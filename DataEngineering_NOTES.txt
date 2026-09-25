@@ -1,0 +1,2067 @@
+      ??????? ?????????? ?????? ??????? ?????????
+      ???? ???? ?????????????? ???????????? ?????????
+      ???? ???? ??????????? ??????? ???????????
+      ???? ???????? ????? ???????? ?????? ??????????
+
+
+Data Engineering 
+----------------
+
+The Ultimate Big Data Program (Cloud Focused)
+=============================================
+
+Any data which is characterised by 5 V's is considered as Big Data
+
+Volume - Huge amount data that cannot be handled by Traditional systems (Peta Bytes)
+
+Variety - format of data i.e Structured, Semi-Structured, Unstructured 
+
+Structured
+----------
+RDBMS (Relational Database Management System) - Database Tables - Ex: Employees table in MySql Database
+		
+Semi-Structured
+---------------
+Json, XML
+
+Unstructured
+------------
+Video, Audio, Image, Log files
+		
+Velocity - The speed at which new data is coming in
+
+Example:-
+
+Amazon Sale - How many iPhones are sold in last 1 hour... To provide the business insights
+
+Veracity - The Quality/Correctness of data. 
+
+Null values, Age might be -ve (we need to correct it and update the values)
+
+Value - The data should be able to generate value
+
+
+Why are we going to learn a new technology stack to handle big data?
+--------------------------------------------------------------------
+
+Our traditional technologies will not be able to handle this big data because of Monolythic Architecture.
+
+Monolythic vs Distributed System
+--------------------------------
+
+Monolythic - Mono --> One big system holding a lot of power.(Super computer)
+
+Resources
+---------
+
+Compute - CPU Cores (4 CPU)
+
+Memory - RAM (8 Gb RAM)
+
+Storage - Hard disk (1 TB Hard disk)
+
+X Resources ~ Y performance
+
+2X Resourcses != 2Y performance
+
+In case of Monolythic Architecture, we are not getting benifited same way i.e with the increase resources/cost we not getting the expected amount of increase performance. Because single system has hardware limitations. Performance wont increase in ratio with the increase in resources/cost.
+
+Monolythic is not a Scalable system
+
+Distributed System
+------------------
+Cluster - a group of nodes (Machines)
+
+Here, if we double the resources the performance will be doubled.
+
+X Resources ~ Y performance
+
+2X Resourcses ~ 2Y performance
+
+All good Big Data Systems are based on Distributed Architecture but not on Monolythic Architecture because you get the scalability with Distributed Systems
+
+In Monolythic -> Vertical Scaling
+In Distributed -> Horizontal Scaling
+
+
+Whenever we want to design a good big data system. We need to think about 3 things.
+
+1. Distributed Storage 
+2. Distributed Processing/Crunching/Computation
+3. Scalability (useful when the data is growing rapidly)
+
+Scalable model is taken care when we have distributed systems in place.
+
+When our Architecture is based on Distributed foundation it is a scalable model.
+
+****** Our Traditional python/java/c code doesnt work as data is residing on multiple machines ******
+
+Hadoop
+======
+
+Hadoop was the first thing developed to handle big data problems
+
+Actually it is a framwork to solve big data problems, its not 1 tool or technology and its a combination of many things. Its an ecosystem of many tools & technologies.
+
+2007 --> Hadoop 1.0
+ 
+2012 --> Hadoop 2.0
+
+Current --> Hadoop 3.0
+
+Hadoop contains 3 core components
+================================= 
+
+HDFS / Mapreduce / YARN 
+
+HDFS - Hadoop Distributed File System (Distributed Storage)
+
+Mapreduce - Distributed Processing (Traditional programming doesnot works as data stored in multiple systems) (OUTDATED) *** we use Spark ***
+
+YARN - Yet Another Resource Negotiator (Resource Manager - useful to assign the resources based on the user request)
+
+*** Writing Mapreduce code is really hard and it is written in Java language (Even spark uses the same logic) ***
+
+There are some technologies that are surrounded by the core components of Hadoop, Hadoop ecosystem technologies:
+
+Sqoop / Hive / pig / HBase / Oozie 
+
+bascilly used to make our lives easier 
+
+Ex:-
+
+Sqoop - Data Ingestion/Movement (OUTDATED) *** We use ADF ***
+
+Sqoop Import - It is used to ingest/get the data from a table(customers) in mysql db to HDFS (Hadoop environment). 
+Sqoop Export - If we want to put the data from HDFS into table in mysql db.
+
+Basically underthehood this is also called as/works as Mapreduce. In Mapreduce we may need to use 100's of lines of java code in Sqoop we use few commands.
+
+Pig - Scripting language, mainly used to process and clean the data. When we write Pig statement it internally executes as Mapreduce code. (OUTDATED)
+
+Hive - provides sql kind of interface to query the data. (Ex: Emp with highest salary) underthehood Mapreduce (Good Demand - Many companies use)
+
+Oozie - Workflow scheduler. Define a workflow to execute (Mapreduce - MR) MR1, MR2, MR3 in a manner as per you requirement. (OUTDATED) *** we use ADF ***
+
+HBase - Nosql db (bascilly when we want to search quickly, Random access of data is possible instead of sequntial data check) (OUTDATED) *** We use Cosmosdb ***
+
+In case of 10L of records, instead of writing 
+
+select * from employee where emp_id = 800
+
+we can make use of NoSql
+
+Challenges with Hadoop
+======================
+
+1) Mapreduce is very slow and hard to write the code in java.
+2) We need to learn so many different components in the Hadoop ecosystem technologies, where each one has its own big learning curve.
+3) Hadoop is mostly on-premise.
+
+
+Cloud and its Advantages
+========================
+
+On-premise vs Cloud
+===================
+
+On-premise -> Everything has to be taken care by us. Purchasing, Installation, Maintenance, Security
+
+For Example
+50 node Hadoop Cluster
+
+you/your org have to buy 50 nodes
+
+you/your org need to procure a space to keep those nodes 
+
+you/your org need to have a cooling equipment
+
+you/your org need to have people who will manage it in location
+
+we need to have admin to do software update, security and everything
+
+
+Cloud -> Everthing will be taken care by cloud (Azure,AWS,GCP)
+
+
+Advantages of cloud
+===================
+
+Scalable - just by buying more resources we can obtain in few mins from cloud services they will lookinto maintenance and security.
+
+opex (operational expenditure) pay as you use (just like a rented house) not need to pay all the amount upfront.
+
+Agility - Ability to create multiple clusters with in mins
+
+Geo distribution - Servers will be in multiple locations to avoid any delay in response/network lag/latency
+
+Disaster recovery - If servers in india affected then we can access from US
+
+Cost Effective - As we need to pay based on our usage
+
+
+3 Types of Clouds
+=================
+
+Public / Private / Hybrid
+
+Public - Amazon AWS, Microsoft Azure, Google GCP (can be used multiple people)
+
+Private - With in their organization they will create their own cloud
+
+On-premise vs privte Cloud
+--------------------------
+
+Only difference is that, in case of private we have an UI by the click of a button we can add resources, clusters up and running on the fly as per user request by their organization people. 
+
+Hybrid - Public + Private (sensitive information)
+
+
+Cloud Providers
+===============
+
+Amazon AWS
+Microsoft Azure
+Google GCP
+
+
+What is Apache Spark
+====================
+
+HDFS / Mapreduce / YARN  --> HDFS / Apache Spark / YARN
+
+Mapreduce is the biggest bottleneck because it is hard to write the logic in java and it is obsalete and very slow. Apache Spark is the replacement for Mapreduce.
+
+Apache Spark is a general purpose, in-memory & compute engine.
+
+General Purpose -> In Hadoop we need to know different components to work with different requirements i.e Hive for querying, Sqoop for Ingestion, pig for scripting but here Apache Spark is enough to work with different requirements. 
+					
+In-Memory -> Process the data/keeps the date in memory, bcz of this it is 10x-100x faster than Mapreduce
+
+Compute Engine -> requires any storage and resource manager to work with
+
+Apache Spark needs 2 things to work with
+========================================
+
+Storage - HDFS / Amazon S3 / Azure ADLS Gen2 / GCS (Google Cloud Storage) / local storage
+
+Resource Manager - YARN / Mesos / Kubernetes 
+
+plug and play compute engine i.e it can work with any Storage and Resource Manager.
+
+
+In which language we write spark code?
+======================================
+
+python / Scala / Java / R (mostly for machine learning experts and data science) 
+
+python is easy to learn and provides good support for data science and machine learning
+
+spark with python - pyspark
+
+spark is written in Scala, Scala is hard to learn.
+
+
+Database vs Data Warehouse vs Data Lake
+=======================================
+
+Database
+========
+
+Deals with transactional data i.e data to day data
+
+OLTP purpose (online transactional processing system)
+
+Structured data
+
+Recent data - day to day data (holds most recent data for better performance)
+
+Example - online banking transaction (Entry will go and sit in Database)
+
+Oracle, MySql	
+
+Database follows "Schema on Write" (which means while inserting the data into the table it will check the values entering into the column is correct or not, based on the datatype of the column and returns error if there is a mismatch with the structure) (i.e validates the schema or structure of table)
+
+cost to store data in database is high so we store last few months/years/day to day data
+
+
+DWH
+===
+
+OLAP (online analytical processing system)
+
+stores more data compared to database, data in DWH is mainly used for analytical processing where we require lot of historical data to find the insights.
+
+We can do analytical processing even on database, but to store the data in database is costly.
+
+The moment we run complex queries on our database with an intent to do some analysis then day to day transactions will become slow and existing users will be affected.
+
+Bcz of this reason we take data from database and migrate it to date warehouse to do analytical processing and also we can store the data in DWH coming from multiple data sources i.e database.
+
+Structured data and follows "Schema on Write".
+
+Example - Teradata
+
+Storage cost in DWH is lesser than database.
+
+DWH follows ETL process.
+
+suppose your data is in database
+
+Extract the data
+Transform the data (it is a complex process)
+Load the data into DWH
+
+This ETL approach reduces our flexibility and its a complicated process because before loading the data itself we need to transform the data which we may not aware sometimes to apply which transformations.
+
+Both Database and Datawarehouse handles structured data only.
+
+
+Data Lake
+=========
+
+To overcome the ETL process we use this
+
+To get insights from huge amount of data
+
+Data is stored in its raw format (i.e structured or unstructured)
+
+In case of Log file - we can directly load the file into data lake in its raw form but in case of DWH we have to transform and the load the data in structured format
+
+ELT process is followed in Data Lake
+
+HDFS, Amazon S3 follows same ELT method.
+
+Cost effective.... because it does not charge huge amount to store the data
+
+Data Lake follows "Schema on Read"
+
+Example: employee.csv 
+
+create structure on top of the raw csv file to visualize or see the data usnig Hive.
+
+Main advantage is it gives flexibility i.e load raw file into Datalake if you create structure on top of it to view the data. so it is cost effective.
+
+In case of Data Lake we can handle structured and unstructured data.
+
+
+
+Big Data the Big Picture
+========================
+
+We will get to know the tasks of Data Engineer in a flow (Data Engineering flow)
+
+High Level overview:
+===================
+
+Multiple sources --> (Data Ingestion) --> Stroage Layer (Date Lake Storage) --> Processing --> Serving layer
+
+Here source might be a raw file, file from website, db table, dwh table, sensor data in different formats
+
+
+Consider we have multiple sources and we want to get that data into the storage layer (Date Lake Storage)
+
+Stage 1: 
+
+Multiple sources --> (Data Ingestion)--> Stroage Layer (Extract and Load the data from Multiple Sources to Storage Layer)
+
+Stage 2:
+
+Data Processing involves Data cleaning ex:-changing the data to common format, Data Filtering, Joining tables, Aggregations, Data Quality Checks, Data Transformation
+
+Stage 3:
+
+Data Serving - From here we will connect to Data Visualization tools.
+
+
+Hadoop
+======
+
+Multiple sources --> (Data Ingestion) --> Stroage Layer (Date Lake Storage) --> Processing --> Serving layer
+
+for Serving layer DWH or Database is the best.
+
+MySql Database --> Sqoop --> HDFS --> Mapreduce / Spark --> Hive / HBase
+(employee)		   Import    File       Processing              dwh
+
+for serving layer db or dwh is the best fit
+
+When to use Database/Datawarehouse in serving layer - when you want to do reporting
+
+									VS
+									
+when to use a Nosql for your serving layer - when you want to build a custom UI (ie when you want to search something using keywords)
+
+
+Cloud
+=====
+
+Azure cloud
+-----------
+
+Multiple sources --> (Data Ingestion) --> Stroage Layer (Date Lake Storage) --> Processing --> Serving layer
+
+Multiple sources --> Azure DataFactory (ADF) --> ADLS Gen2 --> Azure Databricks (Optimised spark) / Azure Synapse --> Azure SQL/Cosmosdb
+
+
+AWS cloud
+---------
+
+Multiple sources --> (Data Ingestion) --> Stroage Layer (Date Lake Storage) --> Processing --> Serving layer
+
+Multiple sources --> AWS Glue --> Amazon S3 --> AWS Databricks/ Athena / Redshift --> AWS RDS (Relational Database System) / DynamoDB
+
+
+
+Ingestion - Sqoop / ADF / AWS Glue
+
+Data Storage - HDFS / ADLS Gen2 / Amazon S3
+
+Processing/Compute - Mapreduce / Spark / Azure Databricks/ Azure Synapse / AWS Glue/Athena/Redshift/AWS Databricks
+
+Serving layer -  Hive/HBase / Azure sql/Cosmosdb / AWS RDS/DynamoDB
+
+
+Computation
+===========
+
+Serverless or Serverful(with server)
+------------------------------------
+
+AWS Athena vs AWS Redshift
+--------------------------
+
+AWS Athena
+==========
+
+Data is stored in Amazon S3 - Data Lake
+
+No need to turn on a dedicated cluster here.
+
+We will write sql kind of query in AWS Athena on the top of Amazon S3 data to scan and fetch the data from Amazon S3
+
+Athena charges based on the amount of data scanned (ie just like opex) --> $5 for 1TB of data scanned
+
+you will use resources from shared pool (i.e there is no dedicated resources like Hadoop)
+
+We need to make sure that our Athena Query is optimized to scan relevant data otherwise it will charge more amount.
+
+ 
+AWS Redshift
+============
+
+We need to turn on dedicated cluster here. Which will charge a lot (i.e capex)
+
+
+Serverless or Serverful
+-----------------------
+
+Serverless will be less expensive
+
+In Serverless, since resources are not dedicated we cannot expect the same level of performance every time (i.e you cannot get guaranteed performance) as we will use resources on shared pool.
+
+If performance is your criteria then better to go with Serverful (AWS Redshift)
+
+
+Serverless - If we want to run a query at 8PM every day and wont bother about the query execution time i.e peformance is not crucial only cost is my criteria.
+
+Serverful - If performance is my criteria or we need to run adhoc queries through out the day.
+
+
+AWS - Athena vs Redshift
+
+Azure - Synapse Serverless vs Synapse Dedicated Pool
+
+
+Azure DataFactory - data Ingestion
+
+ADLS Gen2 - data Storage
+
+Azure Databricks - data Processing
+
+pyspark - data Processing
+
+synapse - data Processing
+
+Cosmosdb - for serving
+
+Azure DataFactory - for scheduling
+
+
+
+Internals of HDFS
+=================
+
+
+Let us consider we have 4 node cluster and have huge file with 500 Mb
+
+Now instead of storing that file in a single machine we will split across all the machines.
+
+to split the file there is a concept called block size - 128 mb (Hadoop 3)
+
+After splitting file data into multiple block and storing it in different nodes when some one tries to read the file1. They donot know what is kept where so we require a master node (Name Node) and remaining 4 slave nodes (Data Node)
+
+Name Node - Holds metadata of what is kept where in a tabular format (file1 | b1 | DN1)
+
+Whenever customers wants to read file1 request will go to Name Node (Master) and it will checkout the metadata table and then it will reach out to the Data Nodes accordingly to fetch the data.
+
+
+block size - 128 mb (Hadoop 3)
+
+1 Name Node (Maste Node)
+
+multiple data nodes 
+
+data nodes hold actual Data
+
+Name Node hold metadata table that contains what is kept where (ie which block of data is present on which Datanode)
+
+Name Node is made of cheap or less cost Hardware
+
+
+How to make sure that we dont loose data even when a data node goes down
+------------------------------------------------------------------------
+
+Replication factor comes into picture --> each block will have 3 copies by default (Example:- b1 stores in node1 and also gets stores in another 2 nodes). So once machine goes down then we can use the other two machines to access data. 
+
+*********** Block Size and Replication factor can be changed by Admin *************
+
+
+How does Name Node get to know that Data Node is down
+-----------------------------------------------------
+
+Heart Beat concept --> Every Data Node sends a heart beat to namenode for every 3 seconds indicating its alive.
+
+If Name Node does not receive heart beat for 10 consecutive times then Name Node will assume Data Node is dead and it will remove that Data Node and replicate the block of data present in that Datanode to another Datanodes 
+
+What if Namenode fails
+----------------------
+
+Datanode is cheap hardware but not Namenode, so chances of Namenode failing is very less. But if it fails there is a concept of Secondary Namenode. There is a process to copy the data from Namenode1 to seconday Namenode and it is Admins reponsibility.
+
+***** Without Namenode we dont know which block of data is present on which Datanode *****
+
+
+Whats the need of a Data Engineer
+=================================
+
+Basically Data Engineer will come into picture when we need to handle the application data i.e operational/transactional data and transform it into consumers (ML/Data Science engineers/Visualization team) usable format.
+
+For Example:-
+
+Amazon will get a lot of transactional data then Data Engineers will take that data and transform it and give it to ML/Data Science engineers to generate some suggestions to customers based on their purchases and to Visualization team to analyse and create reports to provide insights for business improvement.
+
+In general before this, 
+
+ETL + DWH is the methodology we were using that means we transform the data while loading/ingesting into DWH and even in DWH we can transform the remaingin part of data if needed like aggregation of data etc and it is a bit challenging becuase DWH only stores the structured data and it is costly becuase it requires some specialised servers.
+
+Modern approach is,
+
+ELT with this we will get the raw data from multiple sources into Data Lake and then we will use Big Data technologies to transform the data as per the cusmoers requirement and then we serve the data in serving layer (API,DWH,DB,Cosmosdb(Nosql)). Datalake can store structured, unstructured, semi-structured data and we might not have to bring Big DWH to do transformation even if we use DWH for serving it might be a smaller version.
+
+
+Traditional Approach : Multiple Sources -> ETL -> DWH (ETL + DWH)
+
+Tools: Informatica, Talend
+
+Modern Approach : Multiple Sources -> ELT -> Datalake -> Spark (processing) -> Serving Layer (ELT + BIG DATA) 
+
+Tools: ADF, AWS Glue
+
+
+Visualization of Hadoop cluster
+-------------------------------
+
+1 Namenode 
+
+4 Datanodes 
+
+Hard disk is allocated to each datanodes, the Hard disks on these machines will form HDFS. Each Datanode will have CPU, Memory also for processing along with storage (Hard disk). 
+
+So block1 data is processed on the same machine (process the data on machine where it is kept) --> Concept of Data Locality (It improves the performance as we are not moving the data to another machine for data processing)
+
+*********** Hadoop works on the principle of Data locality *********** 
+
+Data Engineers acts as bridge / glue between operational/transactional data stores and Business consumers (ML Experts/Data science Engineers/BI Developers).
+
+
+Week-2
+******
+
+HDFS
+====
+
+Let us consider that we have 4 datanodes, 1 namenode Hadoop cluster and file1 with size 500mb. Max we can have 4000 datanodes.
+
+Why block size is 128Mb? what happens if we reduce the block size to 64 mb
+--------------------------------------------------------------------------
+
+1 Gb file - default block size is 128 Mb - 8 machines max
+1 Gb file - default block size is 64 Mb - 16 machines max
+1 Gb file - default block size is 32 Mb - 32 machines max
+
+If we reduce the block size, it leads to more number of blocks. Then there will be more parallelism.
+
+If we choose a block size very low i.e 1Mb and you have a file of 10Gb, there will be 10240 blocks then you need 10240 machines at max. 
+In this case, namenode has to keep the metadata of all these blocks in its table and it will get overburdened with these many entries.
+
+
+What if we increase the block size
+----------------------------------
+
+1 Gb file - default block size is 128 Mb - 8 machines max
+1 Gb file - default block size is 256 Mb - 4 machines max
+1 Gb file - default block size is 512 Mb - 2 machines max
+
+Then there will be less parallelism.
+
+We basically need to ensure that we should not overburden the Namenode and it should give us appropriate parallelism. So we got 128mb block size.
+
+If your data grows then we can add more number of Datanodes.
+
+When your datanodes increases to a certain level then your metadata also would have grown up. In that case single Namenode will become a bottleneck. Because single Namenode will get overburdened with metadata.
+
+In newer version of Hadoop, there is a concept that called "Namenode Federation".
+
+Namenode Federation -> we can have more than 1 Namenode. Metadata is split across these namenodes.
+
+For example, Sales department metadata is handled by Namenode1, Finance department metadata is handled by Namenode2. These kind of namespaces can be created and hanlded by particular namenodes.
+
+********* Namenode Federation concept is to give Scalability to make sure Namenodes are not overburdened *********
+
+
+Datanode Failure
+----------------
+
+Replication factor - by default 3 copies of each block of data is created.
+
+Namenode Failure
+----------------
+
+Secondary Namenode will replace the failed namenode and admin will take care of copying the metadata of failed namenode to Secondary Namenode.
+
+Secondary Namenode vs Namenode Federation
+=========================================
+
+Secondary Namenode --> Fault Tolerance (Its a backup plan when a namenode fails)
+Namenode Fedaration --> Scalability (When metadata increases we can add more namenodes)
+
+What is Rack
+============
+when we are about to set up cluster 
+
+10 Datanodes in Bangalore (1 rack)
+10 Datanodes in Sanfrancisco (1 rack)
+10 Datanodes in Australia (1 rack)
+
+Rack is a group of servers set up in a geographical location which is far away from other rack. If 1 rack is failed due to natural calamities the servers in other rack are still working. We physically divide the rack across geographies. 
+
+Basically in Big Data world, when we talk about HDFS admins make sure 3 copies are not stored in a single rack. 
+
+When we setup Hadoop cluster, we will make sure that all the machines are not setup in a single geographical location.
+
+
+1 way We can manually install all the services for Hadoop
+
+another way is having ready made VM's
+
+Manual way we need to install Oracle Virtual Box --> you can install Cloudera VM --> This is a pseudo distributed setup
+
+2 types of clusters
+
+1. Pseudo distributed - Oracle Virtual Box -> Cloudera quickstart VM (Namenode and Datanode will be running on the same VM, so it is very slow)
+2. Fully distributed 
+
+What can be practised on Lab?
+============================
+
+Linux commands
+HDFS commands
+python
+DSA
+pyspark
+kafka
+Structured Streaming
+Hive 
+
+ADF, Databricks, Other cloud services
+For the cloud services we need to create an account on your own cloud service and practise.
+
+In order to connect to the Cluster, we will be connecting/logging in to the Gateway node using url, username, password and it knows how to access/connect to cluster.
+
+Login URL: http://g02.itversity.com
+username: itv028185 
+password: ier1ag4toa1y639iq68buhaysj97awz8
+
+Namenode : http://m01.itversity.com:9870/
+
+If each Machine has 10 Tb of Harddisk
+
+3 data nodes * 10 Tb of Harddisk ==> Total 30 Tb
+
+each datanode will allocate - 9 Tb for HDFS (admin will decide)
+							  1 Tb for local
+				
+HDFS Total Size - 27 Tb
+
+Non-HDFS Total Size - 3 Tb
+
+
+Linux commands
+==============
+
+pwd - (Present Working Directory) --> /home/itv028185
+
+whoami - (Current Username) --> itv028185
+
+clear - (clear the screen)
+
+Linux follow tree like structure, everything starts from root
+
+'/' -> root (top most directory, parent of all)
+
+In Linux we call it as directory, windows it is Folder.
+
+cd - (Change Directory) --> cd / --> to go to root directory
+
+cd ~  --> If i have to go to my home directory
+
+cd .. --> Will take you 1 directory back from the present working directory
+
+cd - --> To directly go back to the previous directory in which i was earlier
+
+cd . --> current directory
+
+cd ../.. --> take me 2 directories back from current directory if present
+
+From your windows to connect from your powershell to the Gateway Node from my local
+
+ssh itv028185@g02.itversity.com + 'Enter Password'
+
+
+cd /data (Here we can see all the files that we can work with in this course)
+
+If you are in "/data/trendytech" path and you want to goto "retails_db" folder in "/data" folder we use command ***** cd ../retails_db *****
+
+Absolute vs Relative Path
+=========================
+
+Absoulute Path
+--------------
+
+It means you give the path starting from the "/" (i.e complete path)
+
+Example:- cd /data/retails_db/departments/
+
+Relative Path
+-------------
+
+It means the path relative to current location from where we are..!!! instead of starting from "/"
+
+Example:- pwd (/data/retails_db/customers)
+
+cd ../departments/
+
+ls commands
+===========
+
+It is for listing the files and directories
+
+Blue Colour Indicates directories
+Green Colour Indicates executable files
+Black Colour Indicated Normal files
+
+If we press "Up - ^" arrow we will get the previously executed command
+
+ls --> to list all the files and folders
+
+ls -l --> to list all the files and folders with extra details like (permissions, no.of links, owner, group, file size, creation date) (Asceding order of Uppercase letters and then followed by lowercase letters) *** Ascending order based on ASCII values ***
+
+ls -lr --> to list all the files and folders with extra details like (permissions, no.of links, owner, group, file size, creation date) (Descending order of Uppercase letters and then followed by lowercase letters) *** Descending order based on ASCII values ***
+
+ls -lt --> to list all the files and folders (newest file first)
+
+ls -ltr --> to list all the files and folders (oldest file first)
+
+"-" --> At the start indicates file
+
+"d" --> At the start indicates directory
+
+ls -lR --> to provide the complete details (permissions, no.of links, owner, group, file size, creation date) (Asceding order of Uppercase letters and then followed by lowercase letters) and also returns the files and directories details in each directory
+
+ls -R --> to provide the files and directories and also returns the files and directories details in each directory (Asceding order of Uppercase letters and then followed by lowercase letters) 
+
+ls -a --> to print all the find including hidden files (.filename)
+
+ls -R -a --> recursively print all the files and folders including hidden ones
+
+touch file1 --> to create a new empty file named "file1" and also it can modify the timestamp to the current timestamp
+
+Permissions
+===========
+
+r - Read	(4)
+w - Write	(2)
+x - Execute (1)
+
+owner group others
+drwx  rwx	rwx
+6	  6  	6    --> rw- rw- rw-
+7	  5		4    --> rwx r-x r--
+
+To change the permissions of a file
+-----------------------------------
+
+chmod 777 file1
+
+Defual permissions for files and directories
+--------------------------------------------
+
+files 		->  6 4 4
+directories ->  7 5 5
+
+cat file1 --> to see the content of the file
+
+mkdir dir1 --> to create a new directory
+
+mkdir dir2 dir3 dir3  --> to create mulitple directories
+
+rmdir dir1 --> to remove a Directory *** Only when directory is empty ***
+
+rm file1 --> to remove a file
+
+rm dir1 --> it will give error saying "it is a Directory"
+
+rm -R dir2 --> recursively remove the directory even though if there are any files or directories are there inside dir2 then also it wont consider
+
+cp command
+----------
+
+Used to copy both files and directories. *** cp works like a copy + paste ***
+
+cp source target 
+
+cp file1 file2 --> to copy the content of file1 to file2 by creating it newly
+
+cp fiel1 dir1 --> to copy the file1 to dir1 and paste file1 in dir1
+
+cp dir1 dir2  --> it will give error saying "ommitting directory 'dir1'"
+
+cp -R dir1 dir2 --> recursively copy the details of dir1 to dir2 and paste it in dir2
+
+mv command
+----------
+
+Used to move a file from one directory to another directory (cut + paste) & rename a File
+
+mv currentfile_name newfile_name
+
+mv file56 file5 --> to rename file56 to file5
+
+mv file5 dir2 --> to move the file5 to dir2
+
+To create a new file and enter data in it
+-----------------------------------------
+
+vi samplefile
+
+press "i" button on keyboard --> insert mode
+write the content 
+press "esc" button on keyboard --> to come out of insert mode
+press "shift + :" and enter wq (w-save , q-quit) --> to save the file and quit 
+
+head filename --> to get the first 10 lines of a file
+
+head -n filename --> to get the first 'n' number of line of a file
+
+head * --> returns the first 10 lines of all the files in the current directory
+
+tail filename --> to get the last 10 lines of a file
+
+tail -n filename --> to get the last 'n' number of line of a file
+
+cat ./dir1/* --> to display the content of all the files in 'dir1' directory
+
+history --> to check the commands that you have executed in the current session
+
+wc filename --> returns the no.of lines, no.of words, no.of bytes and filename in that file 
+
+cat > filename --> to create a new file and enter the data 
+--------------
+
+once we run the command it will give you prompt to enter the data into the filename, once you enter the data and save it by using "ctrl + d".
+But the disadvantage with this command is if there is any content already present in filename then it will be overriden because we used "cat > filename"
+
+cat file1.txt file2.txt >> mergedfile.txt --> to append the content of file1 and file2 into a newly created file 'mergedfile.txt'
+
+**** In case of cat commands, '>' for adding/overrding the data in a file && '>>' for appending the data into a file ****
+
+du /data/retails_db/ --> to return the Disk Usage/Size of that directory  
+ 
+du -h /data/retails_db/ --> to return the Disk Usage/Size of that directory in Human readable format (i.e Gb/Mb)
+
+for searching a value/word 
+--------------------------
+
+grep data * --> it will search all the files in the current directory which is having word 'data' in it
+
+
+HDFS commands
+=============
+
+hadoop fs/ hdfs dfs --> will give you all the list of commands available
+
+ls --> we are listing the files and directories on the machine on which you are i.e Gateway Node
+
+In case of my local "/home/itv028185" is my home directory
+
+hadoop fs -ls /user/itv028185 --> to list the files and directories in HDFS
+
+In local, Home Directory - /home/itv028185
+
+In HDFS, Home Directory - /user/itv028185
+  
+******  hadoop fs -ls /user/itv028185  = hadoop fs -ls ******
+
+Whenever we run/fire the hdfs command mostly it will interact with the Name node and check the metadata table (Example:- ls)
+
+However few commands will even interact with Datanodes (Ex:- cat, head, tail i.e whenever we want to get the content)
+
+hadoop fs -ls / --> gives all the details of root directory of hdfs
+
+hadoop fs -ls -S -h / --> gives all the details of root directory of hdfs (big size file/folder at first)
+
+hadoop fs -ls -S -h /order_results --> gives all the details of order_results directory of hdfs (sorting based on size highest at first)
+
+hadoop fs -ls /user | grep itv028186 --> gives the details of user "itv028186" in user directory of hdfs
+
+hadoop fs -mkdir /user/itv028185/retails_dbs --> to create a directory in user directory of hdfs
+
+hadoop fs -mkdir /user/itv028185/dir1/dir2/ --> to create a dir2 inside dir2 (folder hierarchy) it will throw error *** No Such File or Directory ***
+
+hadoop fs -mkdir -p /user/itv028185/dir1/dir2/ --> to create a folder hierarchy or pattern i.e dir2 inside dir1 
+
+hadoop fs -rmdir /user/itv028185/retails_dbs --> to remove a directory in user directory of hdfs (to remove empty directory)
+
+hadoop fs -rm -R  /user/itv028185/dir1 --> to remove a directory in user directory of hdfs (to remove a non-empty directory)
+
+hadoop fs /user/itv028185/retails_dbs/orders_result.csv 
+
+If we want to bring a file from my local to hdfs
+------------------------------------------------
+
+I have created a new folder
+
+#hadoop fs -mkdir /user/itv028185/data
+
+into this "data" directory i want to get a file from my local (/data/trendytech bigLog.txt) i.e Gateway node 
+
+hadoop fs -put <local file path> <hdfs path>
+
+hadoop fs -copyFromLocal <local file path> <hdfs path>
+
+hadopp fs -put /data/trendytech/bigLog.txt /user/itv028185/data  --> Along with the file movement to hdfs, dividing the file into blocks and storing the blocks across multiple machines (datanodes) and namenode holding the metadata table and it will get updated and then execution will be completed.
+
+***************
+In case of HDFS
+
+	hadoop fs -ls -h /data/bigLog.txt
+	--> return the details like (permissions, replication factor, owner, group, size, create on, file/directory name)
+	
+***************
+
+If we want to bring a file from hdfs to my local
+------------------------------------------------
+
+hadoop fs -get <hdfs path> <local file path>
+
+hadoop fs -copyToLocal <hdfs path> <local file path>
+
+
+How to move a file in one location in hdfs to another location in hdfs
+----------------------------------------------------------------------
+
+hadoop fs -cp /data/bigLog.txt /data1/ (copy + paste)
+ 
+hadoop fs -mv /data/bigLog.txt /data1/ (cut + paste) *** It will just change the metadata, it wont do physical movement of data ***
+
+hadoop fs -df -h /user/itv028185/  --> returns the details like (filesystem, size, used, available, use%) (df - disk free)
+
+hadoop fsck data/bigLog.txt -files -blocks -locations --> returns the blocks related information and location related information like which block is stored on which Datanodes inlcuding the replicas (fsck - file system check)
+
+
+hadoop fs -ls -C /user/itv028185/ --> displays only paths by removing the detailed information such as permissions, owner, size, date, etc
+
+hadoop fs -ls -d /user/itv028185/ --> displays the directory itself, rather than its contents
+
+hadoop fs -ls -q /user/itv028185/ --> dispalys quotas
+
+
+
+Few things to remember regarding the Lab
+========================================
+
+cd /data/ --> to explore and work with sample data (Gateway node)
+
+hadoop fs -ls /public --> to explore and work with sample data (hdfs)
+
+To practise sql
+---------------
+
+Open the terminal in the lab,
+
+enter the command "mysql -u retail_user -h ms.itversity.com -p" and press enter 
+enter password "itversity"
+
+MariaDB is the sql type
+
+show databases; --> to view all databases
+
+show tables; --> to view all tables
+
+use retail_db; --> to use retail_db database
+
+***** for retail_db database users dont have write permission *****
+
+***** use retail_export database for creating tables *****
+
+If connecting to a database is very then exit and use 
+#mysql -A -u retail_user -h ms.itversity.com -p (so that metadata wont get loaded)
+
+
+HDFS vs Cloud Datelake
+======================
+
+HDFS cloud alternatives are Amazon S3, ADLS Gen2 (Datalakes in cloud)
+
+If I am running pyspark or spark code, then I would treat HDFS and Cloud Datalake storages in the same way and I can use both of them in same way. But there is 1 major difference.
+
+HDFS + pyspark (Good combination)
+
+ADLS Gen2 + Databricks (Good combination)
+
+HDFS - distributed file system (data is stored in the form of blocks)
+
+ADLS Gen2/ Amazon S3 - Object based storage (data is the stored in form of objects)
+
+Object has id - Unique Identifier
+		   value - the content which we are storing
+		   metadata - who can access the file, what kind of data is stored and others
+		   
+Differences between Distributed File System vs Object Based Storage (HDFS vs Amazon S3/ADLS Gen2)
+=================================================================================================
+
+HDFS is not persistent where are Amazon S3 and ADLS Gen2 are persistent
+
+what do you mean by persistent?
+-------------------------------
+
+Let us consider we have 4 node Hadoop Cluster i.e 4 datanodes.
+
+what if we shutdown/terminate the cluster. We will loose the data. That is your storage is tightly coupled with compute. 
+
+If you want just to store the data but not compute i.e you just want to store the data in HDFS but you dont want to do any processing. Even then we need to pay for the compute cost also because the 4 datanodes are that are running is having both compute and storage. So we cannot only pay for storage.
+
+When you want to increase the storage in your Hadoop cluster we cannot just add the storage when we add a datanode it will have both storage and compute which will endup paying more cost.
+
+In simple terms in case of cloud, storage is not coupled with compute. So we just need to pay for compute only when we do some processing otherwise pay for storage alone. Here storage is cost effective and compute is comparitively costly.
+
+One more disadvantage with HDFS is that,
+if we have one Hadoop - 4 node cluster (HDFS Datalake)
+another Hadoop - 8 node Cluster, if 8 node cluster tries to access the data from 4 node cluster HDFS it is not possible. 
+That means if i am using 4 node cluster data is valid data is valid for that cluster only other clusters cannot access the data. It work in sylos.
+
+But in case of cloud datalakes (Amazon S3/ADLS Gen2) any number of clusters can use this data for processing. That means compute and storage are not tightly coupled with eachother in any cluster.
+
+
+Mapreduce (To process data)
+=========
+
+HDFS - distributed storage
+
+Mapreduce theory is very important, but practicals are not important.(*** we will get to know how to think logically and solve problems using a distributed approach ***)
+
+Mapreduce is combination of Map & Reduce 
+
+2 phase - Map & Reduce
+
+both "Map & Reduce" takes input as key,value pair and gives output as key,value pair and it cannot work with any other input format
+
+Example:- (rollnum, name) 
+		  (1, Sitaram)
+		  (2, Pawan)
+		  
+Mapreduce is a programming paradigm --> It means it is a particular way of programming or solving problems
+
+Traditional programs (c, java, python) work when data is kept on only one machine, they donot know what to do if data is kept on mulitple machines/ they do not know how to handle distributed workloads.
+
+Scenario:-
+--------
+
+Let us consider, we have 4 datanode Hadoop Cluster and 1 namenode. File named file111 of size 500mb. As per default block size of 128 mb, file is distributed into 4 blocks and stored in 4 Datanodes.
+
+User has written Mapreduce code, code will be packaged and transferred to all datanodes. Code will run on each block on each datanodes and this we call as Mapper is running and mappers work in parellel on different blocks of data present in different datanodes.
+
+same way if there is 1gb file, then each machine will hold 2 blocks of data on each datanode. Then 8 Mappers will run but 4 will run in parallel as we have 4 machines only.
+
+****** Mappers will give parallelism and they will run based on the number of blocks the file is divided into/ number of blocks we have ******
+
+****** parallelism is defined by number of machines/datanodes you have in the cluster ******
+
+code is going to the data and as it will be very small in size i.e few kilo bytes. so we send code to the data and data is processed on the machine where it is kept. This is what we call as "Data Locality".
+
+------- Till this part we consider as Map Stage -------
+
+Take the output of these Mappers (i.e Result1, Result2, Result3, Result4) to another machine (i.e any one of the 4 machines) and this output/result coming from Mappers is not the final output but it is an intermediate output.
+
+Now on the another machine where we have taken Mappers output (Result1, Result2, Result3, Result4), there we run "Reduce Code" and the output from this is final output.
+
+Record Reader
+-------------
+It takes each line internally and convert it to key, value pair
+
+Ex:- 
+(Address, Value)
+(12390, My Name is Sandeep)
+(12890, I have completed my learning on Data Engineering course in trendytech and got married in 2026 December,)
+
+Problem Scenario:-
+----------------
+You have a file with data and you want to the calculate the frequency of each word in that file
+
+=======================
+My Name is Sandeep
+I have completed my learning on Data Engineering course in trendytech and got married in 2026 December,   b1-DN1
+I got my first offers related to Data Engineering from TCS and Infosys for 20L and 22L,
+=======================
+Then i put the down the paper in LTM 
+I started giving interviews consistantly during my notice period                                          b2-DN2
+Later I got 25LPA with 2.5L joining bonus in Deloitte Company
+=======================
+I have joined Deloitte company on May3rd2027
+I got a good project and continued in Deloitte for 1 and half year                                        b3-DN3
+Later I gave interviews and then got 45LPA in Qualcomm
+=======================
+Now I a got an onsite opportunity for 5-6 years
+I returned to India because of my parents as they become old                                              b4-DN4
+Continued my career in Qualcomm in India.
+=======================
+
+input to the record reader is 
+"My Name is Sandeep"
+output of the recored reader is 
+(12390, My Name is Sandeep)
+(12890, I have completed my learning on Data Engineering course in trendytech and got married in 2026 December,)
+(12930, I got my first offers related to Data Engineering from TCS and Infosys for 20L and 22L,)
+
+now the above output key,value pair can be recognized by Mapper
+
+and then Mapper code/logic will be executed on the above mentioned key,value pair data 
+
+the output from the Mapper will be 
+
+Mapper - 1 
+(My, 1) 
+(Name, 1)
+(is, 1)
+
+Mapper - 2
+(2LPA, 1) 
+(2.5L, 1)
+(is,1)
+(Deloitte, 1)     ----> output from all these mappers will go to another machine **** Here we are deviating from Data Locality principle **** because after mapper code execution is done data is being moved/tranferred to another machine. This is called as "Shuffling Activity". Literally data is shuffling from Mapper machine to another machine where Reduce code will be going to get executed.    
+							   
+Mapper - 3
+(joined, 1) 
+(May3rd2027, 1)
+(Qualcomm, 1)
+(is,1)
+
+Mapper - 4
+(onsite, 1)
+(parents, 1)
+(is,1)
+(India, 1)
+
+
+Record reader --> Map --> shuffled --> sorting --> Reduce --> Expected Output 
+
+DN2
+===
+(My, 1) 
+(Name, 1)
+(is, 1)
+(2LPA, 1) 
+(2.5L, 1)
+(Deloitte, 1)
+(is,1)
+(joined, 1) 
+(May3rd2027, 1)
+(Qualcomm, 1)
+(is,1)
+(onsite, 1)
+(parents, 1)
+(India, 1)
+(is,1)
+
+sorting
+=======
+(2.5L, 1)
+(2LPA, 1)
+(Deloitte, 1)
+(India, 1)
+(May3rd2027, 1)
+(My, 1)
+(Name, 1)
+(Qualcomm, 1)
+(is, 1)
+(is,1)
+(is,1)
+(is,1)
+(joined, 1)
+(onsite, 1)
+(parents, 1)
+
+programmer view
+===============
+(2.5L, {1})
+(2LPA, {1})
+(Deloitte, {1})
+(India, {1})
+(May3rd2027, {1})
+(My, {1})
+(Name, {1})
+(Qualcomm, {1})
+(is, {1,1,1,1})
+(joined, {1})
+(onsite, {1})
+(parents, {1})
+
+map and reduce code will be written by programmer, shuffle and sort is taken care by framework/system.
+
+mapper logic --> take each word and give 1 as Value
+shuffling
+sorting (based on keys)
+reduce --> takes the list of values and sum it up 
+
+Output
+======
+
+(2.5L, 1)
+(2LPA, 1)
+(Deloitte, 1)
+(India, 1)
+(May3rd2027, 1)
+(My, 1)
+(Name, 1)
+(Qualcomm, 1)
+(is, 6)
+(joined, 1)
+(onsite, 1)
+(parents, 1)
+
+Where would you like to do more work either Map phase or Reduce phase?
+=====================================================================
+
+We should try to shift your computation towards Mapper side, because if we dont do that then everything Reducer will do then its like 1 single machine is processing and we are not utilising the advantage of distributed processing. Ideally as a good programmer we should make sure we use the parellelism, that why we have to do more work at Mapper end and do least work at Reducer end whenever possible. 
+
+Shift your computation from Reducer to Mappers whenever feesible to do that.
+
+System/framework will do shuffle and sort.
+
+****** Mapper - Works on principle of Data Locality  &&& Reduce - Shuffle is required ******
+
+Week-3
+------
+
+Mapreduce
+=========
+
+Mapreduce is used to process huge amount of data. It doesnot make sense to use Mapreduce to process small amount of data. Because in terms of coordinating the work for Mappers and Reducers itself will take lot of time. So dont use Mapreduce programming paradigm for small data. 
+
+Mapreduce conceptually very important, but practically it has zero importance bcz its very difficult to write the code.
+
+Map phase --> this gives us parallelism bcz Mappers will be running on different Machines
+
+Reduce phase --> this is for aggregation of Mapper results
+
+Always try to do more work at Mapper end and minimum work at Reducer end. Shift your computation from Reducer to Mappers bcz mappers works on multiples machines so that can optimise the things.
+
+Scenario:
+--------
+
+We have Linkedin details, we want to find out how many total views are there for each person. i.e How many people visited Sumit's/Manasa's/etc profile
+
+Linkedin Profile Views
+======================
+
+ID, From-Member, To-Member
+1, Manasa, Sumit
+2, Deepa, Sumit
+3, Sumit, Manasa
+4, Manasa, Deepa
+5, Deepa, Manasa
+6, Shilpy, Manasa
+
+Record Reader take the lines internally and convert it to key,value pair.
+
+(0,[1, Manasa, Sumit])
+(1,[2, Deepa, Sumit])
+(2,[3, Sumit, Manasa])
+
+The above will be given as the input for Mappers
+
+(Sumit, 1)
+(Sumit, 1)
+(Manasa, 1)
+(Deepa, 1)
+(Manasa, 1)
+(Manasa, 1)
+
+The above will key,value pairs are shuffled and given to the Reducer Machine and sorting will happen on the Machine
+
+(Deepa, 1)
+(Manasa, 1)
+(Manasa, 1)
+(Manasa, 1)
+(Sumit, 1)
+(Sumit, 1)
+
+After shuffle and sort, view given to Reducer will be the below way i.e values appear as collection to the Reducer
+
+(Deepa,{1})
+(Manasa,{1,1,1})
+(Sumit,{1,1})
+
+Our Reducer code will be working on the above and it will sum up the values
+
+(Deepa, 1)
+(Manasa, 3)
+(Sumit, 2)
+
+The above is the output from Reducer machine
+
+Q1) How to calculate number of views for each profile on Linkedin?
+Q2) How many mappers are launched and how many reducers are working? 
+
+Ans) For example if we have 1Gb file.. block size is 128Mb.. 8 blocks.. 8 Mappers will be running.. (No of Mappers = No of Blocks)
+	(Parellelism is defined by number of machines we have in the cluster)
+	
+Q3) How many reducers are launched?
+Ans) Number of Reducers are controlled by a Developer. By default we will have only one Reducer but we can increase/decrease it to more than 1/0
+
+
+Changing the Number of Reducers
+===============================
+
+What is the need to change the Reducer from default - 1 to another number
+
+When should we consider to increase the number of Reducers
+----------------------------------------------------------
+
+5 Mappers are able to complete the work in few mins (2 min) and 1 reducer is taking long time (10 min) to do the work. (12 mins)
+
+Now we tried to shift some of the computation from Reducer end to Mapper end 
+
+So 5 Mappers are able to complete the work in few mins (3 min) and 1 reducer is taking long time (5 min) to do the work. (8 mins)
+
+*** Beyond this we are unable to optimise more by giving more computation to Mappers as we need to do aggregations which can by done Reducers only ***
+
+In such case, if we have 5 Mappers (3 min) and 2 Reducers (2.5 min) we can finish works in 5.5 mins because of parallelism in Reducers also. Whenever we feel there is a bottleneck/overburdened bcz of 1 Reducer we can have more reducers. But more parallelism should be done at Mapper end but not at Reducers end.
+
+When should we consider to reduce the number of Reducers to 0
+-------------------------------------------------------------
+
+There can be few jobs which do not require aggregation.
+
+In case of Filtering scenario, only mappers can do the filtering. In such scenarios we dont require shuffle, sort and aggregate and Mapper output will be final outpu and we dont require Reducer.
+
+Shuffle and sort only happens when we have 1/more Reducer.
+
+So when there is no Reducer or Reducer Number is 0 then your mapper output will be the final output.
+
+If File is 1Gb in size, then we are doing some filtering. We will have 8 output files as Mapper output will be the final output. As per block size of 128Mb we will have 8 blocks for 1Gb of file, so eventually we will have 8 Mappers and 8 output files will be there...
+
+
+Scenarios
+---------
+
+Consider we have 3 Mappers and 1 Reducer, output of 3 Mappers will go to the same Reducer without any logic.
+
+Concept of partitioning comes into picture when we have more than one reducer. This will tell which k,v pair goes to which reducer
+----------------------------------------------------------------------------------------------------------------------------------
+
+Logic involved in this is, by defualt there is "System Defined Hash Function" which tells you that which k,v pair goes to which partition and eventually to which Reducer
+
+Consider we have 3 Mappers and 2 Reducers, 
+Mapper 1 has 10 (k,v) pairs --> k,v pairs are given equally to both Reducers to maintain equal work distribution. Now Key concept of partitions will come into play i.e output of Mapper 1 will be divided into two partitions. 
+
+***** Partitioning of Mappers output is based on the no.of Reducers we have (no.of partitions = no.of reducers) *****
+
+all partition 1's go to reducer 1 and all partition 2's go to reducer 2
+
+Example:-
+
+mod
+
+3 Reducers - 0,1,2
+
+keys (for numeric)
+-----------------
+1%3 = 1
+2%3 = 2
+3%3 = 0
+4%3 = 1
+5
+6
+7
+
+Keys (for string) --> ASCII values are considered
+
+Hash Function is consistent...
+
+explanation for consistent
+--------------------------
+
+if we have, same key should always go to same reducer (i.e consistent) bcz if hello goes to different reducer we cant get the total count of hello
+(Hello,1) --> Assigned to Reducer1
+(hi,1) --> Assigned toReducer2
+(hello,1) --> Assigned to Reducer1
+
+*** By default Hadoop uses, system defined Hash Function to divide the k,v pairs. This Hash Function is consistent so that if a key repeats any number of times it is assigned to the same reducer ***
+
+
+scenario (Not to use system defined Hash Function)
+--------------------------------------------------
+
+All the words whose length is less than 4 chars should go to Reducer1 and all other words whose length >= 4 chars should go to Reducer2. 
+
+If you dont want to use the system defined hash function then in such cases we need to write our own custom partitioning logic to divide the k,v pairs that goes to the Reducers for aggregation. 
+
+But in this scenario also if you have same words with length < 4 chars (hi), then we have to follow system defined Hash Function i.e as "hi" word should go to only 1 Reducer either Reducer1/Reducer2
+
+Examples for inconsistent function:- 
+1) conversion of Dollars to Rupees 
+2) finding out only the unique words in the paragraph (We dont follow system defined Hash Function)
+
+But we need to make sure our Hash function should be consistent always!!!
+
+
+Flow of Mapreduce
+-----------------
+
+Record Reader --> Map --> Partition, Shuffle, Sort --> reducer
+
+Record Reader --> To internally convert the lines to k,v pair
+
+Map -->  this gives us parallelism bcz Mappers will be running on different Machines
+
+Partition --> when we are having more than 1 reducer to determine which k,v pairs will go to which reducer (Happens on Mapper Machine)
+
+Shuffle --> Mappers output is send to the Reducer
+
+Sort --> k,v pairs get sorted on the Reducer (Happens on Reducer Machine)
+
+Reducer --> this is for aggregation of Mapper results 
+
+What is shuffle?
+---------------
+
+Sending the data from Mapper Machine to Reducer Machine, so that Reducer machine gets the data to work on.
+
+What is sort?
+-------------
+
+Operation done on Reducer Machine to get the same keys together in a group. (hello,{1,1,1})
+
+Values with same keys appear as a collection/list to the reducer and reducer will perform the aggregation or sum it up.
+
+
+Sensor Data Example for Mapreduce
+=================================
+
+Consider a sensor which collects temperature for every 1 hour. We want to find out the max temp recorded on each day.
+
+Sample Data:
+-----------
+Input
+-----
+Date,Time,temperature
+12/12/2015,00:00,50
+12/12/2015,01:00,52
+12/12/2015,02:00,49
+12/13/2015,00:00,48
+12/13/2015,01:00,54
+12/13/2015,02:00,55
+
+expected output
+---------------
+Date,temperature
+12/12/2015,52
+12/13/2015,55
+
+Let us consider we have 300mb file size of data, it is divided in to 3 blocks (block size -128mb)
+
+DN1-b1
+12/12/2015,00:00,50
+12/12/2015,01:00,52
+
+DN2-b2
+12/12/2015,02:00,49
+12/13/2015,00:00,48
+
+DN3-b3
+12/13/2015,01:00,54
+12/13/2015,02:00,55
+
+After Record Reader converting the data into k,v pairs
+
+DN1-b1
+(0,[12/12/2015,00:00,50])
+(1,[12/12/2015,01:00,52])
+
+Output from Mapper 1
+(12/12/2015,50)
+(12/12/2015,52)
+
+DN2-b2
+(2,[12/12/2015,02:00,49])
+(3,[12/13/2015,00:00,48])
+
+Output from Mapper 2
+(12/12/2015,49)
+(12/13/2015,48)
+
+
+DN3-b3
+(4,[12/13/2015,01:00,54])
+(5,[12/13/2015,02:00,55])
+
+Output from Mapper 3
+(12/13/2015,54)
+(12/13/2015,55)
+
+After shuffling the below data will go to reducer
+
+(12/12/2015,50)
+(12/12/2015,52)
+(12/12/2015,49)
+(12/13/2015,48)
+(12/13/2015,54)
+(12/13/2015,55)
+
+Sorting will be done on Reducer
+
+(12/12/2015,49)
+(12/12/2015,50)
+(12/12/2015,52)
+(12/13/2015,48)
+(12/13/2015,54)
+(12/13/2015,55)
+
+Programmer view
+
+(12/12/2015,{49,50,52})
+(12/13/2015,{48,54,55})
+
+Output from Reducer
+(12/12/2015,52)
+(12/13/2015,55)
+
+Ideally we want Mappers to do more work because it gives us parallelism.
+
+In the above scenario mappers have done bare min work, it could have done more. So we get more parallelism and things could have been more Optimised.
+
+We want to add more at Mappers end to find out the max temperature value if the keys are same. 
+
+We call the below work at Mapper end as "Combiner"
+
+1. Improve the parallelism
+2. Reduce the data transfer from Mapper end to Reducer end.
+
+After introducing the Combiner at Mapper end the output from Mappers
+--------------------------------------------------------------------
+DN1-b1
+(0,[12/12/2015,00:00,50])
+(1,[12/12/2015,01:00,52])
+
+Output from Mapper 1
+(12/12/2015,50)
+(12/12/2015,52)
+
+after the agrregation work i.e combiner at Mapper end output from Mapper 1 (bcz here we have same keys i.e 12/12/2015)
+(12/12/2015,52)
+
+DN2-b2
+(2,[12/12/2015,02:00,49])
+(3,[12/13/2015,00:00,48])
+
+Output from Mapper 2
+(12/12/2015,49)
+(12/13/2015,48)
+
+after the agrregation work i.e combiner at Mapper end output from Mapper 2
+(12/12/2015,49)
+(12/13/2015,48)
+
+DN3-b3
+(4,[12/13/2015,01:00,54])
+(5,[12/13/2015,02:00,55])
+
+Output from Mapper 3
+(12/13/2015,54)
+(12/13/2015,55)
+
+after the agrregation work i.e combiner at Mapper end output from Mapper 3 (bcz here we have same keys i.e 12/13/2015)
+(12/13/2015,55)
+
+with the implementation of combiner logic, we will get to send less k,v pairs to Reducer which will results in optimized performance of Mapreduce.
+
+***** Combiner is doing exactly same as Reducer code, Only difference is combiner works only on Mappers data but Reducer works on entire data *****
+
+Combiner plays an important role in optimisation, but we need to use them with caution
+--------------------------------------------------------------------------------------
+Example for above scenario (finding the max, min value it works but it fails in case of average)
+
+With or without using combiner the result should be same.
+
+Average
+
+M1 - 1,3,5
+M2 - 3,7,9
+M3 - 4,7,8,7
+
+Correct answer should be - 54/10 = 5.4 (without combiner)
+
+With combiner - 9/3 + 19/3 + 26/4 = (3 + 6.3 + 6.5)/3 = 15.83/3 = 5.27 
+
+With combiner (correct way) - (total value, no.of values)
+
+(9,3), (19,3), (26,4) --> (54,10) --> 5.4
+
+
+
+Real time Industry use case of Map Reduce Distributed Processing
+================================================================
+
+Google use Mapreduce for their existing web search.
+
+A lot of crawlers are working day and night to crawl the web, these crawlers scan through all the websites inorder to get content.
+
+To solve any problem using Mapreduce
+------------------------------------
+
+4  points to be considered
+
+1. Input to Mapper
+2. Output from Mapper
+3. Input to Reducer
+4. Output from reducer
+
+
+Actual Data
+
+Key  							Value
+flipkart.com				clothes handbag laptop
+amazon.com					clothes mobile purse
+myntra.com					purse clothes tv
+
+
+Input to Mapper
+(0,[flipkart.com,clothes handbag laptop])
+(1,[amazon.com,clothes mobile purse])
+(2,[myntra.com,purse clothes tv])
+
+Output from Mapper
+(clothes, flipkart.com)
+(handbag, flipkart.com)
+(laptop, flipkart.com)
+(clothes, amazon.com)
+(mobile, amazon.com)
+(purse, amazon.com)
+(purse, myntra.com)
+(clothes, myntra.com)
+(tv, myntra.com)
+
+After shuffling and sorting on Reducer programmer view will be as below
+(clothes, {flipkart.com, amazon.com, myntra.com})
+(handbag, {flipkart.com})
+(laptop, {flipkart.com})
+(mobile, {amazon.com})
+(purse, {amazon.com, myntra.com})
+(tv, {myntra.com})
+
+
+Distributed Computing Demo
+==========================
+
+Record Reader --> takes the lines and internally it converts to key value pair
+
+Map --> this gives us parallelism bcz Mappers will be running on different machines (No.of Mappers = No.of blocks of data)
+
+combiner --> this will combine & aggregate the mappers output and imporves parallelism and reduce the amount of data that we need to send to Reducer 
+
+shuffle --> sending the output of Mapper to reducer
+
+sort --> its an operation happens on the Reducer machine so that it appears as a collection/list to the Reducer
+
+Reducer --> to perform the aggregations/sum of the data
+
+
+First use case - count the frequency of each word with 1 reducer
+================================================================
+
+mapreduce_prog.jar --> This is the jar file used in this case 
+
+Takes the input file from HDFS. To execute it of before that, we need to create our own file in Gateway node.
+
+0. upload the jar files from your system to the Gateway Node
+
+1. create a folder hierarchy called "/home/itv028185/data/input" in Gateway Node
+
+2. create a file named "inputfile.txt"
+
+3. create a folder called "/user/itv028185/data/input" in HDFS
+
+4. copy the file "inputfile.txt" from local to HDFS
+
+****** Basically, we would get file from a service we don't create the files on our own ******
+
+Now we need to run the "mapreduce_prog.jar" (Java Archive) 
+
+5. hadoop jar <jar_name> <input_file_path> <output_directory>
+
+   hadoop jar mapreduce_prog.jar /user/itv028185/data/input/inputfile.txt /user/itv028185/data/output 
+   
+&&&&& This command should be executed from the location where we have the jar file &&&&&
+   
+*** Make sure this directory is not exists "/user/itv028185/data/output" and it will get created after execution of the above step ***
+
+6. hadoop fs -ls data/output
+
+Here in the directory you will see a "_SUCCESS" empty file. We can make sure that job is executed successfully.
+and there will be another file "part-r-00000" file (r- reducer) and it let us know that only one file gets generated.
+
+7. hadoop fs -cat data/output/part*  *** to see the content of the output file ***
+
+******* If we run the "step 5" again we will get error, hdfs://m01.itversity.com:9000/user/itv028185/data/output already exists *******
+
+
+
+Second use case - count the frequency of each word with 0 reducer
+=================================================================
+
+mapreduce_prog_0_reducer.jar --> This is the jar file used in this case
+
+Here, Mapper output will be final output and there will be no shuffle and sort as Reducer is not involved
+
+Sceanrios:- Filtering
+
+If the file contains below Data
+
+Input
+===================================
+Sandeep is an Expert in DataEngineering
+He is working in Deloitte as as Senior Data Engineer with 25LPA for his experience
+===================================
+
+Expected output
+---------------
+(Sandeep,1)
+(Expert,1)
+(DataEngineering, 1)
+(Deloitte,1)
+(25LPA,1)
+
+After running the below command,
+
+--> hadoop jar mapreduce_prog_0_reducer.jar /user/itv028185/data/input/inputfile.txt /user/itv028185/data/output 
+
+if we run --> hadoop fs -ls data/output
+
+we will see files "_SUCCESS" and "part-m-00000" (m-mapper) with data init. Mappers output is the final output here. Each Mapper will give you 1 output file and no.of mappers depends on no.of blocks we have.
+
+
+Third use case - count the frequency of each word with 2 reducers
+=================================================================
+
+mapreduce_prog_2_reducer.jar
+
+After running the below command,
+
+--> hadoop jar mapreduce_prog_2_reducer.jar /user/itv028185/data/input/inputfile.txt /user/itv028185/data/output 
+
+if we run --> hadoop fs -ls data/output
+
+we will see files "_SUCCESS", "part-r-00000" and  "part-r-00001" (r-reducer) with data init. As we are using 2 reducers 3 files will get created in the "data/output" directory.
+
+Fourth use case - count the frequency of each word with custom practitioner (i.e instead of system defined Hash Function)
+=========================================================================================================================
+
+mapreduce_prog_cpractitioner.jar
+
+if word length <=3 then it should go to reducer0, all other words should go to reducer1
+
+After running the below command,
+
+--> hadoop jar mapreduce_prog_cpractitioner.jar /user/itv028185/data/input/inputfile.txt /user/itv028185/data/output 
+
+if we run --> hadoop fs -ls data/output
+
+we will see files "_SUCCESS", "part-r-00000" and  "part-r-00001" (r-reducer) with data init. As we are using 2 reducers 3 files will get created in the "data/output" directory.
+
+to know that out custom practitioner logic is implemented or not
+
+--> hadoop fs -cat data/output/part-r-00000 (we can find all the word with length <=3 ) 
+
+Fifth use case - count the frequency of each word with combiner
+===============================================================
+
+mapreduce_prog_combiner.jar
+
+After running the below command,
+
+--> hadoop jar mapreduce_prog_combiner.jar /user/itv028185/data/input/inputfile.txt /user/itv028185/data/output 
+
+if we run --> hadoop fs -ls data/output
+
+we will see files "_SUCCESS" and "part-m-00000" (m-mapper) with data init. Mappers output is the final output here. Each Mapper will give you 1 output file and no.of mappers depends on no.of blocks we have.
+
+
+Apache Spark
+============
+
+Hadoop - HDFS / Mapreduce / YARN
+
+Challenges with Mapreduce
+-------------------------
+
+1. Performance - Lot of DISK IO's required
+
+2. Its really hard to write the hundreds of lines of code in Java.
+
+3. Mapreduce supports only Batch Processing
+	- Batch processing - loading data at regular interval of time
+	- Realtime processing/streaming - deals with current flowing data/streaming Data
+	
+4. Hive (Querying), Pig (Scripting Language for programming), Sqoop (Data Ingestion), HBase (Nosql), Oozie (workflow scheduler) we need to learn a lot of tools or technologies.
+
+5. Map Reduce - We talk only about Map and Reduce, though our problem might not be bcz of Map and Reduce but we try to adjust and try to resolve those issues only using Map and Reduce. Example: Filter, map will work but reduce won't...
+
+6. Intreactive mode - There is no intreactive mode like linux commands. Instead we bundle the jar/code and run it on the cluster and we wont get the response for each command that we execute from the cluster.
+
+Apache Spark
+============
+
+It is meant for Distributed Processing to overcome the Challenges with Mapreduce. It is just a Compute Engine.
+
+Spark does not come with storage and resource manager. It is a plain compute engine that supports only Distributed Processing. When we have some huge number of machines holding the data then spark can help us how to process the data across the cluster of those machines as traditional programing methods wont work.
+
+Spark requires we need 2 things to work. 
+
+1. Datalake
+2. Resource Manager
+
+It is just a plug and play compute engine it can work with any Datalake (storage) [HDFS / S3 / ADLS Gen2 / GCS / local] 
+and Resource Manager [YARN / Mesos / Kubernetes] of our choice.
+
+Apache Spark is a multi language engine for executing Data Engineering, Data Science, Machine Learning on single node or cluster.
+
+Mapreduce we write code in Jave. But Apache Spark is a multi language engine we can write in scala, python, java & R.
+
+Python + Spark = PySpark 
+
+Apache Spark is a general purpose, in-memory & compute engine.
+
+General Purpose -> In Hadoop we need to know different components to work with different requirements i.e Hive for querying, Sqoop for Ingestion, pig for scripting but here Apache Spark is enough to work with different requirements. 
+					
+In-Memory -> Process the data/keeps the date in memory, bcz of this it is 10x-100x faster than Mapreduce.
+
+Compute Engine -> requires any storage and resource manager to work with.
+
+Scenario:-
+--------
+
+Let us consider we have Mapreduce jobs MR-Job-1, MR-Job-2, MR-Job-3, MR-Job-4, MR-Job-5. In this case 10 DISK IO's are required bcz each MR job has to take the input data from HDFS Disk, do the processing and output will be written on the DISK HDFS. When we have a series of MR jobs it happens through DISK HDFS only. This read and write of Data from/to HDFS DISK take time Which will create delay in the performance.
+
+*** Best Scenario ****
+In Spark, Job1 output is not written back to HDFS DISK instead, Job1 output will be passed over to Job2 and this will happen in-memory and the last job output will be written back to HDFS DISK which will reduce the DISK IO's to 2. We will do all the calculations in-memory. 
+
+For a chain of 5 Mapreduce jobs - 10 disk IO's 
+but in spark it could be as min as 2 disk IO's
+
+Spark lets you focus on WHAT computation you want, while Spark handles HOW that computation is distributed across the cluster
+
+
+Apache Spark vs Databricks
+==========================
+
+Apache Spark is Open Source (Apache Software Foundation)
+
+Databricks is a company they have product also called as Databricks. It is sparks internally with some extra features.
+
+Extra Features :-
+
+   -  Spark on Cloud - AWS, Azure, GCP
+   -  Optimised version of spark (5 times faster than normal open source spark)
+   -  Cluster Management (On a click of button we can deploy a 10/15 node cluster along with each node configuration and version of spark which u want)
+   -  Delta Lake 
+   -  Collaborate on Notebooks
+   -  Implemented Security Features
+	
+Apache Spark has 2 Layers
+-------------------------
+
+1. Higher Level API's - On the top ****** Developed to write simple code and it is recommended to work here for performance benifits ******
+2. Spark Core API's - Underneath Layer ****** We can write code using Scala, python, java, R. Here we work at RDD (Resilient Distributed Dataset) level ******
+
+we can write the code based on RDD's - the hardest way to work with Apache Spark (simpler than Mapreduce code)
+
+####### RDD (Resilient Distributed Dataset) is the fundamental unit which holds the data in Apache spark #######
+
+Higher Level API's
+	- Spark SQL / Data Frames
+	- Structured Streaming API's 
+	- Mllib for Machine Learning 
+	- GraphX for Graph based processing
+	
+Spark SQL   -         easiest   less flexibility
+Data Frame  -         Medium    medium flexibility
+RDD 		-         hardest   more flexibility
+
+***** The code that we write at Higher Level API's, underneath it will get converted to RDD *****
+
+Whenever we work on spark we want to do 3 things
+
+1. Load the data from source (HDFS / Cloud Datalake i.e S3, ADLS Gen2, GCS)
+2. Do various transformations to that data (filter, group by, join etc)
+3. Write/Load the final result to Target Location (i.e HDFS / Cloud Datalake) 
+
+
+
+**** Distributed collection of Hard disks on the worker nodes will form HDFS ****
+**** Similarly Distributed collection of in-memory will form RDD ****
+
+**** As per spark terminology, block is disk and partition is memory **** 
+
+How things work in Apache Spark?
+===============================
+
+Let us consider we have a file named file1 in HDFS of size (512Mb).
+
+--> I will write a code to bring it to Memory from HDFS as below, and whenever I load the file1 from HDFS, it will come to in-memory and we give it a name as rdd1.
+
+1. rdd1 = Load file1 from Datalake (HDFS / Cloud Datalake) 
+
+--> we are storing the results of rdd1.map transformation into "rdd2"
+
+2. rdd2 = rdd1.map
+
+--> we are performing filter transformation on rdd2 and stored the results into "rdd3"
+
+3. rdd3 = rdd2.filter
+
+--> to get the results on the screen
+
+4. rdd3.collect()
+
+when we run 1,2,3 nothing will happen, but when we run 4 everything will happen. Basically after running 1,2,3 internally these lines were added to a plan and when we run 4 it execute.
+
+There are 2 kind of operations in Apache Spark
+----------------------------------------------
+
+1. Transaformation (Step 1,2,3) 
+2. Action (step 4)
+
+Transformations are lazy but actions are not i.e whenever transformations are applied they are added to execution plan and Whenever action is called/run the whole execution plan gets executed.
+
+Execution plan flow will look like 
+----------------------------------
+
+This diagram we call as "DAG - Directed Acyclic Graph"
+ 
+file1
+  |
+  |  (load) 
+  |
+RDD1
+  |
+  |  (map) 
+  |
+RDD2
+  |
+  |  (filter) 
+  |
+RDD3
+  |
+  |  (collect) 
+  |
+execution plan will get executed 
+
+
+In spark, we have driver and multiple worker nodes
+
+RDD is Resilient to failures, it means if something goes wrong we will not loose RDD/ it wont impact us.
+
+How to make sure RDD is Resilient to failures
+---------------------------------------------
+
+If I loose RDD3, we can take the parent of "failed RDD" and apply the same transformation on it and we can regenerate it. (System automatically will do this).
+So whenever we create new RDD it acts like a savepoint/lineage and supports fault tolerance. Because if we make all the transformations on a single RDD1 if we loose it, we dont have the parent RDD so we cannot regenerate it.
+
+RDD's are immutable.
+That means you cannot make changes to the existing RDD.
+You end up creating a new RDD always for every transformation.
+
+/* HDFS is Resilient with the help of Replication Factor
+RDD is Resileint with help of Immutabiliy and Lineage */
+
+Why transformations are lazy?
+----------------------------
+
+Materializing the RDD, i.e whenever we load the file1 from Datalake we will get some data into RDD1. As per concept RDD's are immutable.
+
+rdd1 = Load file1 from Datalake (HDFS / Cloud Datalake) --> if we do this load, we will have content in RDD1 -> this we call as Materializing the RDD.
+
+Benifits of Laziness
+
+rdd1 = Load file1 from Datalake (HDFS / Cloud Datalake)
+rdd2 = rdd1.map
+rdd3 = rdd2.filter
+rdd3.collect()
+
+Let us cosider that we have a file in HDFS with 1 Billion records.
+
+We are writing step 1, to load the file from HDFS as rdd1. 
+
+#print the first line from rdd1... (pseudo code)
+
+If spark is not lazy, we would have loaded 1 billion records in-memory just to print the first line from rdd1.... 
+
+Spark being lazy, instead of loading 1 billion records in-memory, it gets only the required information/data/result which I have to display in-memory and only 1 line get into the memory and it will be printed.
+
+Laziness helps to optimise the amount of data loaded into memory.
+
+
+Spark is not lazy
+-----------------
+
+Let us consider we are having a file "file1" with 1 billion records and in this case whenever we load the file from HDFS, it will load 1 billion records to memory and then it will process 1 billion records row by row i.e it will take 1 billion records as input and generate 1 billion records as output by adding a new field to all 1 billions by using map transformation. And by using filter transformation we would like to filter for an employee based on employee id and want to get 5 records and return on the screen. 
+
+The above procedure is a delayed bcz it needs to work with 1 billion records.
+
+
+rdd1 = Load file1 from Datalake (1 billion records)
+rdd2 = rdd1.map (1 billion records)
+rdd3 = rdd2.filter (5 records)
+rdd3.collect()
+
+Now Spark being lazy
+--------------------
+
+Every step will be added as a part of "Execution plan DAD". Only when we run collect then it will load the file from HDFS.
+
+Instead of map, it will filter first. It will save a lot of time bcz we need to add fields using map transformation only for 5 records.
+
+Basically system will shuffle the transformations inorder to get the required results by optimising the performance.
+ 
