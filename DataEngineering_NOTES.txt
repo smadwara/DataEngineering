@@ -1617,6 +1617,42 @@ after the agrregation work i.e combiner at Mapper end output from Mapper 3 (bcz 
 
 with the implementation of combiner logic, we will get to send less k,v pairs to Reducer which will results in optimized performance of Mapreduce.
 
+Complete MapReduce workflow
+===========================
+
+Record Reader  Mapper  Combiner  Partitioner  Shuffle  Sort  Reducer
+
+Mapper creates data  Combiner locally aggregates it  Partitioner decides which Reducer gets each key  Shuffle/Sort transfers and groups it  Reducer processes it
+
+****** Combiner decides what data can be reduced locally. Partitioner decides which Reducer receives the key. ******
+
+Example:-
+
+Mapper 1                Mapper 2
+--------                --------
+Apple   1               Apple   1
+Apple   1               Banana  1
+Banana  1				Banana  1
+Apple   1
+                           
+Combiner                  Combiner
+                           
+Apple 3                   Apple 1
+Banana 1                  Banana 2
+                           
+   ÀÄÄÄÄÄÄ Partitioner ÄÄÄÄÙ
+             
+       ÚÄÄÄÄÄÁÄÄÄÄÄ¿
+                  
+   Reducer 1    Reducer 2
+     Apple        Banana
+     3 + 1        1 + 2
+                  
+      4             3
+
+
+***** Combiner do local aggregation on the Mapper machine only. So, No.of Combiners = No.of Mappers *****
+
 ***** Combiner is doing exactly same as Reducer code, Only difference is combiner works only on Mappers data but Reducer works on entire data *****
 
 Combiner plays an important role in optimisation, but we need to use them with caution
@@ -1638,6 +1674,7 @@ With combiner - 9/3 + 19/3 + 26/4 = (3 + 6.3 + 6.5)/3 = 15.83/3 = 5.27
 With combiner (correct way) - (total value, no.of values)
 
 (9,3), (19,3), (26,4) --> (54,10) --> 5.4
+
 
 
 
@@ -1692,6 +1729,8 @@ After shuffling and sorting on Reducer programmer view will be as below
 (tv, {myntra.com})
 
 
+
+
 Distributed Computing Demo
 ==========================
 
@@ -1713,7 +1752,7 @@ First use case - count the frequency of each word with 1 reducer
 
 mapreduce_prog.jar --> This is the jar file used in this case 
 
-Takes the input file from HDFS. To execute it of before that, we need to create our own file in Gateway node.
+Takes the input file from HDFS. To execute it or before that, we need to create our own file in Gateway node.
 
 0. upload the jar files from your system to the Gateway Node
 
@@ -1742,7 +1781,7 @@ Now we need to run the "mapreduce_prog.jar" (Java Archive)
 Here in the directory you will see a "_SUCCESS" empty file. We can make sure that job is executed successfully.
 and there will be another file "part-r-00000" file (r- reducer) and it let us know that only one file gets generated.
 
-7. hadoop fs -cat data/output/part*  *** to see the content of the output file ***
+7. hadoop fs -cat data/output/part*  +++++ to see the content of the output file +++++
 
 ******* If we run the "step 5" again we will get error, hdfs://m01.itversity.com:9000/user/itv028185/data/output already exists *******
 
@@ -1785,7 +1824,7 @@ we will see files "_SUCCESS" and "part-m-00000" (m-mapper) with data init. Mappe
 Third use case - count the frequency of each word with 2 reducers
 =================================================================
 
-mapreduce_prog_2_reducer.jar
+mapreduce_prog_2_reducer.jar --> This is the jar file used in this case 
 
 After running the below command,
 
@@ -1798,7 +1837,7 @@ we will see files "_SUCCESS", "part-r-00000" and  "part-r-00001" (r-reducer) wit
 Fourth use case - count the frequency of each word with custom practitioner (i.e instead of system defined Hash Function)
 =========================================================================================================================
 
-mapreduce_prog_cpractitioner.jar
+mapreduce_prog_cpractitioner.jar --> This is the jar file used in this case 
 
 if word length <=3 then it should go to reducer0, all other words should go to reducer1
 
@@ -1817,7 +1856,7 @@ to know that out custom practitioner logic is implemented or not
 Fifth use case - count the frequency of each word with combiner
 ===============================================================
 
-mapreduce_prog_combiner.jar
+mapreduce_prog_combiner.jar --> This is the jar file used in this case 
 
 After running the below command,
 
@@ -1825,7 +1864,8 @@ After running the below command,
 
 if we run --> hadoop fs -ls data/output
 
-we will see files "_SUCCESS" and "part-m-00000" (m-mapper) with data init. Mappers output is the final output here. Each Mapper will give you 1 output file and no.of mappers depends on no.of blocks we have.
+we will see files "_SUCCESS", "part-r-00000" with data init. As we are using 1 reducer 2 files will get created in the "data/output" directory.
+
 
 
 Apache Spark
@@ -1893,6 +1933,8 @@ but in spark it could be as min as 2 disk IO's
 Spark lets you focus on WHAT computation you want, while Spark handles HOW that computation is distributed across the cluster
 
 
+
+
 Apache Spark vs Databricks
 ==========================
 
@@ -1935,7 +1977,7 @@ Whenever we work on spark we want to do 3 things
 
 1. Load the data from source (HDFS / Cloud Datalake i.e S3, ADLS Gen2, GCS)
 2. Do various transformations to that data (filter, group by, join etc)
-3. Write/Load the final result to Target Location (i.e HDFS / Cloud Datalake) 
+3. Write/Load the final results to Target Location (i.e HDFS / Cloud Datalake) 
 
 
 
@@ -2064,4 +2106,325 @@ Every step will be added as a part of "Execution plan DAD". Only when we run col
 Instead of map, it will filter first. It will save a lot of time bcz we need to add fields using map transformation only for 5 records.
 
 Basically system will shuffle the transformations inorder to get the required results by optimising the performance.
+
+
+
+Word Count Example in Apache Spark
+==================================
+
+Firstly we need to create a spark session, bcz it acts like an entry point for the spark cluster. If we want to execute anything on the spark cluster it should go through the spark session.
+
+Spark session is given from spark v2.0 before that we have spark context, sql context, hive context
+
+Spark session is like an umbrella that holds all these spark context, sql context, hive context
+
+Current version - Spark v3.0
+
+we will do 3 things in spark
+
+1. Load the data from source (HDFS / Cloud Datalake i.e S3, ADLS Gen2, GCS)
+2. Do various transformations to that data (filter, group by, join etc)
+3. Write/Load the final results to Target Location (i.e HDFS / Cloud Datalake)
+
+To load a file we have 3 approaches
+
+RDD --> requires spark context
+Dataframes --> can work with spark session
+Spark Sql --> can work with spark session
+
+If we want to execute anything on Spark Cluster using RDD we need spark context as entrypoint.
+
+If we want to execute anything on Spark Cluster using Dataframes/Spark Sql we need spark session as entrypoint.
+
+Considering we have spark session
+
+we run the steps of code as below to execute on the spark Cluster
+
+rdd1 = spark.sparkContext.textFile("/user/itv028185/data/input.txt")
+
+rdd2 = rdd1.flatMap(lambda x : x.split(" "))
+
+rdd3 = rdd2.map(lambda word : (word,1))
+
+rdd4 = rdd3.reduceByKey(lambda x,y : x+y)
+
+rdd4.collect()
+
+reduceByKey --> this transformation will take two rows at a time and then add next two rows
+
+Basically collect will execute the entire plan from starting and all processing will happen on the clusters. We will get the results to Driver Machine i.e Gateway node.
+
+If we have 2Tb results, then it will lead to OOM error on Gateway node. Bcz the output data should fit in the memory of the machine. Machine will crash as we excuted the code on Driver machine.
+
+So we need to write the output of the execution to HDFS inorder avoid the crashing of Driver Machine bcz of having huge data by using below command
+
+#rdd4.saveAsTextFile("/user/itv028185/data/output") --> /user/itv028185/data/output folder should not exist
+
+To verify the data in hdfs run below command
+
+#hadoop fs -ls data/output
+
+we will see files "_SUCCESS", "part-00000" and "part-00001" and there is no part-m/r bcz it is not Mapper or Reducer output
+
+***** https://mo2.itversity.com:18080 --> This is the history server to verify the commands that we have executed *****
+
+***** Whenever we run "collect" command a job will get created in the history server 2 check dese details go 2 "https://mo2.itversity.com:18080" *****
+
+
+Implementation Resources 
+------------------------
+Reference Jupyter Notebooks
+Please make sure to use your User-Id in the code or replace it with {username} 
+Example : 
+rdd1 = spark.sparkContext.textFile("/user/itv028185/data/inputfile.txt")
+For the above line of code replace itv028185 with your user-id 
+
+(OR)
+
+Use the following approach - with this, the user-id is internally replaced with your user-id without having to explicit mention.
+
+rdd1 = spark.sparkContext.textFile("/user/{username}/data/inputfile.txt")
+rdd2 = rdd1.flatMap(lambda x: x.split(" "))
+rdd3 = rdd2.map(lambda x: (x,1))
+rdd4 = rdd3.reduceByKey (lambda x,y: x+y)
+rdd4.collect() --> to display the output on the screen
+rdd4.savAsTextFile("/user/itv028185/data/newoutput") --> to save the output in the HDFS.
+
+
+
+Week-4
+======
+
+Python Basics
+-=-=-=-=-=-=-
+
+Map transformation in spark
+
+For each input and it gives one transformed ouput (1000 input --> 1000 output)
+
+Map is a function in python also
+
+Python map function vs spark map Transformation
+-----------------------------------------------
+python map function wont give us parallelism, using which we get to work across the cluster. It will work on single Gateway node on which you logged in.
+
+******** Reduce function basically work on 2 rows at a time and map function works on 1 row at a time ********
+
+What is normal function vs lambda Function
+------------------------------------------
+
+Normal Function
+---------------
+1)
+def my_sum(x,y):
+	return x+y 
+
+total = mysum(5,7)
+
+print(total)
+
+2)
+my_list = [5,7,9,11,13]
+
+I want to double each of the element in the above list
+
+def doubler(x):
+	return 2*x
+
+output  = list(map(doubler, my_list))
+print(output)
+
+
+code explanation
+----------------
+output shoule be list, inside that we are calling the map function. Map function will make sure doubler function is applied to each element in "my_list".
+
+******** Lambda function also called as in-line functions/ anonymous functions in scala ********
+
+2) using lambda function
+
+output1 = list(map(lambda x: 2*x, my_list))
+print(output1)
+
+3)
+my_list1 = [5,7,9,11,13,15]
+
+def sumlist(x):
+	total = 0
+	for i in x:
+		total = total + i 
+	return total
+
+output2 = sumlist(my_list1)
+print(output2)
+
+3) using lambda function
+
+from functiontools import reduce 	------------> without importing reduce function it will throw error. i.e name 'reduce' is not defined.
+output2 = list(reducer(lambda x,y: x+y,my_list1))
+print(output2)
+
+****** Map and Reduce are called as Higher order functions. Because we apply map function takes another function as a parameter ******
+
+Higher order functions are those which takes another function as a parameter or it gives output as another function
+
+
+Spark Usecase1 - Orders Data
+----------------------------
+
+Load the orders data and create RDD and then perform various transformations.
+
+We have a orders file in --> hadoop fs -ls /public/trendytech/retail_db/orders/part-00000
+
+order_id, date, customer_id, order_status
+
+1. We want to count the orders in each category (closed/peding_payment/completed/payment_review)
+
+2. Top 10 customers who placed the most number of orders
+
+3. Distinct count of customers who placed atleast one order
+
+4. Which customer has the maximum number of orders where order_status is "closed"
+
+
+Steps to execute to get the output for above queries
+----------------------------------------------------
+
+1. To execute our code on spark cluster we have to create a spark session 
+
+Here is boiler plate code to create Spark Sessionfrom
+
+from pyspark.sql import SparkSession
+import getpass
+username = getpass.getuser()
+spark = SparkSession. \
+		builder. \
+		config('spark.ui.port','0'). \
+		config("spark.sql.warehouse.dir", f"/user/{username}/warehouse"). \
+		enableHiveSupport(). \
+		master('yarn'). \
+		getOrCreate()
+		
+orders_rdd = spark.sparkContext.textFile("/public/trendytech/retail_db/orders/")
+
+orders_rdd.take(5)  --> to print first 5 lines of code on the screen to verify/check the data
+
+
+Query 1. We want to count the orders in each category
+
+Input Data
+-----------
+1, 2013-07-25 00:00:00.0, 11599, CLOSED
+2, 2013-08-25 00:00:00.0, 11219, COMPLETED
+3, 2013-09-25 00:00:00.0, 12219, PENDING_PAYMENT
+
+Expeteced output
+----------------
+CLOSED,1
+PENDING_PAYMENT,1
+COMPLETED,1
+
+need to use map transformation bcz 1 input we need to 1 output
+
+2. mappped_rdd = orders_rdd.map(lambda x: (x.split(",")[-1],1))
+
+3. reduced_rdd = mapped_rdd.reduceByKey(lambda x,y: x+y)
+
+3.1 reduced_rdd.take(10)  --> to view 10 rows of output on screen
+
+Output Data is so small, when we are using Big Data systems that does not mean we get final output data using Big Data system only.
+
+Role of Big Data system/technology is to bring it to a form that can be easily handled it, but not that mean we get final output data using Big Data technology.
+
+Big Data technology will help you to bring it to stage even normal/simpler technologies can handle the output later.
+
+Explanation for above lines
+---------------------------
+
+This is the original output that I got after running #reduced_rdd.collect()
+
+[('CLOSED', 7556),
+ ('CANCELLED', 1428),
+ ('COMPLETED', 22899),
+ ('PENDING_PAYMENT', 15030)]
  
+By taking the above output to an Excel (simpler technology) we can sort the data based on highest order status count at first
+
+By using spark also we can do that sorting
+
+4. reduced_sorted_rdd = reduced_rdd.sortBy(lambda x: x[1]) ---> by default output will be in ascending order
+4.1. reduced_sorted_rdd.take(10) --> to view 10 rows of output on screen
+
+4. reduced_sorted_rdd = reduced_rdd.sortBy(lambda x: x[1], False) --> to get the output in descending order
+4.1. reduced_sorted_rdd.take(10) --> to view 10 rows of output on screen
+ 
+ 
+Query 2. Top 10 customers who placed the most number of orders
+
+Input Data
+-----------
+order_id, date, customer_id, order_status
+1, 2013-07-25 00:00:00.0, 11599, CLOSED
+2, 2013-08-25 00:00:00.0, 11219, COMPLETED
+3, 2013-09-25 00:00:00.0, 12219, PENDING_PAYMENT
+
+Expeteced output
+----------------
+11599,1
+11219,1
+12219,1
+
+1. Execution of spark session creation code 
+
+2. customers_rdd = orders_rdd.map(lambda x: (x.split(",")[2],1))
+
+3. customers_reduced_rdd = customers_rdd.reduceByKey(lambda x,y: x+y)
+3.1 customers_reduced_rdd.take(20)
+
+4. customers_sorted = customers_reduced_rdd.sortBy(lambda x: x[1], False) --> descending order of customers
+4.1 customer_sorted.take(10) --> to view top 10 customers who placed more Orders
+
+
+Query 3. Distinct count of customers who placed atleast one order
+
+1. As usual
+
+2. distinct_customers = orders_rdd.map(lambda x: x.split(",")[2]).distinct()
+
+	#distinct internally perform lot of operations like sorting, grouping 
+
+3. distinct_customers.count() --> to find the count of distinct customers
+
+
+Query 4. Which customer has the maximum number of orders where order_status is "closed"
+
+1. As usual
+
+2. filtered_orders = orders_rdd.filter(lambda x: (x.split(",")[3] == 'CLOSED'))
+2.1 filtered_order.take(20) --> to view top 20 rows of output data on screen
+
+3. filtered_mapped = filtered_orders.map(lambda x: (x.split(",")[2],1))  ---> (x,1) is called as "pair rdd"
+3.1 filtered_mapped.take(20) --> to view top 20 rows of output data on screen
+
+4. filtered_aggregated = filtered_mapped.reduceByKey(lambda x,y: x+y)
+4.1 filtered_aggregated.take(20) --> to view top 20 rows of output data on screen
+
+4. filtered_sorted = filtered_aggregated.sortBy(lambda x: x[1], False)
+4.1 filtered_sorted.take(1) --> to find customer has the maximum number of orders where order_status is "closed"
+
+
+map --> 100 input rows 100 output rows
+
+reducer --> 100 input rows 1 output row
+
+reducerByKey --> if you have 100 input rows but 14 different keys you will get 14 output rows
+
+filter --> 100 input rows you will get <= 100 input rows
+
+sortBy --> 100 input rows and 100 output rows (by default ascending order if we use false as parameter you will get output in descending order)
+
+sortByKey --> 100 input rows 100 output rows (works for pair rdd ex: ("Hello",100))
+
+distinct --> 100 input rows but you will get <= 100 input rows
+
+count --> action to count the number of rows and it will execute the plan
