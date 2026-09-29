@@ -553,7 +553,7 @@ Amazon will get a lot of transactional data then Data Engineers will take that d
 
 In general before this, 
 
-ETL + DWH is the methodology we were using that means we transform the data while loading/ingesting into DWH and even in DWH we can transform the remaingin part of data if needed like aggregation of data etc and it is a bit challenging becuase DWH only stores the structured data and it is costly becuase it requires some specialised servers.
+ETL + DWH is the methodology we were using that means we transform the data while loading/ingesting into DWH and even in DWH we can transform the remaining part of data if needed like aggregation of data etc and it is a bit challenging becuase DWH only stores the structured data and it is costly becuase it requires some specialised servers.
 
 Modern approach is,
 
@@ -578,7 +578,7 @@ Visualization of Hadoop cluster
 
 Hard disk is allocated to each datanodes, the Hard disks on these machines will form HDFS. Each Datanode will have CPU, Memory also for processing along with storage (Hard disk). 
 
-So block1 data is processed on the same machine (process the data on machine where it is kept) --> Concept of Data Locality (It improves the performance as we are not moving the data to another machine for data processing)
+So block1 data is processed on the same machine (process the data on the same machine where date is kept) --> Concept of Data Locality (It improves the performance as we are not moving the data to another machine for data processing)
 
 *********** Hadoop works on the principle of Data locality *********** 
 
@@ -2166,9 +2166,9 @@ To verify the data in hdfs run below command
 
 we will see files "_SUCCESS", "part-00000" and "part-00001" and there is no part-m/r bcz it is not Mapper or Reducer output
 
-***** https://mo2.itversity.com:18080 --> This is the history server to verify the commands that we have executed *****
+***** https://m02.itversity.com:18080 --> This is the history server to verify the commands that we have executed *****
 
-***** Whenever we run "collect" command a job will get created in the history server 2 check dese details go 2 "https://mo2.itversity.com:18080" *****
+***** Whenever we run "collect" command a job will get created in the history server 2 check dese details go 2 "https://m02.itversity.com:18080" *****
 
 
 Implementation Resources 
@@ -2200,7 +2200,7 @@ Python Basics
 
 Map transformation in spark
 
-For each input and it gives one transformed ouput (1000 input --> 1000 output)
+For each input and it gives one transformed output (1000 input --> 1000 output)
 
 Map is a function in python also
 
@@ -2270,7 +2270,7 @@ Higher order functions are those which takes another function as a parameter or 
 
 
 Spark Usecase1 - Orders Data
-----------------------------
+============================
 
 Load the orders data and create RDD and then perform various transformations.
 
@@ -2305,7 +2305,7 @@ spark = SparkSession. \
 		master('yarn'). \
 		getOrCreate()
 		
-orders_rdd = spark.sparkContext.textFile("/public/trendytech/retail_db/orders/")
+orders_rdd = spark.sparkContext.textFile("/public/trendytech/retail_db/orders/*")
 
 orders_rdd.take(5)  --> to print first 5 lines of code on the screen to verify/check the data
 
@@ -2428,3 +2428,282 @@ sortByKey --> 100 input rows 100 output rows (works for pair rdd ex: ("Hello",10
 distinct --> 100 input rows but you will get <= 100 input rows
 
 count --> action to count the number of rows and it will execute the plan
+
+
+Spark Core APIs - RDD
+=====================
+
+Scenario
+--------
+
+We need to develop a logic to process a huge file of size (10Tb file)
+
+we will do our development by considering sample data. When you feel that you are getting correct results. Then replace your sample data with actual file.
+
+Parallelize
+-----------
+you create sample data and you create RDD out of it.
+
+We can run pyspark command even in Linux terminal
+
+step 1. Open the terminal, run "pyspark3"
+
+It will install the latest version of spark and sparkSession will be available by defualt as Spark. But we have to create a sparkSession in Jupiter notebook by using boiler plate code
+
+Step 2. Run "spark"
+
+output:- <pyspark.sql.session.SparkSession object at .......>
+
+Step 3. Run "sc"
+
+output:- <SparkContext master=yarn appName=PySparkShell>
+
+/******
+We can run the same commands that we have executed during the above use case Orders Data
+
+COMMAND - orders_rdd = sc.textFile("/public/trendytech/retail_db/orders/*")
+******/
+
+To work with sample data inorder to develop the logic to find the frequency of each word. For 10Tb file
+-------------------------------------------------------------------------------------------------------
+
+******** We create a RDD to make sure that a collection is distributed across the cluster ********
+
+***** By using parallelize we can create RDD with the local data (i.e data on Gateway node) *****
+
+
+words = ("My","NAME","is","Sandeep","Expert","in","Data Engineering","Concepts","and","I","am","happy","to","get","30LPA","in","Deloitte")
+
+words_rdd = spark.SparkContext.parallelize(words)
+
+--> Now we will develop our logic on this "words_rdd" (sample data) and check whether it is working fine or not and once it works fine we will use our big size file.
+
+words_normalized_case = words_rdd.map(lambda x: x.lower())
+
+words_normalized_case.collect() --> to view data on screen
+
+mapped_words = words_normalized_case.map(lambda x: (x,1))
+
+aggregated_result = mapped_words.reduceByKey(lambda x,y: x+y)
+
+aggregated_result.collect()
+
+
+This is simple, only few new things are there at starting. This is functional programming and every transformation will give some output to us, so we can chain everything together.
+
+Chain of spark code in a line
+-----------------------------
+spark.SparkContext.parallelize(words).map(lambda x: x.lower()).map(lambda x: (x,1)).reduceByKey(lambda x,y: x+y).collect()
+
+--------- OR ---------
+
+spark. \
+SparkContext. \
+parallelize(words). \
+map(lambda x: x.lower()). \
+map(lambda x: (x,1)). \
+reduceByKey(lambda x,y: x+y). \
+collect()
+
+***** After collect we cant do any transformation, so action should be on next line as per below code *****
+
+--------- OR ---------
+
+Best practise
+=============
+
+result =  spark. \
+SparkContext. \
+parallelize(words). \
+map(lambda x: x.lower()). \
+map(lambda x: (x,1)). \
+reduceByKey(lambda x,y: x+y)
+
+result.collect() 
+
+@@@@ We can work in Terminal also but UI, some other features like saving the output for future use and others are really good incase of Jupiter Notebook @@@@
+
+
+More on Spark parallelize 
+=========================
+
+RDD is made up of partitions i.e in-memory of the worker nodes as it distributed.
+
+How to check that how many partitions your RDD is having
+--------------------------------------------------------
+
+Let us consider that we have a file of size 1 Gb. we created a RDD on top of it by loading the data from that file in HDFS.
+
+based_rdd = loading data from HDFS (1 Gb file)
+
+1 Gb file - 8 blocks -- Block Size is 128 Mb
+
+So there will be 8 blocks in HDFS and then we will have 8 partitions in RDD.
+
+***** Genarally No.of partitions in RDD = No.of Blocks in HDFS *****
+
+If we use parallelize and create a base_rdd, how many blocks will be there?
+---------------------------------------------------------------------------
+
+By looking below scenario we think there will be 1 partition and 1 block because file size is less than 128 Mb.
+
+words = ("My","NAME","is","Sandeep","Expert","in","Data Engineering","Concepts","and","I","am","happy","to","get","30LPA","in","Deloitte")
+
+words_rdd = spark.SparkContext.parallelize(words) 
+
+words_rdd.getNumPartitions()
+output:- 2
+
+Logic behind 2 partitions
+-------------------------
+
+When we use parallelize, the number of partitions are defined by a property called "defaultParallelism". This is defined by Admin.
+
+	spark.sparkContext.defaultParallelism
+	output -- 2
+	
+Scenario:-
+--------
+Let us consider that we are reading a file from text file from HDFS
+
+	orders_rdd = spark.sparkContext.textFile("/public/trendytech/retail_db/orders/*")
+
+	orders_rdd.getNumPartitions()
+	output:- 2
+
+There is another property called "defaultMinPartitions". 
+This will make sure that we will have min of 2 partitions if the block size is <1, but if block is size >=2 then the partitions will be equal to the number of blocks
+
+	spark.sparkContext.defaultMinPartitions
+	output:- 2
+
+getNumPartitions --> to check how many partitions are there in the RDD
+
+defaultParallelism --> Default 2 - when we use parallelize, the number of partitions are defined by this property
+
+defaultMinPartitions --> Default 2 - when we load the file from HDFS, if blocks are less than 2 else partitions = no.of blocks.
+
+CountByValue (Action)
+=====================
+
+CountByValue is an action. 
+
+***** Map + reduceByKey + collect = Map + CountByValue *****
+
+Map + reduceByKey + collect
+---------------------------
+	orders_rdd = spark.sparkContext.textFile("/public/trendytech/retail_db/orders/*")
+	mappped_rdd = orders_rdd.map(lambda x: (x.split(",")[3],1))
+	reduced_rdd = mapped_rdd.reduceByKey(lambda x,y: x+y)
+	reduced_rdd.collect()
+	
+	output:-
+	[('CLOSED', 7556),
+	('CANCELLED', 1428),
+	('COMPLETED', 22899),
+	('PENDING_PAYMENT', 15030)]
+
+This is a transformation.
+
+I would prefer using reduceByKey, when I thought of doing someother transformations later on this data. Because the results are still distributed across the cluster and I can do transformations using the parallelism.
+
+Basically we will go with reduceByKey, if I need to do anything extra in parallel and I can leverage the parallelism of the cluster.
+
+When we call a transformation we get a RDD which is across the cluster and when you perform some transformations in parellel.
+
+***** Not the final results, want to do some other transformations by using the power of cluster (parallelism) --> reduceByKey *****
+	
+Map + CountByValue
+------------------					 
+	orders_rdd = spark.sparkContext.textFile("/public/trendytech/retail_db/orders/*")
+	mappped_rdd = orders_rdd.map(lambda x: (x.split(",")[3]))
+	mapped_rdd.countByValue()
+	
+	output:-
+	defaultdict(int,
+					{'CLOSED', 7556},
+					 {'CANCELLED', 1428},
+					 {'COMPLETED', 22899},
+					 {'PENDING_PAYMENT', 15030})
+					 
+I would prefer using countByValue, when I know after this I wont do any operations and this is my final result.
+
+When we call an action, all the results are computed and given to driver machine (Gateway Node). 
+					 
+But if I use countByValue, then I am getting results on my local machine (Gateway Node) and whatever I do with the result it will happen on my local machine and it will not happen across the cluster and wont get the power of cluster i.e parallelism.
+
+***** Final Results --> countByValue *****
+
+
+More Spark Transformations
+==========================
+
+All of our transformations falls under 2 categories
+
+1. Narrow Transformation --> where there is no shuffling involved (map, flatMap, filter)
+2. Wide Transformation --> where shuffling involved (reduceByKey, groupByKey)
+
+
+Scenario
+--------
+Let us consider we have a 500 mb file in your HDFS. You want to create a RDD out of it. 
+
+For 500 mb file there will be 4 blocks and 4 partitions
+
+so 4 partitions will be present on 4 different worker Nodes
+
+we want to perform map on rdd1 and we do some operation
+
+	rdd1.map
+
+WN1			WN2			WN3			WN4
+p1			p2			p3			p4   ==> rdd1
+
+rdd1.map() (p1 will be processed on WN1 and give the results and there is no shuffling/movement of data) (narrow transformation)
+
+r1			r2			r3			r4	 ==> rdd2 
+(hi,1)                  (hi,1)
+(hi,1)					(hi,1)
+						(hi,1)
+
+(hi,2)					(hi,3)
+local aggregation
+
+			(hi,2)
+			(hi,3)
+			
+			(hi,5)
+	global/final aggregation --> Here we are moving away from the concept of "Data Locality" bcz WN1 and WN3 data is moved to WN2
+		  
+Now data should be shuffled, then only 'hi' should goto one machine. So that we get the final output.
+
+rdd2.reduceByKey() (when ever we do shuffling its a wide transformation and we are moving away from the concept of Data Locality)
+
+****** Our intent should be try to minimise wide transformations as they are heavy bcz it has to move the data from 2/3 machines to another machine and if data is big it takes time as data movement/shuffling takes time so it becomes a costly operation ******
+
+Before doing wide transformations try to bring your data to a stage where data is less.
+
+Example:-
+Apply filter transformation at initially stages if possible. So that we can discard the data that is not required and then we can work on remaining data by applying wide transformations if needed.
+
+We can check all the spark applications that we have executed but not the running applications in the History Server. History server will be on a particular port on the same labs link which we use.
+
+
+History Server Link ----> https://m02.itversity.com:18080
+
+Here when we click on "App ID" --> You will go to "Spark Jobs" page ****** No.of Jobs = No.of actions (collect, take) ******
+
+What is stage and why 2 stages in DAG?
+======================================
+
+Series of transformations that we want to execute is DAG.
+
+We can have 1/2 stages but it depends on no.of wide transformations we have.
+
+***** No.of stages = No.of wide transformations + 1 *****
+
+What happens actually is, whenever we execute wide transformations then result of "Stage 0" is going to the disk and then "Stage 1" is taken from disk.
+
+If we have 2 wide transformations, then it will be 3 stages. After every wide transformation the result will go back to the disk and write the output and next stage will take the result from the disk because shuffling will happen.
+
+**** No.of tasks = No.of parititions = No.of blocks in HDFS *****
