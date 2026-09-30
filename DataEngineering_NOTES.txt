@@ -1640,9 +1640,9 @@ Combiner                  Combiner
 Apple 3                   Apple 1
 Banana 1                  Banana 2
                            
-   ÀÄÄÄÄÄÄ Partitioner ÄÄÄÄÙ
+   Ã€Ã„Ã„Ã„Ã„Ã„Ã„ Partitioner Ã„Ã„Ã„Ã„Ã™
              
-       ÚÄÄÄÄÄÁÄÄÄÄÄ¿
+       ÃšÃ„Ã„Ã„Ã„Ã„ÃÃ„Ã„Ã„Ã„Ã„Â¿
                   
    Reducer 1    Reducer 2
      Apple        Banana
@@ -2261,7 +2261,7 @@ print(output2)
 3) using lambda function
 
 from functiontools import reduce 	------------> without importing reduce function it will throw error. i.e name 'reduce' is not defined.
-output2 = list(reducer(lambda x,y: x+y,my_list1))
+output2 = list(reduce(lambda x,y: x+y,my_list1))
 print(output2)
 
 ****** Map and Reduce are called as Higher order functions. Because we apply map function takes another function as a parameter ******
@@ -2581,7 +2581,7 @@ getNumPartitions --> to check how many partitions are there in the RDD
 
 defaultParallelism --> Default 2 - when we use parallelize, the number of partitions are defined by this property
 
-defaultMinPartitions --> Default 2 - when we load the file from HDFS, if blocks are less than 2 else partitions = no.of blocks.
+defaultMinPartitions --> Default 2 - when we load the file from HDFS, if blocks are less than 1 then 2 partitions by default else partitions = no.of blocks.
 
 CountByValue (Action)
 =====================
@@ -2707,3 +2707,51 @@ What happens actually is, whenever we execute wide transformations then result o
 If we have 2 wide transformations, then it will be 3 stages. After every wide transformation the result will go back to the disk and write the output and next stage will take the result from the disk because shuffling will happen.
 
 **** No.of tasks = No.of parititions = No.of blocks in HDFS *****
+
+
+Difference between reduceByKey and reduce
+-----------------------------------------
+
+reduceByKey --> it is a wide transformation and it works on "pair rdd" (key,value) ("CLOSED",1) ("PENDING",1) ("CLOSED",1)
+rdd.reducetByKey(lambda x,y: x+y)
+
+reduce 
+======
+It is an action, it works on normal rdd not "pair rdd"
+
+After creating the spark session in pyspark3
+my_list = [1,3,5,7,9,11,13]
+base_rdd = spark.sparkContext.parallelize(my_list)
+base_rdd.reduce(lambda x,y: x+y)
+output:- 49
+
+********
+Reason behind Y reduce is action and Y reduceByKey is transformation?
+====================================================================
+
+when we use reduce, we will get 1 single value as the output on driver machine. By executing reduce, our data is boiling down to the point that data that does not require any parallelism even if we want to do something with that output.
+
+when we use reduceByKey, we will get huge data in the form of (key,value) pairs (i.e incase of counting the frequency of each word) and on this output data we can apply some transformations like filtering using parallelism across the cluster. 
+Result of reduceByKey is still a rdd. If we perform some transformations/operations on this rdd we will get parallelism, to maintain the parallelism reduceByKey is given as transformation.
+********
+
+
+reduceByKey vs groupByKey
+=========================
+Let us consider a file named "orders.csv" which is of size 3.5Gb and it is present in "/user/itv028185/public/trendytech/orders/orders.csv" 
+and it is having approximately 86Millions of rows (wc -l orders.csv)
+
+order_id, order_date, customer_id, order_status --> these are the column names in the file
+
+3.5Gb file
+28 blocks in your HDFS based on the default block size of 128Mb...
+28 partitions in RDD...
+we have 3 worker nodes. These 28 partitions will be spread across these 3 nodes. so each node will hold more than 1 partition in this case...
+when we call map, which is a Narrow Transformation. If partition1 is stored on worker node1 then p1 is processed on wn1 only...
+wn1
+p1
+when we use reduceByKey, which is a wide transformation. Shuffling will take place but what it will do is...
+Let us consider every machine is holding some key,value pairs data like below...
+("CLOSED",1) 
+("PENDING",1) 
+("CLOSED",1)
