@@ -2652,9 +2652,7 @@ For 500 mb file there will be 4 blocks and 4 partitions
 
 so 4 partitions will be present on 4 different worker Nodes
 
-we want to perform map on rdd1 and we do some operation
-
-	rdd1.map
+we want to perform map on rdd1 and we do some operation "rdd1.map"
 
 WN1			WN2			WN3			WN4
 p1			p2			p3			p4   ==> rdd1
@@ -2738,8 +2736,8 @@ Result of reduceByKey is still a rdd. If we perform some transformations/operati
 
 reduceByKey vs groupByKey
 =========================
-Let us consider a file named "orders.csv" which is of size 3.5Gb and it is present in "/user/itv028185/public/trendytech/orders/orders.csv" 
-and it is having approximately 86Millions of rows (wc -l orders.csv)
+Let us consider a file named "orders.csv" which is of size 3.5Gb and it is present in "/user/itv028185/public/trendytech/orders/orders.csv" in HDFS.
+and it is having approximately 86 Millions of rows (wc -l orders.csv)
 
 order_id, order_date, customer_id, order_status --> these are the column names in the file
 
@@ -2752,6 +2750,232 @@ wn1
 p1
 when we use reduceByKey, which is a wide transformation. Shuffling will take place but what it will do is...
 Let us consider every machine is holding some key,value pairs data like below...
-("CLOSED",1) 
-("PENDING",1) 
-("CLOSED",1)
+wn1
+("CLOSED",1) 							
+("PENDING",1) --> local aggregation --> ("CLOSED",2) --> bcz of the local aggregation "combiner" --> shuffling will be less 
+("CLOSED",1)                            ("PENDING",1)
+
+wn2
+("CLOSED",1) 							
+("PENDING",1) --> local aggregation --> ("CLOSED",2)
+("CLOSED",1)                            ("PENDING",1)
+
+wn3
+("CLOSED",1) 							
+("PENDING",1) --> local aggregation --> ("CLOSED",2)
+("CLOSED",1)                            ("PENDING",1)
+
+what it will do is local aggregation like "combiner"
+
+#spark.stop() --> stopping the spark session
+When we run the stop command we can find the spark applications details in History server
+
+To check task execution related details
+---------------------------------------
+In the History server, 
+1. Click on "stages"
+2. Click on "reduceByKey at" where Tasks =  Max/Max (Succeeded/Total)
+3. Here in Summary Metrics for 28 tasks
+		 Min, 25th Percentile, 50th Percentile, 75th Percentile, Max
+Duration 6s       7s				9s 				11s			 14s
+
+
+groupByKey
+==========
+
+It will not do any local aggregation, it is for grouping. 
+It will send all the similar keys on to a different machine.
+
+General Scenario:-
+================
+Let us consider we have a 1000 node cluster and file of size 1 TB
+1Tb - 8000 blocks
+each node will hold 8 blocks 
+so your rdd will have 8000 partitions
+9 unique values in order_status column 
+If we reduceByKey in this case, as we have 1000 machines all these machines will work in parallel in order to aggregate the results for 9 unique order_status.
+machine 1,	machine 2,...machine 1000
+9 rows		9 rows		 9 rows(After local aggregation)
+we will get 9 rows bcz reduceByKey will do local aggregation and we have only 9 unique order_status
+
+After this to do final aggregation, all the "closed" will go to a single (machine-12)
+On machine-12, we will have 1000 rows of "closed" key, value pairs. By using "System Defined Hash Function" concept.
+This way we are shuffling very very less data, bcz we are aggregating the data locally to a stage where will have kb's of data.
+
+1. After running sparkSession boiler plate code
+2. base_rdd = spark.sparkContext.textFile("/user/itv028185/public/trendytech/orders/orders.csv")
+3. mapped_rdd = based_rdd.map(lambda x: (x.split(",")[3],x.split(",")[2]))
+   output:-
+   (closed,11234)
+   (pending_payment,25612)
+   (complete,2112)
+   (closed,12365)
+   (pending_payment,17981)
+	.
+	.
+	.
+4. grouped_rdd = mapped_rdd.groupByKey()
+   output:-
+   (closed,{11234,12365,21234,....})
+   (pending_payment,{25612,17981,....})
+   (complete,{2112,....})
+   .
+   .
+   .
+   9
+5. result = grouped_rdd.map(lambda x: (x[0], len(x[1])))
+   output:-
+   (closed,12341)
+   (pending_payment,12981)
+   (complete,1097)
+   .
+   .
+   .
+   9
+6. result.collect()
+
+If we use groupByKey,
+m1
+m2
+m3				closed --> m7 (without doing any local aggregation)
+.				open   --> m9
+.
+m1000
+
+all of your - 1Tb of data will be finally sitting across just 9 machines.
+we are shuffling a lot of data and not doing anything in parallel.
+will lead to OOM as we holding 1Tb of data across just 9 machines.
+we are restricting parellelism.
+so groupByKey is not recommended.
+
+Here disadvantage is that we are not aggregating the data locally and loading huge amount of each unique key value to a single machine by avoiding parallelism which can cause OOM on the machine. So the machine end up taking lot of time to do the aggregation.
+
+reduceByKey
+-----------
+1)
+When we have used reduceByKey, 
+Input File Size - 3.5 Gb
+Shuffle Read - 10.7 Kb (The amount of data read by tasks in a stage from shuffle files produced by the previous stage)
+Shuffle Write - 19.8 Kb (The amount of data written by tasks in a stage to disk (or memory) before it is sent to other executors for the next stage)
+2)
+In History Server --> click on stages --> click on "reduceByKey at" where Tasks =  Max/Max (Succeeded/Total)
+In Summary Metrics for 28 tasks
+		 Min, 25th Percentile, 50th Percentile, 75th Percentile, Max
+Duration 6s       7s				9s 				11s			 14s
+3)
+In History Server --> click on stages --> click on "collect at"
+In Summary Metrics for 28 tasks
+Duration for Min execution time of task and Max execution time of task is small (Normal). Data distribution is appropriate.
+
+
+groupByKey
+----------
+1)
+When we have used reduceByKey, 
+Input File Size - 3.5 Gb
+Shuffle Read - 117.2 Mb
+Shuffle Write - 360 Mb
+2)
+In History Server --> click on stages --> click on "groupByKey at" where Tasks =  Max/Max (Succeeded/Total)
+In Summary Metrics for 28 tasks
+		 Min, 25th Percentile, 50th Percentile, 75th Percentile, Max
+Duration 8s       9s				12s 				13s	     15s
+3)
+In History Server --> click on stages --> click on "collect at"
+In Summary Metrics for 28 tasks
+Duration for Min execution time of task and Max execution time of task is huge (Abnormal)
+Because here out of 1000 machines, only 9 machines are handling huge amount of each key data. Data distribution is not appropriate.
+
+
+Join
+====
+Join is a Transformation.
+
+Let us consider that we have 2 files in HDFS.
+orders.csv - 1100 mb (more than 1 Gb) | 9 blocks | 9 partitions 
+customers.csv - 1 mb | 1 block | 2 partitions (min 2 configured) 
+
+How this join transformation works?
+----------------------------------
+For joining, customer_id column is the column between orders.csv and customers.csv file
+
+Lets consider that we have 4 node cluster.
+			node1 		node2 		node3 		node4
+orders		p1,p2		p3,p4		p5,p6		p7,p8,p9(1012)
+customers  	p1,p2(1012)
+									p9(1012)
+									p2(1012)
+
+Lets assume that orders dataset (customer_id 1012) is stored in p9 and customers dataset (customer_id 1012) is stored in p2.
+For join to happen, same keys should be on same node. For this we have to do lot of shuffling across the cluster to bring the same key (customer_id 1012) on to a same node. So this transformation comes under wide transformation.
+
+Code for how to do shuffling using join (wide) transformation
+-------------------------------------------------------------
+
+Step 1. Run the boiler plate code
+step 2. orders_base = spark.sparkContext.textFile("/user/itv028185/public/trendytech/orders/orders_1gb.csv") --> load orders dataset
+step 3. orders_map = orders_base.map(lambda x: (x.split(",")[2],x.split(",")[3])) --> get customer_id, order_status from orders dataset
+		orders dataset
+		input
+			1, 2013-07-25 00:00:00.0, 11599, CLOSED
+		output
+			(11599, CLOSED)
+step 4. customer_base = spark.sparkContext.textFile("/user/itv028185/public/trendytech/retail_db/customers/part-00000") --> load customers dataset
+step 5. customers_map = customer_base.map(lambda x: (x.split(",")[0],x.split(",")[8])) --> get customer_id, pincode from customers dataset
+		customer dataset
+		input
+			1, Richard, Hernandez, *********, **********, 6303 Heather Plaza, Brownsville, TX, 78521
+		output
+			(1,78521)
+step 6. joined_rdd = customers_map.join(orders_map)
+step 7. joined_rdd.saveAsTextFile("/user/itv028185/data/orders_joined")
+		output
+			11 part files as there are 11 tasks and 1 SUCCESS file
+
+Join transformation is a wide transformation and it is a costly operation as it need to shuffle the data a lot across the cluster.
+
+
+Broadcast Join
+==============
+How to optimize the problems that we have faced with Join tranformation.
+The below is the issue, we need to bring all the keys in order dataset and customers dataset on a same node to perform Join transformation.
+
+			node1 		node2 		node3 		node4
+orders		p1,p2		p3,p4		p5,p6		p7,p8,p9(1012) ----- bigger dataset
+customers  	p1,p2(1012)										   ----- small dataset
+									p9(1012)
+									p2(1012)
+
+To overcome this issue we are trying to copy the entire customers dataset on all the nodes bcz the customers dataset is small. 
+We may think this might be redundancy but the dataset is small i.e in Kb's. We are broadcasting the copy of customers dataset on all the nodes.
+
+			node1 		  node2 		  node3 		  node4
+orders		p1,p2		  p3,p4			  p5,p6			  p7,p8,p9(1012) ----- bigger dataset
+        all_customers	 all_customers   all_customers	all_customers	 ----- small dataset
+			(1012)		 (1012)			 (1012)			 (1012)
+			(1011)		 (1011)			 (1011)			 (1011)
+
+By broadcasting the data on all the nodes the data might increase 20 mb * 4 = 80 mb, but it may give some performance benifits. 
+Each machine is capable/self-sufficient to do the join locally. It does not need to depend on any other machine for joining and no need to shuffle the same key data on to a single machine.
+This is how broadcast transformation works. Bigger dataset is distributed across the cluster and complete copy of smaller data is kept on all the machines.
+
+node1
+part of orders data
+complete customer data
+
+As there is no need of shuffling, it wont create any additional stage.
+
+code for broadcast join
+-----------------------
+Step 1. Run the boiler plate code
+step 2. orders_base = spark.sparkContext.textFile("/user/itv028185/public/trendytech/orders/orders_1gb.csv")
+step 3. orders_map = orders_base.map(lambda x: (x.split(",")[2],x.split(",")[3])) 
+step 4. customer_base = spark.sparkContext.textFile("/user/itv028185/public/trendytech/retail_db/customers/part-00000")
+step 5. customers_map = customer_base.map(lambda x: (x.split(",")[0],x.split(",")[8]))
+
+We want to broadcast the customers dataset.
+RDD cannot be broadcasted and data should be sitting on your driver node or on the machine on which you logged in. Then only we can broadcast.
+
+step 6. customers_broadcast =  spark.sparkContext.broadcast(customer_map.collect())
+	spark context is entry point to broadcast/send the data across the cluster.
+	To make the "customer_map" rdd available on the driver node/local machine we use "customer_map.collect()"
