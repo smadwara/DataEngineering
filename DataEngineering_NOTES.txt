@@ -126,7 +126,7 @@ There are some technologies that are surrounded by the core components of Hadoop
 
 Sqoop / Hive / pig / HBase / Oozie 
 
-bascilly used to make our lives easier 
+basically used to make our lives easier 
 
 Ex:-
 
@@ -143,7 +143,7 @@ Hive - provides sql kind of interface to query the data. (Ex: Emp with highest s
 
 Oozie - Workflow scheduler. Define a workflow to execute (Mapreduce - MR) MR1, MR2, MR3 in a manner as per you requirement. (OUTDATED) *** we use ADF ***
 
-HBase - Nosql db (bascilly when we want to search quickly, Random access of data is possible instead of sequntial data check) (OUTDATED) *** We use Cosmosdb ***
+HBase - Nosql db (basically when we want to search quickly, Random access of data is possible instead of sequntial data check) (OUTDATED) *** We use Cosmosdb ***
 
 In case of 10L of records, instead of writing 
 
@@ -892,7 +892,7 @@ cat > filename --> to create a new file and enter the data
 once we run the command it will give you prompt to enter the data into the filename, once you enter the data and save it by using "ctrl + d".
 But the disadvantage with this command is if there is any content already present in filename then it will be overriden because we used "cat > filename"
 
-cat file1.txt file2.txt >> mergedfile.txt --> to append the content of file1 and file2 into a newly created file 'mergedfile.txt'
+cat file1.txt file2.txt >> mergedfile.txt --> to append the content of file1 at top and file2 at below into a newly created file 'mergedfile.txt'
 
 **** In case of cat commands, '>' for adding/overrding the data in a file && '>>' for appending the data into a file ****
 
@@ -1271,6 +1271,8 @@ System/framework will do shuffle and sort.
 
 ****** Mapper - Works on principle of Data Locality  &&& Reduce - Shuffle is required ******
 
+
+
 Week-3
 ------
 
@@ -1425,7 +1427,7 @@ explanation for consistent
 
 if we have, same key should always go to same reducer (i.e consistent) bcz if hello goes to different reducer we cant get the total count of hello
 (Hello,1) --> Assigned to Reducer1
-(hi,1) --> Assigned toReducer2
+(hi,1) --> Assigned to Reducer2
 (hello,1) --> Assigned to Reducer1
 
 *** By default Hadoop uses, system defined Hash Function to divide the k,v pairs. This Hash Function is consistent so that if a key repeats any number of times it is assigned to the same reducer ***
@@ -2012,7 +2014,7 @@ when we run 1,2,3 nothing will happen, but when we run 4 everything will happen.
 There are 2 kind of operations in Apache Spark
 ----------------------------------------------
 
-1. Transaformation (Step 1,2,3) 
+1. Transformation (Step 1,2,3) 
 2. Action (step 4)
 
 Transformations are lazy but actions are not i.e whenever transformations are applied they are added to execution plan and Whenever action is called/run the whole execution plan gets executed.
@@ -2577,11 +2579,13 @@ This will make sure that we will have min of 2 partitions if the block size is <
 	spark.sparkContext.defaultMinPartitions
 	output:- 2
 
+/////
 getNumPartitions --> to check how many partitions are there in the RDD
 
 defaultParallelism --> Default 2 - when we use parallelize, the number of partitions are defined by this property
 
 defaultMinPartitions --> Default 2 - when we load the file from HDFS, if blocks are less than 1 then 2 partitions by default else partitions = no.of blocks.
+/////
 
 CountByValue (Action)
 =====================
@@ -2704,10 +2708,10 @@ What happens actually is, whenever we execute wide transformations then result o
 
 If we have 2 wide transformations, then it will be 3 stages. After every wide transformation the result will go back to the disk and write the output and next stage will take the result from the disk because shuffling will happen.
 
-**** No.of tasks = No.of parititions = No.of blocks in HDFS *****
+**** No.of tasks = No.of parititions in RDD = No.of blocks in HDFS *****
 
 
-Difference between reduceByKey and reduce
+Difference between reduceByKey and reduce?
 -----------------------------------------
 
 reduceByKey --> it is a wide transformation and it works on "pair rdd" (key,value) ("CLOSED",1) ("PENDING",1) ("CLOSED",1)
@@ -2916,33 +2920,35 @@ Step 1. Run the boiler plate code
 step 2. orders_base = spark.sparkContext.textFile("/user/itv028185/public/trendytech/orders/orders_1gb.csv") --> load orders dataset
 step 3. orders_map = orders_base.map(lambda x: (x.split(",")[2],x.split(",")[3])) --> get customer_id, order_status from orders dataset
 		orders dataset
-		input
+		--------------
+		input:-
 			1, 2013-07-25 00:00:00.0, 11599, CLOSED
-		output
+		output:-
 			(11599, CLOSED)
 step 4. customer_base = spark.sparkContext.textFile("/user/itv028185/public/trendytech/retail_db/customers/part-00000") --> load customers dataset
 step 5. customers_map = customer_base.map(lambda x: (x.split(",")[0],x.split(",")[8])) --> get customer_id, pincode from customers dataset
 		customer dataset
-		input
+		----------------
+		input:-
 			1, Richard, Hernandez, *********, **********, 6303 Heather Plaza, Brownsville, TX, 78521
-		output
+		output:-
 			(1,78521)
 step 6. joined_rdd = customers_map.join(orders_map)
 step 7. joined_rdd.saveAsTextFile("/user/itv028185/data/orders_joined")
-		output
+		output:-
 			11 part files as there are 11 tasks and 1 SUCCESS file
 
 Join transformation is a wide transformation and it is a costly operation as it need to shuffle the data a lot across the cluster.
 
 
-Broadcast Join
-==============
+Broadcast Join(Narrow Transformation)
+=====================================
 How to optimize the problems that we have faced with Join tranformation.
 The below is the issue, we need to bring all the keys in order dataset and customers dataset on a same node to perform Join transformation.
 
 			node1 		node2 		node3 		node4
 orders		p1,p2		p3,p4		p5,p6		p7,p8,p9(1012) ----- bigger dataset
-customers  	p1,p2(1012)										   ----- small dataset
+customers  	p1,p2(1012)										   ----- small dataset (Bcz 1 entry for 1 customer)
 									p9(1012)
 									p2(1012)
 
@@ -2955,11 +2961,19 @@ orders		p1,p2		  p3,p4			  p5,p6			  p7,p8,p9(1012) ----- bigger dataset
 			(1012)		 (1012)			 (1012)			 (1012)
 			(1011)		 (1011)			 (1011)			 (1011)
 
-By broadcasting the data on all the nodes the data might increase 20 mb * 4 = 80 mb, but it may give some performance benifits. 
-Each machine is capable/self-sufficient to do the join locally. It does not need to depend on any other machine for joining and no need to shuffle the same key data on to a single machine.
-This is how broadcast transformation works. Bigger dataset is distributed across the cluster and complete copy of smaller data is kept on all the machines.
+By broadcasting the data on all the nodes the memory consumption might increase 20 mb * 4 = 80 mb, but it may give some performance benifits.
+
+Each machine is capable/self-sufficient to do the join locally. It does not need to depend on any other machine for joining and no need to shuffle the data to bring the same key data on to a single machine.
+
+This is how broadcast transformation works. Bigger dataset is distributed across the cluster and complete copy of smaller dataset is kept on all the machines.
 
 node1
+
+part of orders data
+complete customer data
+
+node2
+
 part of orders data
 complete customer data
 
@@ -2967,15 +2981,627 @@ As there is no need of shuffling, it wont create any additional stage.
 
 code for broadcast join
 -----------------------
-Step 1. Run the boiler plate code
+Step 1. Execute the boiler plate code to create a sparkSession.
 step 2. orders_base = spark.sparkContext.textFile("/user/itv028185/public/trendytech/orders/orders_1gb.csv")
-step 3. orders_map = orders_base.map(lambda x: (x.split(",")[2],x.split(",")[3])) 
+step 3. orders_map = orders_base.map(lambda x: (x.split(",")[2],x.split(",")[3]))
+		orders dataset
+		--------------
+		input:-
+			1, 2013-07-25 00:00:00.0, 11599, CLOSED
+		output:-
+			(11599, CLOSED)
+			
 step 4. customer_base = spark.sparkContext.textFile("/user/itv028185/public/trendytech/retail_db/customers/part-00000")
 step 5. customers_map = customer_base.map(lambda x: (x.split(",")[0],x.split(",")[8]))
+		customer dataset
+		----------------
+		input:-
+			1, Richard, Hernandez, *********, **********, 6303 Heather Plaza, Brownsville, TX, 78521
+		output:-
+			(1,78521)
+
+Now, orders_map and customers_map are pair RDD (k,v pairs)
 
 We want to broadcast the customers dataset.
-RDD cannot be broadcasted and data should be sitting on your driver node or on the machine on which you logged in. Then only we can broadcast.
+RDD cannot be broadcasted and data should be sitting on your driver node or on the machine on which you logged in. Then only we can broadcast the data.
 
 step 6. customers_broadcast =  spark.sparkContext.broadcast(customer_map.collect())
-	spark context is entry point to broadcast/send the data across the cluster.
-	To make the "customer_map" rdd available on the driver node/local machine we use "customer_map.collect()"
+
+spark context is entry point to broadcast/send the data across the cluster.
+To make the "customer_map" rdd available on the driver node/local machine we run "customer_map.collect()"
+
+With this step, the customers dataset (customer_id, pincode) is copied on all node across the cluster. 
+
+Now on each node in cluster we have the data as below,
+
+node{1..n}
+
+(customer_id, order_status) --> orders dataset
+(customer_id, pincode) 		--> customers dataset
+
+step 7. def get_pincode(customer_id):
+			try:
+				return customers_broadcast.value[customer_id] #returns pincode
+			except:
+				return -1
+
+step 8. joined_rdd = orders_map.map(lambda x: (get_pincode(int(x[0])),x[1]))
+		output:-
+			(pincode, order_status)
+step 9. joined_rdd.saveAsTextFile("data/broadcastresults")
+step 10. spark.stop() --> to stop the session
+
+With the execution of this code, 2 jobs will get created 1 for "customer_map.collect()" and another 1 for "saveAsTextFile".
+
+More than 1 Gb file, 9 block so 9 partitions and therefore 9 tasks. And 9 part files are created.
+
+
+Repartition vs Coalesce
+=======================
+
+Repartition
+-----------
+
+For example we have 1 Gb file and we created rdd and it will have 9 partitions which is equal to 9 blocks in HDFS.
+we can increase or decrease the number of partitions.
+
+When do we Increase the partitions? (To get more parallelism)
+----------------------------------
+
+Let us consider, we have 100 node cluster and we have 5 Gb file --> 40 blocks --> 40 partitions.
+
+So at max less than equal to 40 machines are going to be handle the 40 partitions in parallel, remaining 60 machines will be idle. In this case we can increase the number of partitions inorder to get more parallelism. 
+
+How do we increase?
+------------------
+
+From above scenario, 
+
+Run --> rdd.getNumPartitions() --> output:- 40 (for rdd no.of partitions will be same)
+
+Now to increase the partitions,
+
+--> repartitioned_rdd = rdd.repartition(80) (here for rdd we applied repartition and saved in another rdd "repartitioned_rdd")
+
+Run --> rdd.getNumPartitions() --> output:- 80
+
+****** Repartition can increase or decrease the number of partitions in a RDD ******
+
+When do we Decrease the partitions?
+-----------------------------------
+
+Let us consider that we have 100 node clusted and a 1Tb file | 8000 blocks in HDFS | 8000 partitions in RDD.
+
+Each node is handling around 80 partitions. 
+
+Each partition would be handling 128 Mb of data.
+
+After applying filter transformation, we are getting 1 mb of data.
+
+8000 partitions each holding around 1 mb of data.
+
+In this case, maintaining 8000 partitions is not ideal because the time to manage the tasks would become difficult.
+
+So we want to reduce the partitions, bcz instead of having multiple partitions with sparse data. But better to have lesser partitions with filled data.
+
+Example:- 80 partitions holding 100 Mb.
+
+***** Overall meaning is that partitions should have some data, instead of sparse data *****
+
+Increase --> when we want to get more parallelism
+
+Decrease --> After tranformation when the data becomes very less in each partition, then we will merge some partitions
+
+
+Coalesce
+--------
+It will just decrease the number of partitions in RDD but it cannot increase the partitions.
+
+Repartition Decrease vs Coalesce
+--------------------------------
+Repartition
+-----------
+It will do complete reshuffling of data
+
+Let us consider we have 4 partitions, to make it 8 partitions we need to shuffle the data.
+
+Let us consider we have 40 partitions, you want to make it 10 partitions. It will do complete reshuffling of data, bcz it want to male sure that 10 partitions holding same amount of data.
+
+Coalesce
+--------
+Let us consider we have 4 node cluster and have 8 partitions. If we want to make it to 4 partitions. 
+
+Coalesce will try to merge the partitions on same machine and give us new partition (np). So that it can try avoid shuffling Whenever possible. 
+But this new partitions can be of un-equal of size of data.
+
+node1 - p1,p2 --> merge -->np1 
+node2 - p3,p4 --> merge -->np2
+node3 - p5,p6 --> merge -->np3
+node4 - p7,p8 --> merge -->np4
+
+When we want to decrease the number of partitions Coalesce will perform in a more effecient way compared to repartition decrease.
+
+when we want to increase the number of partitions repartition is the only way as it gives more parallelism.
+
+When we try to increase the number of partitions using Coalesce. It will not throw any error but the no.of partitions will remain same.
+
+
+Cache
+=====
+we can cache our RDD.
+
+Why we need to cache RDD and How to do?
+--------------------------------------
+
+Step 1. Execute the boiler plate code to create a sparkSession.
+step 2. orders_base = spark.sparkContext.textFile("/user/itv028185/public/trendytech/orders/orders_1gb.csv")
+step 3. orders_filtered = orders_base.filter(lambda x: x.split(",")[3]!= 'PENDING_PAYMENT')
+step 4. orders_mapped = orders_filtered.map(lambda x: (x.split(",")[2],1))
+step 5. orders_reduced = orders_mapped.reduceByKey(lambda x,y: x+y)
+step 6. results = orders_reduced.filter(lambda x: int(x[0])<501)
+step 6.1 sorted_results = results.sortBy(lambda x: x[0])
+step 7. results.collect()
+step 7.1 sorted_results.collect()
+step 8. spark.stop()
+
+Basically if we apply a list of transformations and at last we execute an action...
+What will happen if we execute the action again? --> I think it wont execute from the scratch instead it will take the data from "cache"
+
+I have executed all the steps from step 1 
+
+If I run collet again, basically all the transformations will be executed from start.
+
+Let us consider that below is our situation,
+
+Stage1			Stage2			Stage3
+------			------			------
+t1				  t4			  t7
+	
+t2				  t5			  t8
+
+t3				  t6			  t9
+
+collect - Stage1 --> Stage2 --> Stage3
+collect - Stage3
+
+When we run "collect" command first time it will start executing the "execution plan" from Stage1 t1 - Stage3 t9 and it will return the output on the screen.
+If we run the "collect" command again, it will start execution from Stage3 by skipping the Stage1 and Stage2 (we can see this in DAG Visualization).
+
+Sometimes we might have done a lot of work and we want to keep that result instead of doing it again from scratch. i.e
+
+Lets consider that we have applied 10 transformations which are very costly and we want to use the result RDD again and again. Then we will cache the RDD.
+
+--> rdd.cache()
+
+Cache is Lazy. It doesnot cache right now. It will be cached when we execute it (rdd.cache) one time using collect and from 2nd time execution becomes faster. 
+But first time execution will take time as the execution starts from beginnig and the result will be cached.
+
+Only when we do a lot of processing and when you dont want to redo all the transformations from the beginnig then go for "Cache". 
+Basically it is not recommended or good caching the base_rdd as it consumes the memory.
+
+Only cache the data when you feel that you have performed lot of processing/transformations i.e medium, small sized resultant data as it consumes memory.
+
+When we run the "Cache" command you will a "Green" dot while loading the data from stage to Disk.
+
+What if enough memory is not available for caching?
+--------------------------------------------------
+
+Caching will be skipped if there is no enough memory for storing the resultant data. It is always done in memory.
+
+Persist vs Cache
+----------------
+
+Caching is always in-memory
+
+Persist will give you more options like persist on disk, persist on memory, persist on memory and disk.
+
+-------------------------------------------------------------------------------------------------------
+
+											Datasets
+											========
+	All the required datasets are available in the Lab @ the following path 
+	orders.csv is in HDFS @    /public/trendytech/retail_db/orders (for Spark Usecase1 practice)
+						Spark Join practice datasets-
+		orders.csv is in HDFS @   /public/trendytech/orders/orders.csv
+		customers.csv is in HDFS @   /public/trendytech/retail_db/customers
+
+
+Here is boiler plate code to create Spark Session-
+
+from pyspark.sql import SparkSession
+
+import getpass
+
+username = getpass.getuser()
+
+spark = SparkSession. \
+
+builder. \
+
+config('spark.ui.port','0'). \
+
+config("spark.sql.warehouse.dir", f"/user/itv000173/warehouse"). \
+
+enableHiveSupport(). \
+
+master('yarn'). \
+
+getOrCreate()
+
+-------------------------------------------------------------------------------------------------------
+
+		Reference Jupyter Notebooks
+		===========================
+Please make sure to use your User-Id in the code or replace it with {username} 
+Example : 
+rdd1 = spark.sparkContext.textFile("/user/itv006277/data/inputfile.txt")
+For the above line of code replace itv006277 with your user-id 
+
+(OR)
+
+Use the following approach - with this, the user-id is internally replaced with your user-id without having to explicit mention.
+
+rdd1 = spark.sparkContext.textFile("/user/{username}/data/inputfile.txt")
+
+-------------------------------------------------------------------------------------------------------
+
+Week-5
+======
+
+Higher Level API's in Apache Spark (Dataframes & Spark SQL)
+-----------------------------------------------------------
+
+--> Data Frames
+--> Spark SQL
+
+--> Datasets (language specific things available only for scala and java. Not required)
+
+Till now we have gone through RDD's.
+
+RDD's do not consist of any schema (metadata). Column Name, Data type. Its just a raw data which is distributed across the cluster in the form of partitions.
+
+In RDD's there is no structure / schema / metadata associated with it.
+
+Spark creators itself recommend not to use RDD/ avoid using code in RDD Whenever possible. Bcz it does not give you optimisation and easy to write the code, which we will get using Higher Level API's.
+
+Lets consider that we have a table in a Database (orders). It contains 2 things.
+
+1. Data (1,21-10-1997,101,CLOSED) --> Data will be present in the form of Datafiles in a physical storage (DISK) 
+
+2. Metadata/Schema (columns names like order_id - INT, order_date - DATETIME, customer_id - INT, order_status - VARCHAR) --> Will be kept in Metastore, it is the place that contains metadata or holds the schema of it.
+
+
+When we run,
+	select * from orders 
+metadata + data will get combine together and gives you output in the form of tabular view 
+
+For example,
+when we run	select order_id, order_date from orders,
+then it will check the metastore, that whether the mentioned columns are exists in the table or not. If exists then it will go for the Datafile.
+If not available it will give "analysis exception".
+
+Same concept is applicable for Apache Spark.
+
+
+Spark SQL contains 2 things.
+
+1. Datafiles --> stores on the DISK - on your Datalake (HDFS, Amazon s3, ADLS Gen2, GCS)
+2. Metadata --> stores in the Metastore - it can be some database where it is getting stored. Admin can configure where to store the schema/metadata.
+
+
+Dataframe
+---------
+It is just like a RDD with some structure (Metadata/Schema)
+
+Data is stored in memory
+Metadata is also stored in memory
+
+There is no metastore to hold the metadata. And your metadata is kept temporarily in metadata catalog. It will be gone once application is closed.
+
+Comparing the concept of above line to RDD
+------------------------------------------
+We created,
+	rdd_1 = spark.sparkContext.textFile("/public/trendytech/retail_db/orders/*")
+	
+we can materilize "rdd_1",
+	rdd_2 = rdd1.map(....)
+	
+But once we run,
+	spark.stop()
+we wont have "rdd_1, rdd_2", we loose it. As it is temporary thing valid during applciation.
+
+Spark Dataframs vs Spark Table
+==============================
+Spark Dataframe is not persistent. Only during the session we can see data and metadata, once we close the spark session we wont find data and metadata.
+
+Spark Dataframes is available only for your session.
+
+Spark Table is persistent. We use spark sql to write Spark Table. Data and Metadata will be available even after closing the spark session. We can see the data in the tables until we drop the table.
+
+Spark Table is accessible acorss other sessions.
+
+
+RDD's are not recommended... But we need to know how Spark Sql, Dataframes internally works as it works at higher level to RDD.
+
+Dataframes and Spark SQL (Higher Level API's) are recommended...
+
+Both Dataframes and Spark SQL gives us same level of performance. 
+
+We can convert Dataframe to Spark Table and Spark Table to Dataframe.
+
+
+Why Higher Level API's performance is better?
+--------------------------------------------
+
+Becuase whenever we create Dataframe OR Spark Table it is just like RDD + Schema (some extra information).
+
+Spark engine would have better idea how to optimise things bcz we are provinding extra information i.e metadata (How many columns and their datatypes and total columns) and data.
+
+
+
+Understanding Dataframes
+------------------------
+
+Whenever we are working with structured data we should work with Higher Level API's not the spark core/ RDD level.
+
+What we do with Dataframe?
+-------------------------
+
+Step 1. we will load your file and create a dataframe
+Step 2. we will perform bunch of transformations
+Step 3. we will write the results back to your storage
+
+
+How would you read something and create rdd?
+--------------------------------------------
+
+In my multi-node cluster, we have boiler plate code to create spark session.
+
+When working with Higher Level API's (Dataframe & Spark SQL) we need to use spark session not spark cluster. As spark session is the entry point to cluster.
+
+1.After creating spark session using boiler plate code.
+
+2. On spark session, I am calling read attribute to get the spark dataframe called "reader". we need to give the settings/configurations how to read the file.
+
+We call the below way of writing code as "Builder Pattern"
+
+   1. standard dataframe reader API
+   
+   orders_df = spark.read \								==> this is lazy just like RDD.
+   .format("csv") \ ==>(csv, json, avro, parquet)
+   .option("header","true") \ 							==> consider first line as header
+   .option("inferSchema","true") \ 						==> I am not providing the metadata/schema please infer it
+   .load("/public/trendytech/orders_wh/*")
+   
+   2.
+   orders_df.show() --> to return the output on the screen. By defualt, "show" will return "20 rows" in a tabular format.
+   
+   3.
+   orders_df.printSchema() --> to view the schema (column names, data types) associated with it.
+   
+   Output:-
+   ------
+   root
+   |-- order_id : integer (nullable = true)
+   |-- order_date : string (nullable = true)   --> its not showing "order_date" as "Date" datatype thats why it is not recommended 2 use "inferSchema"
+   |-- customer_id : integer (nullable = true)
+   |-- order_status : string (nullable = true)
+   
+   It is not preffered to use "inferSchema" to infer the schema....
+   
+   -> Bcz it might not infer correctly.
+   -> It puts some extra load on the system, which leads to performance issue. As spark has to scan the data inorder to determine the datatypes.
+   
+   4.
+   transform_df1 = orders_df.withColumnRenamed("order_status","status")  --> to rename the column "order_status" to "status"
+   
+   4.1. 
+   transform_df1.show()
+   
+   5. to change the datatype of column name "order_date" from "string" to "timestamp"
+   
+   from psyspark.sql.functions import *      --> we need this step as we used "to_timestamp", which is sql function
+   
+   transform_df2 = transform_df1.withColumn("order_date_new", to_timestamp(order_date))    -->  "withColumn" used to create a new column
+   
+   transform_df2.printSchema()
+   
+   Output:-
+   ------
+   root
+   |-- order_id : integer (nullable = true)
+   |-- order_date : string (nullable = true)      
+   |-- customer_id : integer (nullable = true)
+   |-- order_status : string (nullable = true)
+   |-- order_date_new : timestamp (nullable = true)
+   
+   6. to get only required columns
+   transform_df2.select(column_names)
+   
+
+More about Dataframe Reader
+---------------------------
+
+How to create Dataframe using Dataframe reader API's?
+
+Standard Dataframe Reader API
+-----------------------------
+   
+   orders_df = spark.read \								==> this is lazy just like RDD.
+   .format("csv") \ ==>(csv, json, avro, parquet)
+   .option("header","true") \ 							==> consider first line as header
+   .option("inferSchema","true") \ 						==> I am not providing the metadata/schema please infer it
+   .load("/public/trendytech/orders_wh/*")				==> loading the file from HDFS
+   
+Shortcut Methods to files from few formats 
+------------------------------------------
+spark.read.csv/json/...
+
+csv, json, jdbc (to read table in db (mysql,postgre) and create a Dataframe out of it), orc, parquet, table, text
+
+Example for loading csv file:-
+
+	orders_df = spark.read \
+	.csv("/public/trendytech/orders_wh/*", header = "true", inferSchema = "true")
+	
+Example for loading json file:-
+	
+	orders_df = spark.read \
+	.json("/public/trendytech/datasets/orders.json")  ==> there is no header here as column names are embedded in data and no need of inferSchema as it will inferSchema automatically
+	
+Example for loading parquet file:-
+
+	orders_df = spark.read \
+	.parquet("/public/trendytech/datasets/ordersparquet/*") ==> parquet is very optimised i.e work well with spark
+
+parquet is a column based file format where metadata is embedded in the data. Automatically it will read column names and datatypes.
+
+Example for loading orc file:-
+
+	orders_df = spark.read \
+	.orc("/public/trendytech/datasets/ordersorc")
+	
+Command to filter the data from a Dataframe
+-------------------------------------------
+
+	filtered_df = orders_df.where("customer_id = 111")
+
+----------------------- OR ---------------------------
+
+	filtered_df = orders_df.filter("customer_id = 111")
+
+	filtered_df.show()     ==> to print first 20 rows of data
+
+filtered_df.show(truncated = false)  ==> to make sure the output is visible clearly i.e instead of "23-10-1995 00:00:..." --> "23-10-1995 00:00:00.0"
+	By defult truncate will be true. when column width is more, it will not show entire column details then use this.
+	
+How to create Spark table/view using Dataframe?
+----------------------------------------------
+	
+Dataframe and spark table are interchangable as both API's are Integrated
+
+	orders_df.createOrReplaceTempView("orders")  ==> viewname - orders
+
+Now we can use "orders" viewname as if it is a spark table in your database but it is distributed across the cluster.
+
+If we convert dataframe to saprk table/view using "createOrReplaceGlobalTempView" then "orders" view will be accessible across other applications.
+
+To access the "orders" spark table
+----------------------------------
+
+	filtered_sql_df  = spark.sql("select * from orders where order_status = 'CLOSED'") 
+
+whenever we run "spark.sql" we will get dataframe as a result
+
+Basically we convert dataframe to spark view/table is just to write the queries in sql.
+
+
+How to convert spark table to a dataframe?
+-----------------------------------------
+using table method we can achieve this.
+
+	orders_new_df = spark.read.table("orders")
+	
+
+Introduction to Spark SQL
+-==-==-==-==-==-==-==-==-
+
+How to create Spark table?
+-------------------------
+
+By defuault, all the tables that we create get stored in the "Default" database unless we create a Database manually.
+
+1. Need to run the boiler plate code.
+
+   from pyspark.sql import SparkSession
+   import getpass
+   username = getpass.getuser()
+   spark = SparkSession. \
+		   builder. \
+		   config('spark.ui.port','0'). \
+		   config("spark.sql.warehouse.dir", f"/user/{username}/warehouse"). \
+		   enableHiveSupport(). \
+		   master('yarn'). \
+		   getOrCreate()
+   
+2. Create a databse
+
+   spark.sql("create database if not exists itv028185_retail")
+   
+3. To see all the databses
+	
+   spark.sql("show databases").show()
+   
+4. To find whether a database is there or Not
+   
+   spark.sql("show databases").filter("namespace = 'itv028185_retail').show() ==> database is called as "namesapce"
+   
+   spark.sql("show databases").where("namespace like 'itv028185%').show()
+    
+5. To view all the Tables
+
+   spark.sql("show tables").show() --> returns all the tables in the "default" database/namespace
+   
+6. To use a database and view the tables under the selected Database
+
+   spark.sql("use itv028185_retail")
+
+   spark.sql("show tables").show()
+   
+   output:-
+   
+   databse		tableName		isTemporary
+				   Orders			   true             ==> this we created using the dataframe and it is not persistent table
+				   
+7. To create spark table
+ 
+   spark.sql("create table itv028185_retail.orders (order_id integer, order_date string, customer_id integer, order_status string)")
+   
+8. We want to load the temp view data into the persistent table "orders" as temp view will go away as soon as session ends.
+
+   spark.sql("insert into itv028185_retail.orders select * from orders")
+   
+   spark.sql("select * from itv028185_retail.orders").show()
+   
+9. To see the structur of the table
+	 
+   spark.sql("describe table itv028185_retail.orders").show()
+   
+   output:-
+   
+   col_name   	data_type   comment
+   order_id      integer     null
+   order_date    string      null
+   customer_id   integer     null
+   order_status  string      null
+   
+10. To get more details about schema
+
+	spark.sql("describe extended/formatted itv028185_retail.orders").show()
+	
+	its a "managed table" and data is kept inside hfds://m02.itversity.com:9000/user/itv028185/warehouse/itv028185_retail.db/orders
+	
+	Table consists of data (stored in above hdfs location) and metadata (stored in metastore)
+	
+	In my HDFS Home
+	
+	Actual data will be present in /user/itv028185/Warehouse/<databasename.db>/<tablename>/files
+	
+11. Drop the table
+	
+	spark.sql("drop table itv028185_retail.orders")
+	
+	If we run spark.sql("describe table itv028185_retail.orders")
+	
+	output:- Table or view not found
+	
+	To check, open terminal and run below command:-
+	
+	hadoop fs -ls /user/itv028185/warehouse/itv028185_retail.db ==> you wont find any files
+	
+	In this case both metadata and data are dropped bcz this table is of type "Managed"
+	
+
+Spark SQL - Managed vs External Tables
+======================================	
+	
