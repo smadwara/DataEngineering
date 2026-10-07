@@ -3052,8 +3052,8 @@ Let us consider, we have 100 node cluster and we have 5 Gb file --> 40 blocks --
 
 So at max less than equal to 40 machines are going to be handle the 40 partitions in parallel, remaining 60 machines will be idle. In this case we can increase the number of partitions inorder to get more parallelism. 
 
-How do we increase?
-------------------
+How do we increase the partitions?
+---------------------------------
 
 From above scenario, 
 
@@ -3603,5 +3603,147 @@ By defuault, all the tables that we create get stored in the "Default" database 
 	
 
 Spark SQL - Managed vs External Tables
-======================================	
-	
+======================================
+Managed Table
+-------------
+	#spark.sql("create table itv028185_retail.orders (order_id integer, order_date string, customer_id integer, order_status string) using csv")
+When we load data into this table, the data is stored in CSV format because we specified "USING CSV".
+Here, we write some insert statements to load the data into the table.
+
+External Table
+--------------
+	#spark.sql("create table itv028185_retail.orders_ext (order_id integer, order_date string, customer_id integer, order_status string) using csv location '/public/trendytech/retail_db/orders/'")
+We are indicating that whatever is present the location, that is my data. The location is pointing to the HDFS path that contains some existing files are we are not interested to load any data (i.e, we don't need to write any insert statement to load the data which we write incase of Managed Tables).
+
+Here we are simply creating structure/metadata on the top of the csv file. So that we get the output in tabular view.
+
+Whenever we create External table and if we run the below command,
+	#spark.sql("describe extended itv028185_retail.orders_ext").show(truncated = False)
+
+we can see the output with details like
+Type		--> External
+Provider	--> CSV (The file that we have placed in the location to load the data)
+Location	--> hdfs://m02:itversity.com:9000/public/trendytech/retail_db/orders
+
+When do we need to use Managed and External Tables?
+--------------------------------------------------
+Managed Table
+-------------
+1) In case of Managed Table, you are the only owner of table and data. As you created the table and you loaded the data. We are multiple copies of data because the data was in HDFS and now we are loading into the table. Here we have complete control over the data and metadata.
+
+2) When we try to drop the Managed table you will loose both data and metadata as you are the owner of data.
+
+External Table
+--------------
+1) In case of External Table, the file is already present some where it might not be your file. So you only own the metadata but not the data. As data in that location can be use by many and you are one of the them. You are just creating structure on the top of the file.
+
+2) When we try to drop the external table, you will loose only the metadata. The data will be present in the location as we are not the owner of the data. And we cannot truncate the table also. 
+
+Let us try inserting a row of data into the External table
+	#spark.sql("insert into itv028185_retail.orders_ext value(1111,'12-21-2024',2222,'CLOSED')")
+
+To see the inserted data in the data files
+	Go to terminal, 
+	#hadoop fs -ls /user/itv028185/warehouse/itv028185_retail.db  ==> No output tables/directories
+You didn't find the data in the database location because my data will be kept at the location i.e the path I mentioned while creating the External table.
+	#hadoop fs -ls /public/trendytech/retail_db/orders
+Here, you will see a new part file got added containing the data that we have inserted. You can view the content of the file using cat command.
+
+This means we cannot changes to the existing file, a new file will get created when you insert a record.
+
+DML operations
+Insert - is working
+Update - does not work (because if we update a row, it requires a change in file and updating a file is not possible)
+Delete - does not work (because if we delete a row, it requires a change in file and updating a file is not possible)
+Select - this is working
+
+update and delete do not work as a part of open source spark. But update and delete works in Databricks using Delta Lake.
+
+
+Use Case - Dataframes & SparkSQL
+================================
+
+1. Let us run the boiler plate code,
+	from pyspark.sql import SparkSession
+	import getpass
+	username = getpass.getuser()
+	spark = SparkSession. \
+			builder. \
+			config('spark.ui.port','0'). \
+			config("spark.sql.warehouse.dir", f"/user/{username}/warehouse"). \
+			enableHiveSupport(). \
+			master('yarn'). \
+			getOrCreate()
+2. Let us create a dataframe using standard dataframe API, by calling read attribute to get the spark dataframe called "reader".
+	orders_df = spark.read \
+	.format("csv") \
+	.option("header","true") \
+	.option("inferSchema","true") \
+	.load("/public/trendytech/orders_wh/*")
+3. Now I have created a spark table/view using "orders_df" dataframe. We can execute the Dataframe API using "orders_df" and spark sql code using "orders" view/table.
+	orders_df.createOrReplaceTempView("orders")
+
+Q1. Top 15 customers who placed more number of orders
+Dataframe
+---------
+result = orders_df.groupBy("customer_id").count().sort("count",ascending = False).limit(15)
+result.show()
+
+SparkSQL
+--------
+result1 = spark.sql("select customer_id, count(*) as count from orders group by customer_id order by count desc limit 5")
+result1.show()
+
+Q2. Find the number of orders under each order_status
+Dataframe
+---------
+result = orders_df.groupBy("order_status").count()  
+result.show()
+--> Here, count() acts like a transformation. Bcz the result of groupBy will have multiple keys and this count still give multiple keys. Bcz one entry for each key. On the count output also we can have parallelism i.e the results are still present across the cluster.
+
+SparkSQL
+--------
+result1 = spark.sql("select order_status, count(*) as count from orders group by order_status")
+result1.show()
+
+Q3. Number of active customers who placed at least one order
+Dataframe
+---------
+result = orders_df.select("customer_id").distinct().count() ==> The output is a single value, so result is not a dataframe
+result.show() ==> should not be used bcz here result is not a dataframe it is a single value and error:- 'int' object has no attribute 'show'
+print(result) ==> we need to use this to display the output
+--> Here, count() will act like an action as it give as single value.
+
+SparkSQL
+--------
+spark.sql("select count(distinct customer_id) as active_customers from orders")
+
+Q4. Customers with most number of closed orders
+Dataframe
+---------
+result = orders_df.filter("order_status='CLOSED').groupBy("customer_id").count().sort("count", ascending = False)
+result.show()
+
+SparkSQL
+--------
+results1 = spark.sql("select customer_id, count(*) as count from orders where order_status='CLOSED' group by customer_id order by count desc")
+results1.show()
+
+count (transformation/action)
+-----------------------------
+It acts as a transformation if we use "groupy.action" because when the results are huge it should be given as transformation. Because we need more parallelism
+
+It acts as a action if we use ".action" because when the results are less it should be given as an action. Because we might not need more parallelism.
+
+orderBy - Transformation (bcz 1L rows input 1L rows output)
+filter - Transformation (bcz 1L rows input <= 1L rows outptut)
+show - action ==> to display the result
+head - action ==> to display first few rows 
+tail - action ==> to display last few rows
+take - action ==> to get the result
+collect - action ==> to get the result
+distinct - transformation (bcz 1L rows input <= 1L rows outptut)
+join - transformation (bcz 1L rows input <= 1L rows outptut)
+printSchema - utility function which is neither action nor trasformation
+cache - utility function which is neither action nor trasformation 
+createOrReplaceTempView - utility function which is neither action nor trasformation
