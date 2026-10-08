@@ -3731,19 +3731,96 @@ results1.show()
 
 count (transformation/action)
 -----------------------------
-It acts as a transformation if we use "groupy.action" because when the results are huge it should be given as transformation. Because we need more parallelism
+Transformation
+--------------
+It acts as a transformation if we use "groupy.action" because when the results are huge from the previous transformation then it should be given as input to another transformation. Because we need more parallelism.
 
-It acts as a action if we use ".action" because when the results are less it should be given as an action. Because we might not need more parallelism.
+Ex:- 
+When we use "count" to find out the number of orders per each customer_id. Then we will get multiple key values as output from "groupBY" bcz it will return each row for each customer_id. 
+Basically "groupBy" will collect all the similar key values as a set on the top of it we need to perform "count" transformation bcz we need to get the aggregated value for each key.
+Here "count" is getting some hundreds of similar key values as input and it is returning 1 row as output for each key. (1L input rows from a single key also will give only 1 key as output)
 
-orderBy - Transformation (bcz 1L rows input 1L rows output)
-filter - Transformation (bcz 1L rows input <= 1L rows outptut)
-show - action ==> to display the result
+Action
+------
+It acts as a action if we use ".action" because when the results are less from the previous transformation then it should be given as input to an action. Because we might not need more parallelism and we say this is the end result.
+
+Ex:- When we use "count" to find how many rows in a dataframe. If we get 500 rows as output. We don't need to have this data to be present across the cluster and don't want parallelism.
+
+orderBy - Transformation (bcz for 1L rows input we will get <=1L rows)
+filter - Transformation (bcz for 1L rows input we will get <= 1L rows)
+show - action ==> to get the results
 head - action ==> to display first few rows 
 tail - action ==> to display last few rows
-take - action ==> to get the result
-collect - action ==> to get the result
-distinct - transformation (bcz 1L rows input <= 1L rows outptut)
-join - transformation (bcz 1L rows input <= 1L rows outptut)
-printSchema - utility function which is neither action nor trasformation
-cache - utility function which is neither action nor trasformation 
-createOrReplaceTempView - utility function which is neither action nor trasformation
+take - action ==> to get the results
+collect - action ==> to get the results
+distinct - transformation (bcz for 1L rows input we will get <=1L rows)
+join - transformation (bcz for 1L rows input we will get <=1L rows)
+
+utility --> wont change dataframe/RDD from one form to another & wont perform calculation and processing on dataframe. 
+
+printSchema - utility function which is neither an action nor a transformation
+cache - utility function which is neither an action nor a transformation 
+createOrReplaceTempView - utility function which is neither an action nor a transformation (It wont transform dataframe to new dataframe and wont give results)
+
+
+Spark Optimization - Session 1
+==============================
+Performance Tuning... Optimization (reduced the cost, reduce the time taken)
+
+1. Application Level Code Optimization
+use cache, prefer reduceByKey over groupByKey, use optimized file formats like parquet
+
+2. Cluster Level optimization
+Am I giving enough resources to my job. Is Cluster having some issues. Bcz of this is the job not performed/executed in a efficient manner.
+
+How containers/executed formed on each machine?
+With this concept, we can understand how many jobs each worker node can process/how many tasks it can run parallelly on each worker node.
+How cluster is setup.
+
+
+Spark Optimization - Session 2
+==============================
+Resource Level optimization, that means we need to check our job is getting enough resources or not.
+Mainly we talk about 2 kind of resources
+1. Memory (RAM)
+2. CPU cores (Compute)
+
+Our intention is to make sure that our job should get right amount of resources
+
+Let us consider, we have a 10 Node cluster (10 worker nodes). In that each worker node is having 16 CPU core (Compute) and 64 Gb RAM.
+When we run the spark job, how much resources our spark job will get that's what we want to know.
+
+We need to understand about Executor. It is container which will hold the resources like CPU and RAM. And the amount of resources it will hold is depend on us.
+
+1 Node can have more than 1 Executor. So that instead of a single Executor holding entire, we will breakdown into multiple containers bcz of that we can make use of resources more efficiently without loosing anything.
+
+1 worker node can have multiple executors (multiple containers)
+
+Executor/Container/JVM (Java Virtual Machine)
+
+As per our scenario, in a 10 Node cluster with 16 CPU cores and 64 Gb RAM. How many executors/containers we can have in a single worker node. 
+There are two strategies when creating containers:-
+
+1. Thin executor -
+Intention is to create more number of executors with each executor holding minimum possible number of resources.
+total 16 executors each one of them is holding 1 CPU core and 4 Gb RAM.
+
+Drawabacks
+----------
+1. In this scenario we will loose the benefits of multi threading, due to which we can execute multiple tasks in a executor.
+2. A lot of copies of broadcast variables are required. Each executor should receive its own copy.
+
+2. Fat executor -
+Intention is to give max resources to a single executor.
+16 CPU cores and 64 Gb RAM - 1 Executor
+
+Drawbacks
+---------
+1. It is observed, if the executor holds more than 5 CPU cores then the HDFS throughput suffers. That means it takes time/becomes slow to get the data from HDFS.
+2. If executor holds very huge amount of memory, then garbage collection takes a lot of time. (Garbage collection - removing unused objects from memory)
+
+Both Thin and Fat executors strategies are not good for Resource Level Optimization. We need to choose some balanced strategy, where we get a mix of both things.
+
+Overview
+--------
+Whenever we run a spark job it requires some resources. Resources are given in the form of executors/containers/JVM which contains RAM and CPU.
