@@ -3310,7 +3310,7 @@ But once we run,
 	spark.stop()
 we wont have "rdd_1, rdd_2", we loose it. As it is temporary thing valid during applciation.
 
-Spark Dataframs vs Spark Table
+Spark Dataframes vs Spark Table
 ==============================
 Spark Dataframe is not persistent. Only during the session we can see data and metadata, once we close the spark session we wont find data and metadata.
 
@@ -3791,6 +3791,7 @@ Let us consider, we have a 10 Node cluster (10 worker nodes). In that each worke
 When we run the spark job, how much resources our spark job will get that's what we want to know.
 
 We need to understand about Executor. It is container which will hold the resources like CPU and RAM. And the amount of resources it will hold is depend on us.
+***** Executor is a container that hold the resources like CPU and RAM *****
 
 1 Node can have more than 1 Executor. So that instead of a single Executor holding entire, we will breakdown into multiple containers bcz of that we can make use of resources more efficiently without loosing anything.
 
@@ -3824,3 +3825,41 @@ Both Thin and Fat executors strategies are not good for Resource Level Optimizat
 Overview
 --------
 Whenever we run a spark job it requires some resources. Resources are given in the form of executors/containers/JVM which contains RAM and CPU.
+
+
+Spark Optimization - session 3
+------------------------------
+Let us consider, we have a 10 Node cluster (10 worker nodes). In that each worker node is having 16 CPU core (Compute) and 64 Gb RAM.
+
+Out of 16 CPU Core and 64 Gb RAM, 1 CPU Core is given for handling background processing. 1 Gb RAM is given for OS.
+After this in each node we are now left with 15 CPU core and 63 Gb RAM.
+
+==> We want multi-threading with in a Executor that means each executor/container/JVM should contain minimum of 2 CPU cores. (>1 CPU core per executor)
+==> We do not want to our HDFS throughput to suffer. It suffers when we use more than 5 CPU cores per executor. (<5 CPU core per executor)
+
+***** 5 is the right choice of CPU core number in each executor. so that we can have 5 threads running in parallel within an executor without suffering HDFS throughput *****
+
+--> 15 CPU core, 63 Gb RAM - on each machine (Remaining after allocating 1 CPU core for background processing and 1 Gb RAM for OS)
+--> So we can have 3 executors running on each worker node
+--> And each executor contains 5 CPU core and 21 Gb RAM. So we can have 5 threads running in parallel within an executor supporting multi-threading.
+--> Out of 21 Gb RAM on each executor, some of this will go as a part of overhead (off heap memory - RAW memory - which is not a part of JVM/container).
+And this off heap memory size is ***** max (384 Mb (OR) 7% of executor memory (i.e 1.5 Gb in our case) ) ***** 
+--> So we can have 3 executors on each worker node machine. Each executor holds 5 CPU cores and ~19 Gb RAM (21-1.5)
+
+Total How many executors we can have is?
+---------------------------------------
+we have 10 Node cluster (10 worker nodes). Each worker node can have 3 executors with 5 CPU Cores,19 Gb RAM.
+10 * 3 = 30 executors we can have across 10 node cluster
+
+30 executors with each executor holding 5 CPU Cores,19 Gb RAM 
+1 executor out of these 30 will be dedicated for YARN Application Manager. So eventually we will have 29 executors which we can use as part of cluster for spark jobs execution.
+
+***** No.of tasks can run in an Executor = No.of CPU cores are there in an Executor (Each thread takes each task) *****
+
+***** Memory inside the Executor is called On-heap Memory and it is managed by JVM *****
+
+Off-heap Memory (RAW memory)
+---------------------------
+--> It is outside the JVM/Container/Executor and it is kept for optimization.
+--> Basically when we create objects inside the executor, then garbage collection takes time to clean/remove the unused objects. But for off-heap memory, garbage collection does not come into picture. We avoid time spend on garbage collection if we store objects in off-heap memory (RAW memory).
+--> In off-heap memory we have to do our own Memory Management programmatically which is a bit difficult task.
