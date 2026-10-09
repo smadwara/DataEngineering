@@ -12,7 +12,7 @@ The Ultimate Big Data Program (Cloud Focused)
 
 Any data which is characterised by 5 V's is considered as Big Data
 
-Volume - Huge amount data that cannot be handled by Traditional systems (Peta Bytes)
+Volume - Huge amount of data that cannot be handled by Traditional systems (Peta Bytes)
 
 Variety - format of data i.e Structured, Semi-Structured, Unstructured 
 
@@ -44,12 +44,12 @@ Value - The data should be able to generate value
 Why are we going to learn a new technology stack to handle big data?
 --------------------------------------------------------------------
 
-Our traditional technologies will not be able to handle this big data because of Monolythic Architecture.
+Our traditional technologies will not be able to handle this big data because of Monolithic Architecture.
 
-Monolythic vs Distributed System
+Monolithic vs Distributed System
 --------------------------------
 
-Monolythic - Mono --> One big system holding a lot of power.(Super computer)
+Monolithic - Mono --> One big system holding a lot of power.(Super computer)
 
 Resources
 ---------
@@ -64,9 +64,9 @@ X Resources ~ Y performance
 
 2X Resourcses != 2Y performance
 
-In case of Monolythic Architecture, we are not getting benifited same way i.e with the increase resources/cost we not getting the expected amount of increase performance. Because single system has hardware limitations. Performance wont increase in ratio with the increase in resources/cost.
+In case of Monolithic Architecture, we are not getting benefitted the same way i.e with the increase in resources/cost we are not getting the expected amount of increase in performance. Because single system has hardware limitations. Performance won't increase in ratio with the increase in resources/cost.
 
-Monolythic is not a Scalable system
+Monolithic is not a Scalable system.
 
 Distributed System
 ------------------
@@ -78,11 +78,10 @@ X Resources ~ Y performance
 
 2X Resourcses ~ 2Y performance
 
-All good Big Data Systems are based on Distributed Architecture but not on Monolythic Architecture because you get the scalability with Distributed Systems
+All good Big Data Systems are based on Distributed Architecture but not on Monolithic Architecture because you will get the scalability with Distributed Systems.
 
-In Monolythic -> Vertical Scaling
-In Distributed -> Horizontal Scaling
-
+In Monolithic -> Vertical Scaling (means they will replace the existing system with new system with more power)
+In Distributed -> Horizontal Scaling (means they will add more number of systems with same power)
 
 Whenever we want to design a good big data system. We need to think about 3 things.
 
@@ -94,12 +93,12 @@ Scalable model is taken care when we have distributed systems in place.
 
 When our Architecture is based on Distributed foundation it is a scalable model.
 
-****** Our Traditional python/java/c code doesnt work as data is residing on multiple machines ******
+****** Our Traditional python/java/c code doesnt work when data is residing on multiple machines ******
 
 Hadoop
 ======
 
-Hadoop was the first thing developed to handle big data problems
+Hadoop was the first thing developed to handle big data problems.
 
 Actually it is a framwork to solve big data problems, its not 1 tool or technology and its a combination of many things. Its an ecosystem of many tools & technologies.
 
@@ -116,7 +115,7 @@ HDFS / Mapreduce / YARN
 
 HDFS - Hadoop Distributed File System (Distributed Storage)
 
-Mapreduce - Distributed Processing (Traditional programming doesnot works as data stored in multiple systems) (OUTDATED) *** we use Spark ***
+Mapreduce - Distributed Processing (Traditional programming doesnot works when data stored in multiple machines/systems) (OUTDATED) *** we use Spark ***
 
 YARN - Yet Another Resource Negotiator (Resource Manager - useful to assign the resources based on the user request)
 
@@ -135,7 +134,7 @@ Sqoop - Data Ingestion/Movement (OUTDATED) *** We use ADF ***
 Sqoop Import - It is used to ingest/get the data from a table(customers) in mysql db to HDFS (Hadoop environment). 
 Sqoop Export - If we want to put the data from HDFS into table in mysql db.
 
-Basically underthehood this is also called as/works as Mapreduce. In Mapreduce we may need to use 100's of lines of java code in Sqoop we use few commands.
+Basically underthehood this is also called as/works as Mapreduce. In Mapreduce, we may need to use 100's of lines of java code in Sqoop we use few commands.
 
 Pig - Scripting language, mainly used to process and clean the data. When we write Pig statement it internally executes as Mapreduce code. (OUTDATED)
 
@@ -167,8 +166,8 @@ On-premise vs Cloud
 
 On-premise -> Everything has to be taken care by us. Purchasing, Installation, Maintenance, Security
 
-For Example
-50 node Hadoop Cluster
+For Example:-
+If we want to have a 50 node Hadoop Cluster
 
 you/your org have to buy 50 nodes
 
