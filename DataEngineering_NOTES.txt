@@ -1,9 +1,3 @@
-      ??????? ?????????? ?????? ??????? ?????????
-      ???? ???? ?????????????? ???????????? ?????????
-      ???? ???? ??????????? ??????? ???????????
-      ???? ???????? ????? ???????? ?????? ??????????
-
-
 Data Engineering 
 ----------------
 
@@ -14,7 +8,7 @@ Any data which is characterised by 5 V's is considered as Big Data
 
 Volume - Huge amount of data that cannot be handled by Traditional systems (Peta Bytes)
 
-Variety - format of data i.e Structured, Semi-Structured, Unstructured 
+Variety - format of data i.e..e Structured, Semi-Structured, Unstructured 
 
 Structured
 ----------
@@ -22,7 +16,7 @@ RDBMS (Relational Database Management System) - Database Tables - Ex: Employees 
 		
 Semi-Structured
 ---------------
-Json, XML
+json, XML
 
 Unstructured
 ------------
@@ -62,9 +56,9 @@ Storage - Hard disk (1 TB Hard disk)
 
 X Resources ~ Y performance
 
-2X Resourcses != 2Y performance
+2X Resources != 2Y performance
 
-In case of Monolithic Architecture, we are not getting benefitted the same way i.e with the increase in resources/cost we are not getting the expected amount of increase in performance. Because single system has hardware limitations. Performance won't increase in ratio with the increase in resources/cost.
+In case of Monolithic Architecture, we are not getting benefitted the same way i.e. with the increase in resources/cost we are not getting the expected amount of increase in performance. Because single system has hardware limitations. Performance won't increase in ratio with the increase in resources/cost.
 
 Monolithic is not a Scalable system.
 
@@ -76,7 +70,7 @@ Here, if we double the resources the performance will be doubled.
 
 X Resources ~ Y performance
 
-2X Resourcses ~ 2Y performance
+2X Resources ~ 2Y performance
 
 All good Big Data Systems are based on Distributed Architecture but not on Monolithic Architecture because you will get the scalability with Distributed Systems.
 
@@ -93,14 +87,14 @@ Scalable model is taken care when we have distributed systems in place.
 
 When our Architecture is based on Distributed foundation it is a scalable model.
 
-****** Our Traditional python/java/c code doesnt work when data is residing on multiple machines ******
+****** Our Traditional python/java/c code doesn't work when data is residing on multiple machines ******
 
 Hadoop
 ======
 
 Hadoop was the first thing developed to handle big data problems.
 
-Actually it is a framwork to solve big data problems, its not 1 tool or technology and its a combination of many things. Its an ecosystem of many tools & technologies.
+Actually it is a framework to solve big data problems, its not 1 tool or technology and its a combination of many things. Its an ecosystem of many tools & technologies.
 
 2007 --> Hadoop 1.0
  
@@ -111,15 +105,15 @@ Current --> Hadoop 3.0
 Hadoop contains 3 core components
 ================================= 
 
-HDFS / Mapreduce / YARN 
+HDFS / MapReduce / YARN 
 
 HDFS - Hadoop Distributed File System (Distributed Storage)
 
-Mapreduce - Distributed Processing (Traditional programming doesnot works when data stored in multiple machines/systems) (OUTDATED) *** we use Spark ***
+MapReduce - Distributed Processing (Traditional programming does not works when data stored in multiple machines/systems) (OUTDATED) *** we use Spark ***
 
 YARN - Yet Another Resource Negotiator (Resource Manager - useful to assign the resources based on the user request)
 
-*** Writing Mapreduce code is really hard and it is written in Java language (Even spark uses the same logic) ***
+*** Writing MapReduce code is really hard and it is written in Java language (Even spark uses the same logic) ***
 
 There are some technologies that are surrounded by the core components of Hadoop, Hadoop ecosystem technologies:
 
@@ -131,31 +125,32 @@ Ex:-
 
 Sqoop - Data Ingestion/Movement (OUTDATED) *** We use ADF ***
 
-Sqoop Import - It is used to ingest/get the data from a table(customers) in mysql db to HDFS (Hadoop environment). 
-Sqoop Export - If we want to put the data from HDFS into table in mysql db.
+Sqoop Import - It is used to ingest/get the data from a table(customers) in MySQL dB to HDFS (Hadoop environment). 
+Sqoop Export - If we want to put the data from HDFS into table in MySQL db.
 
-Basically underthehood this is also called as/works as Mapreduce. In Mapreduce, we may need to use 100's of lines of java code in Sqoop we use few commands.
+Basically under the hood this is also called as/works as MapReduce. In MapReduce, we may need to use 100's of lines of java code in Sqoop we use few commands.
 
-Pig - Scripting language, mainly used to process and clean the data. When we write Pig statement it internally executes as Mapreduce code. (OUTDATED)
+Pig - Scripting language, mainly used to process and clean the data. When we write Pig statement it internally executes as MapReduce code. (OUTDATED)
 
-Hive - provides sql kind of interface to query the data. (Ex: Emp with highest salary) underthehood Mapreduce (Good Demand - Many companies use)
+Hive - provides SQL kind of interface to query the data. (Ex: Emp with highest salary) under the hood MapReduce (Good Demand - Many companies use)
 
-Oozie - Workflow scheduler. Define a workflow to execute (Mapreduce - MR) MR1, MR2, MR3 in a manner as per you requirement. (OUTDATED) *** we use ADF ***
+Oozie - Workflow scheduler. Define a workflow to execute (MapReduce - MR) MR1, MR2, MR3 in a manner as per you requirement. (OUTDATED) *** we use ADF ***
 
-HBase - Nosql db (basically when we want to search quickly, Random access of data is possible instead of sequntial data check) (OUTDATED) *** We use Cosmosdb ***
+HBase - NoSQL dB (basically when we want to search quickly, Random access of data is possible instead of sequential data check) (OUTDATED) *** We use Cosmos dB ***
 
 In case of 10L of records, instead of writing 
 
 select * from employee where emp_id = 800
 
-we can make use of NoSql
+we can make use of NoSQL
 
 Challenges with Hadoop
 ======================
 
-1) Mapreduce is very slow and hard to write the code in java.
+1) MapReduce is very slow and hard to write the code in java.
 2) We need to learn so many different components in the Hadoop ecosystem technologies, where each one has its own big learning curve.
 3) Hadoop is mostly on-premise.
+
 
 
 Cloud and its Advantages
@@ -164,10 +159,11 @@ Cloud and its Advantages
 On-premise vs Cloud
 ===================
 
-On-premise -> Everything has to be taken care by us. Purchasing, Installation, Maintenance, Security
+On-premise -> Everything has to be taken care by us. Purchasing, Installation, Maintenance and Security.
 
 For Example:-
-If we want to have a 50 node Hadoop Cluster
+
+If we want to setup a 50 node Hadoop Cluster
 
 you/your org have to buy 50 nodes
 
@@ -175,28 +171,28 @@ you/your org need to procure a space to keep those nodes
 
 you/your org need to have a cooling equipment
 
-you/your org need to have people who will manage it in location
+you/your org need to have people who will manage/maintain them in the location
 
-we need to have admin to do software update, security and everything
+you/your org need to have admin to do software updates, security and everything
 
 
-Cloud -> Everthing will be taken care by cloud (Azure,AWS,GCP)
+Cloud -> Everything will be taken care by cloud (Azure, AWS, GCP)
 
 
 Advantages of cloud
 ===================
 
-Scalable - just by buying more resources we can obtain in few mins from cloud services they will lookinto maintenance and security.
+Scalable - Ability to increase or decrease resources based on your demand and we can obtain the resources in few mins from cloud services
 
-opex (operational expenditure) pay as you use (just like a rented house) not need to pay all the amount upfront.
+opex (operational expenditure) we pay for the resources that we use (just like a rented house) instead of paying the huge amount upfront.
 
-Agility - Ability to create multiple clusters with in mins
+Agility - Ability to quickly create multiple resources based on changing business requirements.
 
 Geo distribution - Servers will be in multiple locations to avoid any delay in response/network lag/latency
 
-Disaster recovery - If servers in india affected then we can access from US
+Disaster recovery - Ability to restore applications and data from a backup or alternate location when a disaster affects the primary system
 
-Cost Effective - As we need to pay based on our usage
+Cost Effective - Ability to reduce infra costs by paying only for the resources we use.
 
 
 3 Types of Clouds
@@ -204,38 +200,41 @@ Cost Effective - As we need to pay based on our usage
 
 Public / Private / Hybrid
 
-Public - Amazon AWS, Microsoft Azure, Google GCP (can be used multiple people)
+Public - Amazon AWS, Microsoft Azure, Google GCP (can be used by multiple users)
 
-Private - With in their organization they will create their own cloud
+Private - With in their organization, they will create their own cloud due to confidential/sensitive information
 
-On-premise vs privte Cloud
---------------------------
+On-premise vs private Cloud
+---------------------------
 
-Only difference is that, in case of private we have an UI by the click of a button we can add resources, clusters up and running on the fly as per user request by their organization people. 
+On-premise     ==> we need to buy our own infrastructure and set everything else yourself in your company
+private cloud  ==> Similar to on-premise with in our organization, we need to build everything from scartch.
 
-Hybrid - Public + Private (sensitive information)
+Only difference is that, in case of private we have an UI by the click of a button we can add resources, clusters will be up and running on the fly as per user request by their organization people. 
+
+Hybrid - Public + Private (sensitive/confidential information will be stored in private cloud and remaining information will be stored in public cloud and private clouds are costly compared to public as they are dedicated for your organization)
 
 
 Cloud Providers
 ===============
 
 Amazon AWS
-Microsoft Azure
+Microsoft Azure (Most in-demand cloud for Data Engineering)
 Google GCP
 
 
 What is Apache Spark
 ====================
 
-HDFS / Mapreduce / YARN  --> HDFS / Apache Spark / YARN
+HDFS / MapReduce / YARN  --> HDFS / Apache Spark / YARN
 
-Mapreduce is the biggest bottleneck because it is hard to write the logic in java and it is obsalete and very slow. Apache Spark is the replacement for Mapreduce.
+MapReduce is the biggest bottleneck because it is hard to write the logic in java and it is obsolete and very slow. Apache Spark is the replacement for MapReduce.
 
 Apache Spark is a general purpose, in-memory & compute engine.
 
-General Purpose -> In Hadoop we need to know different components to work with different requirements i.e Hive for querying, Sqoop for Ingestion, pig for scripting but here Apache Spark is enough to work with different requirements. 
+General Purpose -> In Hadoop we need to know different components to work with different requirements i.e. Hive for querying, Sqoop for Ingestion, pig for scripting but here Apache Spark is enough to work with different requirements. 
 					
-In-Memory -> Process the data/keeps the date in memory, bcz of this it is 10x-100x faster than Mapreduce
+In-Memory -> Process the data/keeps the date in memory, bcz of this it is 10x-100x faster than MapReduce
 
 Compute Engine -> requires any storage and resource manager to work with
 
@@ -246,7 +245,7 @@ Storage - HDFS / Amazon S3 / Azure ADLS Gen2 / GCS (Google Cloud Storage) / loca
 
 Resource Manager - YARN / Mesos / Kubernetes 
 
-plug and play compute engine i.e it can work with any Storage and Resource Manager.
+Apache Spark is a plug and play compute engine i.e. it can work with any Storage and Resource Manager.
 
 
 In which language we write spark code?
@@ -261,13 +260,13 @@ spark with python - pyspark
 spark is written in Scala, Scala is hard to learn.
 
 
-Database vs Data Warehouse vs Data Lake
-=======================================
+Database vs Data Warehouse vs Datalake
+======================================
 
 Database
 ========
 
-Deals with transactional data i.e data to day data
+Deals with transactional data i.e. data to day data
 
 OLTP purpose (online transactional processing system)
 
@@ -277,11 +276,11 @@ Recent data - day to day data (holds most recent data for better performance)
 
 Example - online banking transaction (Entry will go and sit in Database)
 
-Oracle, MySql	
+Oracle, MySQL, PostgresSQL, Microsoft SQL Server Studio	
 
-Database follows "Schema on Write" (which means while inserting the data into the table it will check the values entering into the column is correct or not, based on the datatype of the column and returns error if there is a mismatch with the structure) (i.e validates the schema or structure of table)
+Database follows "Schema on Write" (which means while inserting the data into the table it will check the values entering into the column is correct or not, based on the datatype of the column and returns error if there is a mismatch with the structure) (i.e. validates the schema or structure of table)
 
-cost to store data in database is high so we store last few months/years/day to day data
+cost to store the data in database is high so we store last few months/years/day to day data
 
 
 DWH
@@ -291,57 +290,57 @@ OLAP (online analytical processing system)
 
 stores more data compared to database, data in DWH is mainly used for analytical processing where we require lot of historical data to find the insights.
 
-We can do analytical processing even on database, but to store the data in database is costly.
+We can do analytical processing even on database, but to store the huge amount of data in database is costly.
 
 The moment we run complex queries on our database with an intent to do some analysis then day to day transactions will become slow and existing users will be affected.
 
-Bcz of this reason we take data from database and migrate it to date warehouse to do analytical processing and also we can store the data in DWH coming from multiple data sources i.e database.
+Bcz of this reason we take data from database and migrate it to date warehouse to do analytical processing and also we can store the data in DWH coming from multiple data sources i.e. database.
 
 Structured data and follows "Schema on Write".
 
 Example - Teradata
 
-Storage cost in DWH is lesser than database.
+Storage cost in DWH is lesser compared to database.
 
 DWH follows ETL process.
 
-suppose your data is in database
+suppose your data is in database, when you want to load that data into DWH
 
 Extract the data
 Transform the data (it is a complex process)
 Load the data into DWH
 
-This ETL approach reduces our flexibility and its a complicated process because before loading the data itself we need to transform the data which we may not aware sometimes to apply which transformations.
+This ETL approach reduces our flexibility and its a complicated process because before loading the data itself we need to transform the data, sometimes we may not be aware of applying which transformations.
 
 Both Database and Datawarehouse handles structured data only.
 
 
-Data Lake
-=========
+Datalake
+========
 
-To overcome the ETL process we use this
+To overcome the drawbacks of ETL process we use Datalake
 
 To get insights from huge amount of data
 
-Data is stored in its raw format (i.e structured or unstructured)
+In Datalake, data is stored in its raw format (i.e. structured or unstructured)
 
-In case of Log file - we can directly load the file into data lake in its raw form but in case of DWH we have to transform and the load the data in structured format
+In case of Log file - we can directly load the file into Datalake in its raw form but in case of DWH we have to transform and the load the data in structured format
 
-ELT process is followed in Data Lake
+ELT process is followed in Datalake.
 
 HDFS, Amazon S3 follows same ELT method.
 
-Cost effective.... because it does not charge huge amount to store the data
+Cost effective.... because it does not charge huge amount to store the data like Database and DWH.
 
-Data Lake follows "Schema on Read"
+Datalake follows "Schema on Read"
 
-Example: employee.csv 
+For example: employee.csv, if we load the csv file into Datalake in its raw format
 
-create structure on top of the raw csv file to visualize or see the data usnig Hive.
+create a structure on top of the raw csv file to visualize or see the data using Hive.
 
-Main advantage is it gives flexibility i.e load raw file into Datalake if you create structure on top of it to view the data. so it is cost effective.
+Main advantage is, it gives flexibility i.e. load raw file into Datalake if you want create structure on top of it to view the data. so it is cost effective.
 
-In case of Data Lake we can handle structured and unstructured data.
+Using Datalake we can handle structured and unstructured data.
 
 
 
@@ -353,20 +352,19 @@ We will get to know the tasks of Data Engineer in a flow (Data Engineering flow)
 High Level overview:
 ===================
 
-Multiple sources --> (Data Ingestion) --> Stroage Layer (Date Lake Storage) --> Processing --> Serving layer
+Multiple sources --> (Data Ingestion) --> Storage Layer (Date Lake Storage) --> Processing --> Serving layer
 
-Here source might be a raw file, file from website, db table, dwh table, sensor data in different formats
-
+Here source might be a raw file, file from website, dB table, DWH table, sensor data in different formats
 
 Consider we have multiple sources and we want to get that data into the storage layer (Date Lake Storage)
 
 Stage 1: 
 
-Multiple sources --> (Data Ingestion)--> Stroage Layer (Extract and Load the data from Multiple Sources to Storage Layer)
+Multiple sources --> (Data Ingestion)--> Storage Layer (Extract and Load the data from Multiple Sources to Storage Layer)
 
 Stage 2:
 
-Data Processing involves Data cleaning ex:-changing the data to common format, Data Filtering, Joining tables, Aggregations, Data Quality Checks, Data Transformation
+Data Processing involves Data cleaning ex:- changing the data to common format, Data Filtering, Joining tables, Aggregations, Data Quality Checks, Data Transformation
 
 Stage 3:
 
@@ -376,20 +374,18 @@ Data Serving - From here we will connect to Data Visualization tools.
 Hadoop
 ======
 
-Multiple sources --> (Data Ingestion) --> Stroage Layer (Date Lake Storage) --> Processing --> Serving layer
+Multiple sources --> (Data Ingestion) --> Storage Layer (Date Lake Storage) --> Processing --> Serving layer
 
-for Serving layer DWH or Database is the best.
+MySQL Database --> Sqoop --> HDFS --> MapReduce / Spark --> Hive / HBase
+(employee)		   Import    File       Processing              DWH
 
-MySql Database --> Sqoop --> HDFS --> Mapreduce / Spark --> Hive / HBase
-(employee)		   Import    File       Processing              dwh
-
-for serving layer db or dwh is the best fit
+For Serving layer DWH or Database is the best.
 
 When to use Database/Datawarehouse in serving layer - when you want to do reporting
 
 									VS
 									
-when to use a Nosql for your serving layer - when you want to build a custom UI (ie when you want to search something using keywords)
+when to use a NoSQL for your serving layer - when you want to build a custom UI (i.e. when you want to search something quickly using keywords)
 
 
 Cloud
@@ -398,34 +394,33 @@ Cloud
 Azure cloud
 -----------
 
-Multiple sources --> (Data Ingestion) --> Stroage Layer (Date Lake Storage) --> Processing --> Serving layer
+Multiple sources --> (Data Ingestion) --> Storage Layer (Date Lake Storage) --> Processing --> Serving layer
 
-Multiple sources --> Azure DataFactory (ADF) --> ADLS Gen2 --> Azure Databricks (Optimised spark) / Azure Synapse --> Azure SQL/Cosmosdb
+Multiple sources --> Azure Data Factory (ADF) --> ADLS Gen2 --> Azure Databricks (Optimised spark) / Azure Synapse --> Azure SQL/Cosmos dB
 
 
 AWS cloud
 ---------
 
-Multiple sources --> (Data Ingestion) --> Stroage Layer (Date Lake Storage) --> Processing --> Serving layer
+Multiple sources --> (Data Ingestion) --> Storage Layer (Date Lake Storage) --> Processing --> Serving layer
 
 Multiple sources --> AWS Glue --> Amazon S3 --> AWS Databricks/ Athena / Redshift --> AWS RDS (Relational Database System) / DynamoDB
-
 
 
 Ingestion - Sqoop / ADF / AWS Glue
 
 Data Storage - HDFS / ADLS Gen2 / Amazon S3
 
-Processing/Compute - Mapreduce / Spark / Azure Databricks/ Azure Synapse / AWS Glue/Athena/Redshift/AWS Databricks
+Processing/Compute - MapReduce/Spark / Azure Databricks/Azure Synapse / AWS Glue/Athena/Redshift/AWS Databricks
 
-Serving layer -  Hive/HBase / Azure sql/Cosmosdb / AWS RDS/DynamoDB
+Serving layer -  Hive/HBase / Azure SQL/Cosmos dB / AWS RDS/DynamoDB
 
 
 Computation
 ===========
 
-Serverless or Serverful(with server)
-------------------------------------
+Serverless (or) Serverful(with server)
+--------------------------------------
 
 AWS Athena vs AWS Redshift
 --------------------------
@@ -433,15 +428,15 @@ AWS Athena vs AWS Redshift
 AWS Athena
 ==========
 
-Data is stored in Amazon S3 - Data Lake
+Data is stored in Amazon S3 - Datalake
 
 No need to turn on a dedicated cluster here.
 
-We will write sql kind of query in AWS Athena on the top of Amazon S3 data to scan and fetch the data from Amazon S3
+We will write SQL kind of query in AWS Athena on the top of Amazon S3 data to scan and fetch the data from Amazon S3
 
-Athena charges based on the amount of data scanned (ie just like opex) --> $5 for 1TB of data scanned
+Athena charges based on the amount of data scanned (i.e. just like opex) --> $5 for 1TB of data scanned
 
-you will use resources from shared pool (i.e there is no dedicated resources like Hadoop)
+you will use resources from shared pool (i.e. there is no dedicated resources like Hadoop)
 
 We need to make sure that our Athena Query is optimized to scan relevant data otherwise it will charge more amount.
 
@@ -449,7 +444,7 @@ We need to make sure that our Athena Query is optimized to scan relevant data ot
 AWS Redshift
 ============
 
-We need to turn on dedicated cluster here. Which will charge a lot (i.e capex)
+We need to turn on dedicated cluster here. Which will charge a lot (i.e. capex)
 
 
 Serverless or Serverful
@@ -457,22 +452,23 @@ Serverless or Serverful
 
 Serverless will be less expensive
 
-In Serverless, since resources are not dedicated we cannot expect the same level of performance every time (i.e you cannot get guaranteed performance) as we will use resources on shared pool.
+In Serverless, since resources are not dedicated we cannot expect the same level of performance every time (i.e. you cannot get guaranteed performance) as we will use resources on shared pool.
 
 If performance is your criteria then better to go with Serverful (AWS Redshift)
 
+Scenario:-
 
-Serverless - If we want to run a query at 8PM every day and wont bother about the query execution time i.e peformance is not crucial only cost is my criteria.
+Serverless - If we want to run a query at 8PM every day and wont bother about the query execution time i.e. performance is not crucial only cost is my criteria.
 
 Serverful - If performance is my criteria or we need to run adhoc queries through out the day.
 
 
-AWS - Athena vs Redshift
+AWS - Athena vs Redshift (Serverless or Serverful) 
 
-Azure - Synapse Serverless vs Synapse Dedicated Pool
+Azure - Synapse Serverless vs Synapse Dedicated Pool (Serverless or Serverful)
 
 
-Azure DataFactory - data Ingestion
+Azure Data Factory - data Ingestion
 
 ADLS Gen2 - data Storage
 
@@ -480,48 +476,46 @@ Azure Databricks - data Processing
 
 pyspark - data Processing
 
-synapse - data Processing
+Azure synapse - data Processing
 
-Cosmosdb - for serving
+Cosmos dB - for serving
 
-Azure DataFactory - for scheduling
+Azure Data Factory - for scheduling
 
 
 
 Internals of HDFS
 =================
 
+Let us consider we have 4 node cluster and a huge file with 500 Mb
 
-Let us consider we have 4 node cluster and have huge file with 500 Mb
+Now instead of storing that file in a single machine, we will split it across all the machines.
 
-Now instead of storing that file in a single machine we will split across all the machines.
+to split the file there is a concept called "block size" - 128 mb (Hadoop 3)
 
-to split the file there is a concept called block size - 128 mb (Hadoop 3)
-
-After splitting file data into multiple block and storing it in different nodes when some one tries to read the file1. They donot know what is kept where so we require a master node (Name Node) and remaining 4 slave nodes (Data Node)
+After splitting file data into multiple blocks and storing it in different nodes when some one tries to read the file1. They do not know what is kept where so we require a master node (Name Node) and remaining 4 slave nodes (Data Node)
 
 Name Node - Holds metadata of what is kept where in a tabular format (file1 | b1 | DN1)
 
-Whenever customers wants to read file1 request will go to Name Node (Master) and it will checkout the metadata table and then it will reach out to the Data Nodes accordingly to fetch the data.
-
+Whenever customers wants to read file1, request will go to Name Node (Master) and it will checkout the metadata table and then it will reach out to the Data Nodes accordingly to fetch the data.
 
 block size - 128 mb (Hadoop 3)
 
-1 Name Node (Maste Node)
+1 Name Node (Master Node)
 
 multiple data nodes 
 
-data nodes hold actual Data
+Data nodes holds actual Data
 
-Name Node hold metadata table that contains what is kept where (ie which block of data is present on which Datanode)
+Name Node hold metadata table that contains what is kept where (i.e. which block of data is present on which Datanode)
 
-Name Node is made of cheap or less cost Hardware
+Data Node is made of cheap or less cost Hardware
 
 
-How to make sure that we dont loose data even when a data node goes down
-------------------------------------------------------------------------
+How to make sure that we don't loose data even when a data node goes down
+-------------------------------------------------------------------------
 
-Replication factor comes into picture --> each block will have 3 copies by default (Example:- b1 stores in node1 and also gets stores in another 2 nodes). So once machine goes down then we can use the other two machines to access data. 
+"Replication factor" comes into picture --> each block will have 3 copies by default (Example:- b1 stores in node1 and also gets stores in another 2 nodes). So once machine goes down then we can use the other two machines to access data. 
 
 *********** Block Size and Replication factor can be changed by Admin *************
 
@@ -529,22 +523,22 @@ Replication factor comes into picture --> each block will have 3 copies by defau
 How does Name Node get to know that Data Node is down
 -----------------------------------------------------
 
-Heart Beat concept --> Every Data Node sends a heart beat to namenode for every 3 seconds indicating its alive.
+"Heart Beat" concept comes in to picture --> Every Data Node sends a heart beat to namenode for every 3 seconds indicating its alive.
 
-If Name Node does not receive heart beat for 10 consecutive times then Name Node will assume Data Node is dead and it will remove that Data Node and replicate the block of data present in that Datanode to another Datanodes 
+If Name Node does not receive heart beat for 10 consecutive times then Name Node will assume Data Node is dead and replicate the block of data present in that Datanode to another Datanode and then it will remove that Data Node
 
 What if Namenode fails
 ----------------------
 
-Datanode is cheap hardware but not Namenode, so chances of Namenode failing is very less. But if it fails there is a concept of Secondary Namenode. There is a process to copy the data from Namenode1 to seconday Namenode and it is Admins reponsibility.
+Datanode is cheap hardware but not Namenode, so chances of Namenode failing is very less. But if it fails there is a concept of "Secondary Namenode". There is a process to copy the data from Namenode1 to secondary Namenode and it is Admins responsibility.
 
-***** Without Namenode we dont know which block of data is present on which Datanode *****
+***** Without Namenode we don't know which block of data is present on which Datanode *****
 
 
-Whats the need of a Data Engineer
-=================================
+What's the need of a Data Engineer
+==================================
 
-Basically Data Engineer will come into picture when we need to handle the application data i.e operational/transactional data and transform it into consumers (ML/Data Science engineers/Visualization team) usable format.
+Basically Data Engineer will come into picture when we need to handle the application data i.e. operational/transactional data and transform it into consumers (ML/Data Science engineers/Visualization team) usable format.
 
 For Example:-
 
@@ -552,11 +546,11 @@ Amazon will get a lot of transactional data then Data Engineers will take that d
 
 In general before this, 
 
-ETL + DWH is the methodology we were using that means we transform the data while loading/ingesting into DWH and even in DWH we can transform the remaining part of data if needed like aggregation of data etc and it is a bit challenging becuase DWH only stores the structured data and it is costly becuase it requires some specialised servers.
+ETL + DWH is the methodology we were using that means we transform the data while loading/ingesting into DWH and even in DWH we can transform the remaining part of data if needed like aggregation of data etc and it is a bit challenging because DWH only stores the structured data and it is costly because it requires some specialised servers.
 
 Modern approach is,
 
-ELT with this we will get the raw data from multiple sources into Data Lake and then we will use Big Data technologies to transform the data as per the cusmoers requirement and then we serve the data in serving layer (API,DWH,DB,Cosmosdb(Nosql)). Datalake can store structured, unstructured, semi-structured data and we might not have to bring Big DWH to do transformation even if we use DWH for serving it might be a smaller version.
+ELT with this we will get the raw data from multiple sources into Datalake and then we will use Big Data technologies to transform the data as per the customers requirement and then we serve the data in serving layer (API, DWH, DB, Cosmos dB(NoSQL)). Datalake can store structured, unstructured, semi-structured data and we might not need to bring Big DWH to do transformation even if we use DWH for serving it might be a smaller version.
 
 
 Traditional Approach : Multiple Sources -> ETL -> DWH (ETL + DWH)
@@ -575,22 +569,23 @@ Visualization of Hadoop cluster
 
 4 Datanodes 
 
-Hard disk is allocated to each datanodes, the Hard disks on these machines will form HDFS. Each Datanode will have CPU, Memory also for processing along with storage (Hard disk). 
+Hard disk is allocated to each datanode, the Hard disks on these machines will form HDFS. Each Datanode will have CPU, Memory also for processing along with storage (Hard disk). 
 
-So block1 data is processed on the same machine (process the data on the same machine where date is kept) --> Concept of Data Locality (It improves the performance as we are not moving the data to another machine for data processing)
+So block1 data is processed on the same machine (process the data on the same machine where data is kept) --> Concept of "Data Locality" (It improves the performance as we are not moving the data to another machine for data processing)
 
 *********** Hadoop works on the principle of Data locality *********** 
 
 Data Engineers acts as bridge / glue between operational/transactional data stores and Business consumers (ML Experts/Data science Engineers/BI Developers).
 
 
+
 Week-2
-******
+======
 
 HDFS
 ====
 
-Let us consider that we have 4 datanodes, 1 namenode Hadoop cluster and file1 with size 500mb. Max we can have 4000 datanodes.
+Let us consider that we have 4 datanodes, 1 namenode Hadoop cluster and file1 with size 500mb. Max we can have 4000 datanodes in a cluster.
 
 Why block size is 128Mb? what happens if we reduce the block size to 64 mb
 --------------------------------------------------------------------------
@@ -601,7 +596,7 @@ Why block size is 128Mb? what happens if we reduce the block size to 64 mb
 
 If we reduce the block size, it leads to more number of blocks. Then there will be more parallelism.
 
-If we choose a block size very low i.e 1Mb and you have a file of 10Gb, there will be 10240 blocks then you need 10240 machines at max. 
+If we choose a block size very low i.e. 1Mb and you have a file of 10Gb, there will be 10240 blocks then you need 10240 machines at max. 
 In this case, namenode has to keep the metadata of all these blocks in its table and it will get overburdened with these many entries.
 
 
@@ -626,13 +621,13 @@ Namenode Federation -> we can have more than 1 Namenode. Metadata is split acros
 
 For example, Sales department metadata is handled by Namenode1, Finance department metadata is handled by Namenode2. These kind of namespaces can be created and hanlded by particular namenodes.
 
-********* Namenode Federation concept is to give Scalability to make sure Namenodes are not overburdened *********
+********* Namenode Federation concept is to give Scalability in order to make sure Namenodes are not overburdened *********
 
 
 Datanode Failure
 ----------------
 
-Replication factor - by default 3 copies of each block of data is created.
+Replication factor - by default 3 copies of each block of data is created and stored on other 2 datanodes.
 
 Namenode Failure
 ----------------
@@ -643,32 +638,30 @@ Secondary Namenode vs Namenode Federation
 =========================================
 
 Secondary Namenode --> Fault Tolerance (Its a backup plan when a namenode fails)
-Namenode Fedaration --> Scalability (When metadata increases we can add more namenodes)
+Namenode Federation --> Scalability (When metadata increases we can add more namenodes so that we can split the metadata across the namenodes)
 
 What is Rack
 ============
 when we are about to set up cluster 
 
 10 Datanodes in Bangalore (1 rack)
-10 Datanodes in Sanfrancisco (1 rack)
+10 Datanodes in San Francisco (1 rack)
 10 Datanodes in Australia (1 rack)
 
-Rack is a group of servers set up in a geographical location which is far away from other rack. If 1 rack is failed due to natural calamities the servers in other rack are still working. We physically divide the rack across geographies. 
+Rack is a group of servers set up in a geographical location which is far away from other rack. If 1 rack is failed due to natural calamities the servers in other rack will be working. We physically divide the rack across geographies. 
 
-Basically in Big Data world, when we talk about HDFS admins make sure 3 copies are not stored in a single rack. 
+Basically in Big Data world, when we talk about HDFS. Admins make sure 3 copies are not stored in a single rack. 
 
 When we setup Hadoop cluster, we will make sure that all the machines are not setup in a single geographical location.
 
 
-1 way We can manually install all the services for Hadoop
+1 way We can manually install all the services for Hadoop and another way is having ready made VM's
 
-another way is having ready made VM's
-
-Manual way we need to install Oracle Virtual Box --> you can install Cloudera VM --> This is a pseudo distributed setup
+In Manual way we need to install Oracle Virtual Box --> you can install Cloudera VM --> This is a pseudo distributed setup
 
 2 types of clusters
 
-1. Pseudo distributed - Oracle Virtual Box -> Cloudera quickstart VM (Namenode and Datanode will be running on the same VM, so it is very slow)
+1. Pseudo distributed - Oracle Virtual Box -> Cloudera QuickStart VM (Namenode and Datanode will be running on the same VM, so it is very slow)
 2. Fully distributed 
 
 What can be practised on Lab?
@@ -679,14 +672,14 @@ HDFS commands
 python
 DSA
 pyspark
-kafka
+Kafka
 Structured Streaming
 Hive 
 
 ADF, Databricks, Other cloud services
 For the cloud services we need to create an account on your own cloud service and practise.
 
-In order to connect to the Cluster, we will be connecting/logging in to the Gateway node using url, username, password and it knows how to access/connect to cluster.
+In order to connect to the Cluster, we will be connecting/logging in to the Gateway node using URL, username, password and it knows how to access/connect to cluster.
 
 Login URL: http://g02.itversity.com
 username: itv028185 
@@ -694,9 +687,9 @@ password: ier1ag4toa1y639iq68buhaysj97awz8
 
 Namenode : http://m01.itversity.com:9870/
 
-If each Machine has 10 Tb of Harddisk
+If each Machine has 10 Tb of Hard disk
 
-3 data nodes * 10 Tb of Harddisk ==> Total 30 Tb
+3 data nodes * 10 Tb of Hard disk ==> Total 30 Tb
 
 each datanode will allocate - 9 Tb for HDFS (admin will decide)
 							  1 Tb for local
@@ -721,7 +714,9 @@ Linux follow tree like structure, everything starts from root
 
 In Linux we call it as directory, windows it is Folder.
 
-cd - (Change Directory) --> cd / --> to go to root directory
+cd - (Change Directory) 
+
+cd / --> to go to root directory
 
 cd ~  --> If i have to go to my home directory
 
@@ -733,22 +728,22 @@ cd . --> current directory
 
 cd ../.. --> take me 2 directories back from current directory if present
 
-From your windows to connect from your powershell to the Gateway Node from my local
+From windows, to connect from your PowerShell to the Gateway Node from my local
 
 ssh itv028185@g02.itversity.com + 'Enter Password'
 
 
 cd /data (Here we can see all the files that we can work with in this course)
 
-If you are in "/data/trendytech" path and you want to goto "retails_db" folder in "/data" folder we use command ***** cd ../retails_db *****
+If you are in "/data/trendytech" path and you want to go to "retails_db" folder in "/data" folder we use command ***** cd ../retails_db *****
 
 Absolute vs Relative Path
 =========================
 
-Absoulute Path
---------------
+Absolute Path
+-------------
 
-It means you give the path starting from the "/" (i.e complete path)
+It means you give the path starting from the "/" (i.e. complete path)
 
 Example:- cd /data/retails_db/departments/
 
@@ -761,20 +756,20 @@ Example:- pwd (/data/retails_db/customers)
 
 cd ../departments/
 
-ls commands
+ls commands                                                                 ******************** REVISION STOPPED  ********************
 ===========
 
 It is for listing the files and directories
 
 Blue Colour Indicates directories
 Green Colour Indicates executable files
-Black Colour Indicated Normal files
+Black Colour Indicates Normal files
 
 If we press "Up - ^" arrow we will get the previously executed command
 
 ls --> to list all the files and folders
 
-ls -l --> to list all the files and folders with extra details like (permissions, no.of links, owner, group, file size, creation date) (Asceding order of Uppercase letters and then followed by lowercase letters) *** Ascending order based on ASCII values ***
+ls -l --> to list all the files and folders with extra details like (permissions, no.of links, owner, group, file size, creation date) (Ascending order of Uppercase letters and then followed by lowercase letters) *** Ascending order based on ASCII values ***
 
 ls -lr --> to list all the files and folders with extra details like (permissions, no.of links, owner, group, file size, creation date) (Descending order of Uppercase letters and then followed by lowercase letters) *** Descending order based on ASCII values ***
 
@@ -786,9 +781,9 @@ ls -ltr --> to list all the files and folders (oldest file first)
 
 "d" --> At the start indicates directory
 
-ls -lR --> to provide the complete details (permissions, no.of links, owner, group, file size, creation date) (Asceding order of Uppercase letters and then followed by lowercase letters) and also returns the files and directories details in each directory
+ls -lR --> to provide the complete details (permissions, no.of links, owner, group, file size, creation date) (Ascending order of Uppercase letters and then followed by lowercase letters) and also returns the files and directories details in each directory
 
-ls -R --> to provide the files and directories and also returns the files and directories details in each directory (Asceding order of Uppercase letters and then followed by lowercase letters) 
+ls -R --> to provide the files and directories and also returns the files and directories details in each directory (Ascending order of Uppercase letters and then followed by lowercase letters) 
 
 ls -a --> to print all the find including hidden files (.filename)
 
@@ -806,15 +801,15 @@ x - Execute (1)
 owner group others
 drwx  rwx	rwx
 6	  6  	6    --> rw- rw- rw-
-7	  5		4    --> rwx r-x r--
+7	  5	4    --> rwx r-x r--
 
 To change the permissions of a file
 -----------------------------------
 
 chmod 777 file1
 
-Defual permissions for files and directories
---------------------------------------------
+Default permissions for files and directories
+---------------------------------------------
 
 files 		->  6 4 4
 directories ->  7 5 5
@@ -823,7 +818,7 @@ cat file1 --> to see the content of the file
 
 mkdir dir1 --> to create a new directory
 
-mkdir dir2 dir3 dir3  --> to create mulitple directories
+mkdir dir2 dir3 dir3  --> to create multiple directories
 
 rmdir dir1 --> to remove a Directory *** Only when directory is empty ***
 
@@ -844,7 +839,7 @@ cp file1 file2 --> to copy the content of file1 to file2 by creating it newly
 
 cp fiel1 dir1 --> to copy the file1 to dir1 and paste file1 in dir1
 
-cp dir1 dir2  --> it will give error saying "ommitting directory 'dir1'"
+cp dir1 dir2  --> it will give error saying "omitting directory 'dir1'"
 
 cp -R dir1 dir2 --> recursively copy the details of dir1 to dir2 and paste it in dir2
 
@@ -889,15 +884,15 @@ cat > filename --> to create a new file and enter the data
 --------------
 
 once we run the command it will give you prompt to enter the data into the filename, once you enter the data and save it by using "ctrl + d".
-But the disadvantage with this command is if there is any content already present in filename then it will be overriden because we used "cat > filename"
+But the disadvantage with this command is if there is any content already present in filename then it will be overridden because we used "cat > filename"
 
 cat file1.txt file2.txt >> mergedfile.txt --> to append the content of file1 at top and file2 at below into a newly created file 'mergedfile.txt'
 
-**** In case of cat commands, '>' for adding/overrding the data in a file && '>>' for appending the data into a file ****
+**** In case of cat commands, '>' for adding/overriding the data in a file && '>>' for appending the data into a file ****
 
 du /data/retails_db/ --> to return the Disk Usage/Size of that directory  
  
-du -h /data/retails_db/ --> to return the Disk Usage/Size of that directory in Human readable format (i.e Gb/Mb)
+du -h /data/retails_db/ --> to return the Disk Usage/Size of that directory in Human readable format (i.e. Gb/Mb)
 
 for searching a value/word 
 --------------------------
@@ -910,7 +905,7 @@ HDFS commands
 
 hadoop fs/ hdfs dfs --> will give you all the list of commands available
 
-ls --> we are listing the files and directories on the machine on which you are i.e Gateway Node
+ls --> we are listing the files and directories on the machine on which you are i.e. Gateway Node
 
 In case of my local "/home/itv028185" is my home directory
 
@@ -924,7 +919,7 @@ In HDFS, Home Directory - /user/itv028185
 
 Whenever we run/fire the hdfs command mostly it will interact with the Name node and check the metadata table (Example:- ls)
 
-However few commands will even interact with Datanodes (Ex:- cat, head, tail i.e whenever we want to get the content)
+However few commands will even interact with Datanodes (Ex:- cat, head, tail i.e. whenever we want to get the content)
 
 hadoop fs -ls / --> gives all the details of root directory of hdfs
 
@@ -938,7 +933,7 @@ hadoop fs -mkdir /user/itv028185/retails_dbs --> to create a directory in user d
 
 hadoop fs -mkdir /user/itv028185/dir1/dir2/ --> to create a dir2 inside dir2 (folder hierarchy) it will throw error *** No Such File or Directory ***
 
-hadoop fs -mkdir -p /user/itv028185/dir1/dir2/ --> to create a folder hierarchy or pattern i.e dir2 inside dir1 
+hadoop fs -mkdir -p /user/itv028185/dir1/dir2/ --> to create a folder hierarchy or pattern i.e. dir2 inside dir1 
 
 hadoop fs -rmdir /user/itv028185/retails_dbs --> to remove a directory in user directory of hdfs (to remove empty directory)
 
@@ -953,7 +948,7 @@ I have created a new folder
 
 #hadoop fs -mkdir /user/itv028185/data
 
-into this "data" directory i want to get a file from my local (/data/trendytech bigLog.txt) i.e Gateway node 
+into this "data" directory i want to get a file from my local (/data/trendytech bigLog.txt) i.e. Gateway node 
 
 hadoop fs -put <local file path> <hdfs path>
 
@@ -986,14 +981,14 @@ hadoop fs -mv /data/bigLog.txt /data1/ (cut + paste) *** It will just change the
 
 hadoop fs -df -h /user/itv028185/  --> returns the details like (filesystem, size, used, available, use%) (df - disk free)
 
-hadoop fsck data/bigLog.txt -files -blocks -locations --> returns the blocks related information and location related information like which block is stored on which Datanodes inlcuding the replicas (fsck - file system check)
+hadoop fsck data/bigLog.txt -files -blocks -locations --> returns the blocks related information and location related information like which block is stored on which Datanodes including the replicas (fsck - file system check)
 
 
 hadoop fs -ls -C /user/itv028185/ --> displays only paths by removing the detailed information such as permissions, owner, size, date, etc
 
 hadoop fs -ls -d /user/itv028185/ --> displays the directory itself, rather than its contents
 
-hadoop fs -ls -q /user/itv028185/ --> dispalys quotas
+hadoop fs -ls -q /user/itv028185/ --> displays quotas
 
 
 
@@ -1004,7 +999,7 @@ cd /data/ --> to explore and work with sample data (Gateway node)
 
 hadoop fs -ls /public --> to explore and work with sample data (hdfs)
 
-To practise sql
+To practise SQL
 ---------------
 
 Open the terminal in the lab,
@@ -1012,7 +1007,7 @@ Open the terminal in the lab,
 enter the command "mysql -u retail_user -h ms.itversity.com -p" and press enter 
 enter password "itversity"
 
-MariaDB is the sql type
+MariaDB is the SQL type
 
 show databases; --> to view all databases
 
@@ -1020,11 +1015,11 @@ show tables; --> to view all tables
 
 use retail_db; --> to use retail_db database
 
-***** for retail_db database users dont have write permission *****
+***** for retail_db database users don't have write permission *****
 
 ***** use retail_export database for creating tables *****
 
-If connecting to a database is very then exit and use 
+If connecting to a database is very slow then exit and use 
 #mysql -A -u retail_user -h ms.itversity.com -p (so that metadata wont get loaded)
 
 
@@ -1055,51 +1050,51 @@ HDFS is not persistent where are Amazon S3 and ADLS Gen2 are persistent
 what do you mean by persistent?
 -------------------------------
 
-Let us consider we have 4 node Hadoop Cluster i.e 4 datanodes.
+Let us consider we have 4 node Hadoop Cluster i.e. 4 datanodes.
 
 what if we shutdown/terminate the cluster. We will loose the data. That is your storage is tightly coupled with compute. 
 
-If you want just to store the data but not compute i.e you just want to store the data in HDFS but you dont want to do any processing. Even then we need to pay for the compute cost also because the 4 datanodes are that are running is having both compute and storage. So we cannot only pay for storage.
+If you want just to store the data but not compute i.e. you just want to store the data in HDFS but you don't want to do any processing. Even then we need to pay for the compute cost also because the 4 datanodes are that are running is having both compute and storage. So we cannot only pay for storage.
 
-When you want to increase the storage in your Hadoop cluster we cannot just add the storage when we add a datanode it will have both storage and compute which will endup paying more cost.
+When you want to increase the storage in your Hadoop cluster we cannot just add the storage when we add a datanode it will have both storage and compute which will end up paying more cost.
 
-In simple terms in case of cloud, storage is not coupled with compute. So we just need to pay for compute only when we do some processing otherwise pay for storage alone. Here storage is cost effective and compute is comparitively costly.
+In simple terms in case of cloud, storage is not coupled with compute. So we just need to pay for compute only when we do some processing otherwise pay for storage alone. Here storage is cost effective and compute is comparatively costly.
 
 One more disadvantage with HDFS is that,
 if we have one Hadoop - 4 node cluster (HDFS Datalake)
 another Hadoop - 8 node Cluster, if 8 node cluster tries to access the data from 4 node cluster HDFS it is not possible. 
 That means if i am using 4 node cluster data is valid data is valid for that cluster only other clusters cannot access the data. It work in sylos.
 
-But in case of cloud datalakes (Amazon S3/ADLS Gen2) any number of clusters can use this data for processing. That means compute and storage are not tightly coupled with eachother in any cluster.
+But in case of cloud Datalakes (Amazon S3/ADLS Gen2) any number of clusters can use this data for processing. That means compute and storage are not tightly coupled with each other in any cluster.
 
 
-Mapreduce (To process data)
+MapReduce (To process data)
 =========
 
 HDFS - distributed storage
 
-Mapreduce theory is very important, but practicals are not important.(*** we will get to know how to think logically and solve problems using a distributed approach ***)
+MapReduce theory is very important, but practical's are not important.(*** we will get to know how to think logically and solve problems using a distributed approach ***)
 
-Mapreduce is combination of Map & Reduce 
+MapReduce is combination of Map & Reduce 
 
 2 phase - Map & Reduce
 
-both "Map & Reduce" takes input as key,value pair and gives output as key,value pair and it cannot work with any other input format
+both "Map & Reduce" takes input as key, value pair and gives output as key, value pair and it cannot work with any other input format
 
 Example:- (rollnum, name) 
-		  (1, Sitaram)
-		  (2, Pawan)
+	  (1, Sitaram)
+	  (2, Pawan)
 		  
-Mapreduce is a programming paradigm --> It means it is a particular way of programming or solving problems
+MapReduce is a programming paradigm --> It means it is a particular way of programming or solving problems
 
-Traditional programs (c, java, python) work when data is kept on only one machine, they donot know what to do if data is kept on mulitple machines/ they do not know how to handle distributed workloads.
+Traditional programs (c, java, python) work when data is kept on only one machine, they do not know what to do if data is kept on multiple machines/ they do not know how to handle distributed workloads.
 
 Scenario:-
 --------
 
 Let us consider, we have 4 datanode Hadoop Cluster and 1 namenode. File named file111 of size 500mb. As per default block size of 128 mb, file is distributed into 4 blocks and stored in 4 Datanodes.
 
-User has written Mapreduce code, code will be packaged and transferred to all datanodes. Code will run on each block on each datanodes and this we call as Mapper is running and mappers work in parellel on different blocks of data present in different datanodes.
+User has written MapReduce code, code will be packaged and transferred to all datanodes. Code will run on each block on each datanodes and this we call as Mapper is running and mappers work in parallel on different blocks of data present in different datanodes.
 
 same way if there is 1gb file, then each machine will hold 2 blocks of data on each datanode. Then 8 Mappers will run but 4 will run in parallel as we have 4 machines only.
 
@@ -1107,11 +1102,11 @@ same way if there is 1gb file, then each machine will hold 2 blocks of data on e
 
 ****** parallelism is defined by number of machines/datanodes you have in the cluster ******
 
-code is going to the data and as it will be very small in size i.e few kilo bytes. so we send code to the data and data is processed on the machine where it is kept. This is what we call as "Data Locality".
+code is going to the data and as it will be very small in size i.e. few kilo bytes. so we send code to the data and data is processed on the machine where it is kept. This is what we call as "Data Locality".
 
 ------- Till this part we consider as Map Stage -------
 
-Take the output of these Mappers (i.e Result1, Result2, Result3, Result4) to another machine (i.e any one of the 4 machines) and this output/result coming from Mappers is not the final output but it is an intermediate output.
+Take the output of these Mappers (i.e. Result1, Result2, Result3, Result4) to another machine (i.e. any one of the 4 machines) and this output/result coming from Mappers is not the final output but it is an intermediate output.
 
 Now on the another machine where we have taken Mappers output (Result1, Result2, Result3, Result4), there we run "Reduce Code" and the output from this is final output.
 
@@ -1134,7 +1129,7 @@ I have completed my learning on Data Engineering course in trendytech and got ma
 I got my first offers related to Data Engineering from TCS and Infosys for 20L and 22L,
 =======================
 Then i put the down the paper in LTM 
-I started giving interviews consistantly during my notice period                                          b2-DN2
+I started giving interviews consistently during my notice period                                          b2-DN2
 Later I got 25LPA with 2.5L joining bonus in Deloitte Company
 =======================
 I have joined Deloitte company on May3rd2027
@@ -1148,14 +1143,14 @@ Continued my career in Qualcomm in India.
 
 input to the record reader is 
 "My Name is Sandeep"
-output of the recored reader is 
+output of the record reader is 
 (12390, My Name is Sandeep)
 (12890, I have completed my learning on Data Engineering course in trendytech and got married in 2026 December,)
 (12930, I got my first offers related to Data Engineering from TCS and Infosys for 20L and 22L,)
 
-now the above output key,value pair can be recognized by Mapper
+now the above output key, value pair can be recognized by Mapper
 
-and then Mapper code/logic will be executed on the above mentioned key,value pair data 
+and then Mapper code/logic will be executed on the above mentioned key, value pair data 
 
 the output from the Mapper will be 
 
@@ -1168,7 +1163,7 @@ Mapper - 2
 (2LPA, 1) 
 (2.5L, 1)
 (is,1)
-(Deloitte, 1)     ----> output from all these mappers will go to another machine **** Here we are deviating from Data Locality principle **** because after mapper code execution is done data is being moved/tranferred to another machine. This is called as "Shuffling Activity". Literally data is shuffling from Mapper machine to another machine where Reduce code will be going to get executed.    
+(Deloitte, 1)     ----> output from all these mappers will go to another machine **** Here we are deviating from Data Locality principle **** because after mapper code execution is done data is being moved/transferred to another machine. This is called as "Shuffling Activity". Literally data is shuffling from Mapper machine to another machine where Reduce code will be going to get executed.    
 							   
 Mapper - 3
 (joined, 1) 
@@ -1262,25 +1257,25 @@ Output
 Where would you like to do more work either Map phase or Reduce phase?
 =====================================================================
 
-We should try to shift your computation towards Mapper side, because if we dont do that then everything Reducer will do then its like 1 single machine is processing and we are not utilising the advantage of distributed processing. Ideally as a good programmer we should make sure we use the parellelism, that why we have to do more work at Mapper end and do least work at Reducer end whenever possible. 
+We should try to shift your computation towards Mapper side, because if we don't do that then everything Reducer will do then its like 1 single machine is processing and we are not utilising the advantage of distributed processing. Ideally as a good programmer we should make sure we use the parallelism, that why we have to do more work at Mapper end and do least work at Reducer end whenever possible. 
 
-Shift your computation from Reducer to Mappers whenever feesible to do that.
+Shift your computation from Reducer to Mappers whenever feasible to do that.
 
 System/framework will do shuffle and sort.
 
-****** Mapper - Works on principle of Data Locality  &&& Reduce - Shuffle is required ******
+****** Mapper - Works on principle of Data Locality &&& Reduce - Shuffle is required ******
 
 
 
 Week-3
-------
+======
 
-Mapreduce
+MapReduce
 =========
 
-Mapreduce is used to process huge amount of data. It doesnot make sense to use Mapreduce to process small amount of data. Because in terms of coordinating the work for Mappers and Reducers itself will take lot of time. So dont use Mapreduce programming paradigm for small data. 
+MapReduce is used to process huge amount of data. It does not make sense to use MapReduce to process small amount of data. Because in terms of coordinating the work for Mappers and Reducers itself will take lot of time. So don't use MapReduce programming paradigm for small data. 
 
-Mapreduce conceptually very important, but practically it has zero importance bcz its very difficult to write the code.
+MapReduce conceptually very important, but practically it has zero importance bcz its very difficult to write the code.
 
 Map phase --> this gives us parallelism bcz Mappers will be running on different Machines
 
@@ -1291,9 +1286,9 @@ Always try to do more work at Mapper end and minimum work at Reducer end. Shift 
 Scenario:
 --------
 
-We have Linkedin details, we want to find out how many total views are there for each person. i.e How many people visited Sumit's/Manasa's/etc profile
+We have LinkedIn details, we want to find out how many total views are there for each person. i.e. How many people visited Sumit's/ Manasa's/ etc profile
 
-Linkedin Profile Views
+LinkedIn Profile Views
 ======================
 
 ID, From-Member, To-Member
@@ -1304,7 +1299,7 @@ ID, From-Member, To-Member
 5, Deepa, Manasa
 6, Shilpy, Manasa
 
-Record Reader take the lines internally and convert it to key,value pair.
+Record Reader take the lines internally and convert it to key, value pair.
 
 (0,[1, Manasa, Sumit])
 (1,[2, Deepa, Sumit])
@@ -1328,7 +1323,7 @@ The above will key,value pairs are shuffled and given to the Reducer Machine and
 (Sumit, 1)
 (Sumit, 1)
 
-After shuffle and sort, view given to Reducer will be the below way i.e values appear as collection to the Reducer
+After shuffle and sort, view given to Reducer will be the below way i.e. values appear as collection to the Reducer
 
 (Deepa,{1})
 (Manasa,{1,1,1})
@@ -1342,11 +1337,11 @@ Our Reducer code will be working on the above and it will sum up the values
 
 The above is the output from Reducer machine
 
-Q1) How to calculate number of views for each profile on Linkedin?
+Q1) How to calculate number of views for each profile on LinkedIn?
 Q2) How many mappers are launched and how many reducers are working? 
 
 Ans) For example if we have 1Gb file.. block size is 128Mb.. 8 blocks.. 8 Mappers will be running.. (No of Mappers = No of Blocks)
-	(Parellelism is defined by number of machines we have in the cluster)
+	(Parallelism is defined by number of machines we have in the cluster)
 	
 Q3) How many reducers are launched?
 Ans) Number of Reducers are controlled by a Developer. By default we will have only one Reducer but we can increase/decrease it to more than 1/0
@@ -1375,7 +1370,7 @@ When should we consider to reduce the number of Reducers to 0
 
 There can be few jobs which do not require aggregation.
 
-In case of Filtering scenario, only mappers can do the filtering. In such scenarios we dont require shuffle, sort and aggregate and Mapper output will be final outpu and we dont require Reducer.
+In case of Filtering scenario, only mappers can do the filtering. In such scenarios we don't require shuffle, sort and aggregate and Mapper output will be final output and we don't require Reducer.
 
 Shuffle and sort only happens when we have 1/more Reducer.
 
@@ -1389,13 +1384,14 @@ Scenarios
 
 Consider we have 3 Mappers and 1 Reducer, output of 3 Mappers will go to the same Reducer without any logic.
 
-Concept of partitioning comes into picture when we have more than one reducer. This will tell which k,v pair goes to which reducer
-----------------------------------------------------------------------------------------------------------------------------------
+Concept of partitioning comes into picture when we have more than one reducer. This will tell which k, v pair goes to which reducer
+-----------------------------------------------------------------------------------------------------------------------------------
 
-Logic involved in this is, by defualt there is "System Defined Hash Function" which tells you that which k,v pair goes to which partition and eventually to which Reducer
+Logic involved in this is, by default there is "System Defined Hash Function" which tells you that which k, v pair goes to which partition and eventually to which Reducer
 
-Consider we have 3 Mappers and 2 Reducers, 
-Mapper 1 has 10 (k,v) pairs --> k,v pairs are given equally to both Reducers to maintain equal work distribution. Now Key concept of partitions will come into play i.e output of Mapper 1 will be divided into two partitions. 
+Consider we have 3 Mappers and 2 Reducers,
+
+Mapper 1 has 10 (k, v) pairs --> k, v pairs are given equally to both Reducers to maintain equal work distribution. Now Key concept of partitions will come into play i.e. output of Mapper 1 will be divided into two partitions. 
 
 ***** Partitioning of Mappers output is based on the no.of Reducers we have (no.of partitions = no.of reducers) *****
 
@@ -1424,12 +1420,12 @@ Hash Function is consistent...
 explanation for consistent
 --------------------------
 
-if we have, same key should always go to same reducer (i.e consistent) bcz if hello goes to different reducer we cant get the total count of hello
+if we have, same key should always go to same reducer (i.e. consistent) bcz if hello goes to different reducer we cant get the total count of hello
 (Hello,1) --> Assigned to Reducer1
 (hi,1) --> Assigned to Reducer2
 (hello,1) --> Assigned to Reducer1
 
-*** By default Hadoop uses, system defined Hash Function to divide the k,v pairs. This Hash Function is consistent so that if a key repeats any number of times it is assigned to the same reducer ***
+*** By default Hadoop uses, system defined Hash Function to divide the k, v pairs. This Hash Function is consistent so that if a key repeats any number of times it is assigned to the same reducer ***
 
 
 scenario (Not to use system defined Hash Function)
@@ -1437,31 +1433,31 @@ scenario (Not to use system defined Hash Function)
 
 All the words whose length is less than 4 chars should go to Reducer1 and all other words whose length >= 4 chars should go to Reducer2. 
 
-If you dont want to use the system defined hash function then in such cases we need to write our own custom partitioning logic to divide the k,v pairs that goes to the Reducers for aggregation. 
+If you don't want to use the system defined hash function then in such cases we need to write our own custom partitioning logic to divide the k, v pairs that goes to the Reducers for aggregation. 
 
-But in this scenario also if you have same words with length < 4 chars (hi), then we have to follow system defined Hash Function i.e as "hi" word should go to only 1 Reducer either Reducer1/Reducer2
+But in this scenario also if you have same words with length < 4 chars (hi), then we have to follow system defined Hash Function i.e. as "hi" word should go to only 1 Reducer either Reducer1/Reducer2
 
 Examples for inconsistent function:- 
 1) conversion of Dollars to Rupees 
-2) finding out only the unique words in the paragraph (We dont follow system defined Hash Function)
+2) finding out only the unique words in the paragraph (We don't follow system defined Hash Function)
 
 But we need to make sure our Hash function should be consistent always!!!
 
 
-Flow of Mapreduce
+Flow of MapReduce
 -----------------
 
 Record Reader --> Map --> Partition, Shuffle, Sort --> reducer
 
-Record Reader --> To internally convert the lines to k,v pair
+Record Reader --> To internally convert the lines to k, v pair
 
 Map -->  this gives us parallelism bcz Mappers will be running on different Machines
 
-Partition --> when we are having more than 1 reducer to determine which k,v pairs will go to which reducer (Happens on Mapper Machine)
+Partition --> when we are having more than 1 reducer to determine which k, v pairs will go to which reducer (Happens on Mapper Machine)
 
 Shuffle --> Mappers output is send to the Reducer
 
-Sort --> k,v pairs get sorted on the Reducer (Happens on Reducer Machine)
+Sort --> k, v pairs get sorted on the Reducer (Happens on Reducer Machine)
 
 Reducer --> this is for aggregation of Mapper results 
 
@@ -1478,7 +1474,7 @@ Operation done on Reducer Machine to get the same keys together in a group. (hel
 Values with same keys appear as a collection/list to the reducer and reducer will perform the aggregation or sum it up.
 
 
-Sensor Data Example for Mapreduce
+Sensor Data Example for MapReduce
 =================================
 
 Consider a sensor which collects temperature for every 1 hour. We want to find out the max temp recorded on each day.
@@ -1515,7 +1511,7 @@ DN3-b3
 12/13/2015,01:00,54
 12/13/2015,02:00,55
 
-After Record Reader converting the data into k,v pairs
+After Record Reader converting the data into k, v pairs
 
 DN1-b1
 (0,[12/12/2015,00:00,50])
@@ -1590,7 +1586,7 @@ Output from Mapper 1
 (12/12/2015,50)
 (12/12/2015,52)
 
-after the agrregation work i.e combiner at Mapper end output from Mapper 1 (bcz here we have same keys i.e 12/12/2015)
+after the aggregation work i.e. combiner at Mapper end output from Mapper 1 (bcz here we have same keys i.e 12/12/2015)
 (12/12/2015,52)
 
 DN2-b2
@@ -1601,7 +1597,7 @@ Output from Mapper 2
 (12/12/2015,49)
 (12/13/2015,48)
 
-after the agrregation work i.e combiner at Mapper end output from Mapper 2
+after the aggregation work i.e. combiner at Mapper end output from Mapper 2
 (12/12/2015,49)
 (12/13/2015,48)
 
@@ -1613,17 +1609,17 @@ Output from Mapper 3
 (12/13/2015,54)
 (12/13/2015,55)
 
-after the agrregation work i.e combiner at Mapper end output from Mapper 3 (bcz here we have same keys i.e 12/13/2015)
+after the aggregation work i.e. combiner at Mapper end output from Mapper 3 (bcz here we have same keys i.e. 12/13/2015)
 (12/13/2015,55)
 
-with the implementation of combiner logic, we will get to send less k,v pairs to Reducer which will results in optimized performance of Mapreduce.
+with the implementation of combiner logic, we will get to send less k, v pairs to Reducer which will results in optimized performance of MapReduce.
 
 Complete MapReduce workflow
 ===========================
 
-Record Reader  Mapper  Combiner  Partitioner  Shuffle  Sort  Reducer
+Record Reader -> Mapper -> Combiner -> Partitioner -> Shuffle -> Sort -> Reducer
 
-Mapper creates data  Combiner locally aggregates it  Partitioner decides which Reducer gets each key  Shuffle/Sort transfers and groups it  Reducer processes it
+Mapper creates data -> Combiner locally aggregates it -> Partitioner decides which Reducer gets each key -> Shuffle/Sort transfers and groups it -> Reducer processes it
 
 ****** Combiner decides what data can be reduced locally. Partitioner decides which Reducer receives the key. ******
 
@@ -1633,14 +1629,20 @@ Mapper 1                Mapper 2
 --------                --------
 Apple   1               Apple   1
 Apple   1               Banana  1
-Banana  1				Banana  1
+Banana  1		Banana  1
 Apple   1
-                           
+
+   | 			     |
+                      
 Combiner                  Combiner
-                           
+
+   |                         |
+
 Apple 3                   Apple 1
 Banana 1                  Banana 2
-                           
+
+   |                         |
+
    ÀÄÄÄÄÄÄ Partitioner ÄÄÄÄÙ
              
        ÚÄÄÄÄÄÁÄÄÄÄÄ¿
@@ -1682,11 +1684,11 @@ With combiner (correct way) - (total value, no.of values)
 Real time Industry use case of Map Reduce Distributed Processing
 ================================================================
 
-Google use Mapreduce for their existing web search.
+Google use MapReduce for their existing web search.
 
-A lot of crawlers are working day and night to crawl the web, these crawlers scan through all the websites inorder to get content.
+A lot of crawlers are working day and night to crawl the web, these crawlers scan through all the websites in order to get content.
 
-To solve any problem using Mapreduce
+To solve any problem using MapReduce
 ------------------------------------
 
 4  points to be considered
@@ -1700,15 +1702,15 @@ To solve any problem using Mapreduce
 Actual Data
 
 Key  							Value
-flipkart.com				clothes handbag laptop
+flipkart.com					clothes handbag laptop
 amazon.com					clothes mobile purse
 myntra.com					purse clothes tv
 
 
 Input to Mapper
-(0,[flipkart.com,clothes handbag laptop])
-(1,[amazon.com,clothes mobile purse])
-(2,[myntra.com,purse clothes tv])
+(0,[flipkart.com, clothes handbag laptop])
+(1,[amazon.com, clothes mobile purse])
+(2,[myntra.com, purse clothes tv])
 
 Output from Mapper
 (clothes, flipkart.com)
@@ -1739,7 +1741,7 @@ Record Reader --> takes the lines and internally it converts to key value pair
 
 Map --> this gives us parallelism bcz Mappers will be running on different machines (No.of Mappers = No.of blocks of data)
 
-combiner --> this will combine & aggregate the mappers output and imporves parallelism and reduce the amount of data that we need to send to Reducer 
+combiner --> this will combine & aggregate the mappers output and improves parallelism and reduce the amount of data that we need to send to Reducer 
 
 shuffle --> sending the output of Mapper to reducer
 
@@ -1795,7 +1797,7 @@ mapreduce_prog_0_reducer.jar --> This is the jar file used in this case
 
 Here, Mapper output will be final output and there will be no shuffle and sort as Reducer is not involved
 
-Sceanrios:- Filtering
+Scenarios:- Filtering
 
 If the file contains below Data
 
@@ -1835,8 +1837,8 @@ if we run --> hadoop fs -ls data/output
 
 we will see files "_SUCCESS", "part-r-00000" and  "part-r-00001" (r-reducer) with data init. As we are using 2 reducers 3 files will get created in the "data/output" directory.
 
-Fourth use case - count the frequency of each word with custom practitioner (i.e instead of system defined Hash Function)
-=========================================================================================================================
+Fourth use case - count the frequency of each word with custom practitioner (i.e. instead of system defined Hash Function)
+==========================================================================================================================
 
 mapreduce_prog_cpractitioner.jar --> This is the jar file used in this case 
 
@@ -1872,29 +1874,29 @@ we will see files "_SUCCESS", "part-r-00000" with data init. As we are using 1 r
 Apache Spark
 ============
 
-Hadoop - HDFS / Mapreduce / YARN
+Hadoop - HDFS / MapReduce / YARN
 
-Challenges with Mapreduce
+Challenges with MapReduce
 -------------------------
 
 1. Performance - Lot of DISK IO's required
 
 2. Its really hard to write the hundreds of lines of code in Java.
 
-3. Mapreduce supports only Batch Processing
+3. MapReduce supports only Batch Processing
 	- Batch processing - loading data at regular interval of time
 	- Realtime processing/streaming - deals with current flowing data/streaming Data
 	
-4. Hive (Querying), Pig (Scripting Language for programming), Sqoop (Data Ingestion), HBase (Nosql), Oozie (workflow scheduler) we need to learn a lot of tools or technologies.
+4. Hive (Querying), Pig (Scripting Language for programming), Sqoop (Data Ingestion), HBase (NoSQL), Oozie (workflow scheduler) we need to learn a lot of tools or technologies.
 
 5. Map Reduce - We talk only about Map and Reduce, though our problem might not be bcz of Map and Reduce but we try to adjust and try to resolve those issues only using Map and Reduce. Example: Filter, map will work but reduce won't...
 
-6. Intreactive mode - There is no intreactive mode like linux commands. Instead we bundle the jar/code and run it on the cluster and we wont get the response for each command that we execute from the cluster.
+6. Interactive mode - There is no interactive mode like Linux commands. Instead we bundle the jar/code and run it on the cluster and we wont get the response for each command that we execute from the cluster.
 
 Apache Spark
 ============
 
-It is meant for Distributed Processing to overcome the Challenges with Mapreduce. It is just a Compute Engine.
+It is meant for Distributed Processing to overcome the Challenges with MapReduce. It is just a Compute Engine.
 
 Spark does not come with storage and resource manager. It is a plain compute engine that supports only Distributed Processing. When we have some huge number of machines holding the data then spark can help us how to process the data across the cluster of those machines as traditional programing methods wont work.
 
@@ -1908,27 +1910,27 @@ and Resource Manager [YARN / Mesos / Kubernetes] of our choice.
 
 Apache Spark is a multi language engine for executing Data Engineering, Data Science, Machine Learning on single node or cluster.
 
-Mapreduce we write code in Jave. But Apache Spark is a multi language engine we can write in scala, python, java & R.
+MapReduce we write code in Java. But Apache Spark is a multi language engine we can write in Scala, python, java & R.
 
 Python + Spark = PySpark 
 
 Apache Spark is a general purpose, in-memory & compute engine.
 
-General Purpose -> In Hadoop we need to know different components to work with different requirements i.e Hive for querying, Sqoop for Ingestion, pig for scripting but here Apache Spark is enough to work with different requirements. 
+General Purpose -> In Hadoop we need to know different components to work with different requirements i.e. Hive for querying, Sqoop for Ingestion, pig for scripting but here Apache Spark is enough to work with different requirements. 
 					
-In-Memory -> Process the data/keeps the date in memory, bcz of this it is 10x-100x faster than Mapreduce.
+In-Memory -> Process the data/keeps the date in memory, bcz of this it is 10x-100x faster than MapReduce.
 
 Compute Engine -> requires any storage and resource manager to work with.
 
 Scenario:-
 --------
 
-Let us consider we have Mapreduce jobs MR-Job-1, MR-Job-2, MR-Job-3, MR-Job-4, MR-Job-5. In this case 10 DISK IO's are required bcz each MR job has to take the input data from HDFS Disk, do the processing and output will be written on the DISK HDFS. When we have a series of MR jobs it happens through DISK HDFS only. This read and write of Data from/to HDFS DISK take time Which will create delay in the performance.
+Let us consider we have MapReduce jobs MR-Job-1, MR-Job-2, MR-Job-3, MR-Job-4, MR-Job-5. In this case 10 DISK IO's are required bcz each MR job has to take the input data from HDFS Disk, do the processing and output will be written on the DISK HDFS. When we have a series of MR jobs it happens through DISK HDFS only. This read and write of Data from/to HDFS DISK take time Which will create delay in the performance.
 
 *** Best Scenario ****
 In Spark, Job1 output is not written back to HDFS DISK instead, Job1 output will be passed over to Job2 and this will happen in-memory and the last job output will be written back to HDFS DISK which will reduce the DISK IO's to 2. We will do all the calculations in-memory. 
 
-For a chain of 5 Mapreduce jobs - 10 disk IO's 
+For a chain of 5 MapReduce jobs - 10 disk IO's 
 but in spark it could be as min as 2 disk IO's
 
 Spark lets you focus on WHAT computation you want, while Spark handles HOW that computation is distributed across the cluster
@@ -1958,7 +1960,7 @@ Apache Spark has 2 Layers
 1. Higher Level API's - On the top ****** Developed to write simple code and it is recommended to work here for performance benifits ******
 2. Spark Core API's - Underneath Layer ****** We can write code using Scala, python, java, R. Here we work at RDD (Resilient Distributed Dataset) level ******
 
-we can write the code based on RDD's - the hardest way to work with Apache Spark (simpler than Mapreduce code)
+we can write the code based on RDD's - the hardest way to work with Apache Spark (simpler than MapReduce code)
 
 ####### RDD (Resilient Distributed Dataset) is the fundamental unit which holds the data in Apache spark #######
 
@@ -1970,16 +1972,15 @@ Higher Level API's
 	
 Spark SQL   -         easiest   less flexibility
 Data Frame  -         Medium    medium flexibility
-RDD 		-         hardest   more flexibility
+RDD 	    -         hardest   more flexibility
 
 ***** The code that we write at Higher Level API's, underneath it will get converted to RDD *****
 
 Whenever we work on spark we want to do 3 things
 
-1. Load the data from source (HDFS / Cloud Datalake i.e S3, ADLS Gen2, GCS)
+1. Load the data from source (HDFS / Cloud Datalake i.e. S3, ADLS Gen2, GCS)
 2. Do various transformations to that data (filter, group by, join etc)
-3. Write/Load the final results to Target Location (i.e HDFS / Cloud Datalake) 
-
+3. Write/Load the final results to Target Location (i.e. HDFS / Cloud Datalake) 
 
 
 **** Distributed collection of Hard disks on the worker nodes will form HDFS ****
@@ -2016,7 +2017,7 @@ There are 2 kind of operations in Apache Spark
 1. Transformation (Step 1,2,3) 
 2. Action (step 4)
 
-Transformations are lazy but actions are not i.e whenever transformations are applied they are added to execution plan and Whenever action is called/run the whole execution plan gets executed.
+Transformations are lazy but actions are not i.e. whenever transformations are applied they are added to execution plan and Whenever action is called/run the whole execution plan gets executed.
 
 Execution plan flow will look like 
 ----------------------------------
@@ -2050,14 +2051,14 @@ How to make sure RDD is Resilient to failures
 ---------------------------------------------
 
 If I loose RDD3, we can take the parent of "failed RDD" and apply the same transformation on it and we can regenerate it. (System automatically will do this).
-So whenever we create new RDD it acts like a savepoint/lineage and supports fault tolerance. Because if we make all the transformations on a single RDD1 if we loose it, we dont have the parent RDD so we cannot regenerate it.
+So whenever we create new RDD it acts like a save point/lineage and supports fault tolerance. Because if we make all the transformations on a single RDD1 if we loose it, we don't have the parent RDD so we cannot regenerate it.
 
 RDD's are immutable.
 That means you cannot make changes to the existing RDD.
 You end up creating a new RDD always for every transformation.
 
 /* HDFS is Resilient with the help of Replication Factor
-RDD is Resileint with help of Immutabiliy and Lineage */
+RDD is Resilient with help of Immutability and Lineage */
 
 Why transformations are lazy?
 ----------------------------
@@ -2066,14 +2067,14 @@ Materializing the RDD, i.e whenever we load the file1 from Datalake we will get 
 
 rdd1 = Load file1 from Datalake (HDFS / Cloud Datalake) --> if we do this load, we will have content in RDD1 -> this we call as Materializing the RDD.
 
-Benifits of Laziness
+Benefits of Laziness
 
 rdd1 = Load file1 from Datalake (HDFS / Cloud Datalake)
 rdd2 = rdd1.map
 rdd3 = rdd2.filter
 rdd3.collect()
 
-Let us cosider that we have a file in HDFS with 1 Billion records.
+Let us consider that we have a file in HDFS with 1 Billion records.
 
 We are writing step 1, to load the file from HDFS as rdd1. 
 
@@ -2089,7 +2090,7 @@ Laziness helps to optimise the amount of data loaded into memory.
 Spark is not lazy
 -----------------
 
-Let us consider we are having a file "file1" with 1 billion records and in this case whenever we load the file from HDFS, it will load 1 billion records to memory and then it will process 1 billion records row by row i.e it will take 1 billion records as input and generate 1 billion records as output by adding a new field to all 1 billions by using map transformation. And by using filter transformation we would like to filter for an employee based on employee id and want to get 5 records and return on the screen. 
+Let us consider we are having a file "file1" with 1 billion records and in this case whenever we load the file from HDFS, it will load 1 billion records to memory and then it will process 1 billion records row by row i.e. it will take 1 billion records as input and generate 1 billion records as output by adding a new field to all 1 billions by using map transformation. And by using filter transformation we would like to filter for an employee based on employee id and want to get 5 records and return on the screen. 
 
 The above procedure is a delayed bcz it needs to work with 1 billion records.
 
@@ -2106,7 +2107,7 @@ Every step will be added as a part of "Execution plan DAD". Only when we run col
 
 Instead of map, it will filter first. It will save a lot of time bcz we need to add fields using map transformation only for 5 records.
 
-Basically system will shuffle the transformations inorder to get the required results by optimising the performance.
+Basically system will shuffle the transformations in order to get the required results by optimising the performance.
 
 
 
@@ -2115,17 +2116,17 @@ Word Count Example in Apache Spark
 
 Firstly we need to create a spark session, bcz it acts like an entry point for the spark cluster. If we want to execute anything on the spark cluster it should go through the spark session.
 
-Spark session is given from spark v2.0 before that we have spark context, sql context, hive context
+Spark session is given from spark v2.0 before that we have spark context, SQL context, hive context
 
-Spark session is like an umbrella that holds all these spark context, sql context, hive context
+Spark session is like an umbrella that holds all these spark context, SQL context, hive context
 
 Current version - Spark v3.0
 
 we will do 3 things in spark
 
-1. Load the data from source (HDFS / Cloud Datalake i.e S3, ADLS Gen2, GCS)
+1. Load the data from source (HDFS / Cloud Datalake i.e. S3, ADLS Gen2, GCS)
 2. Do various transformations to that data (filter, group by, join etc)
-3. Write/Load the final results to Target Location (i.e HDFS / Cloud Datalake)
+3. Write/Load the final results to Target Location (i.e. HDFS / Cloud Datalake)
 
 To load a file we have 3 approaches
 
@@ -2133,9 +2134,9 @@ RDD --> requires spark context
 Dataframes --> can work with spark session
 Spark Sql --> can work with spark session
 
-If we want to execute anything on Spark Cluster using RDD we need spark context as entrypoint.
+If we want to execute anything on Spark Cluster using RDD we need spark context as entry point.
 
-If we want to execute anything on Spark Cluster using Dataframes/Spark Sql we need spark session as entrypoint.
+If we want to execute anything on Spark Cluster using Dataframes/Spark SQL we need spark session as entry point.
 
 Considering we have spark session
 
@@ -2153,11 +2154,11 @@ rdd4.collect()
 
 reduceByKey --> this transformation will take two rows at a time and then add next two rows
 
-Basically collect will execute the entire plan from starting and all processing will happen on the clusters. We will get the results to Driver Machine i.e Gateway node.
+Basically collect will execute the entire plan from starting and all processing will happen on the clusters. We will get the results to Driver Machine i.e. Gateway node.
 
-If we have 2Tb results, then it will lead to OOM error on Gateway node. Bcz the output data should fit in the memory of the machine. Machine will crash as we excuted the code on Driver machine.
+If we have 2Tb results, then it will lead to OOM error on Gateway node. Bcz the output data should fit in the memory of the machine. Machine will crash as we executed the code on Driver machine.
 
-So we need to write the output of the execution to HDFS inorder avoid the crashing of Driver Machine bcz of having huge data by using below command
+So we need to write the output of the execution to HDFS in order to avoid the crashing of Driver Machine bcz of having huge data by using below command
 
 #rdd4.saveAsTextFile("/user/itv028185/data/output") --> /user/itv028185/data/output folder should not exist
 
@@ -2238,9 +2239,9 @@ print(output)
 
 code explanation
 ----------------
-output shoule be list, inside that we are calling the map function. Map function will make sure doubler function is applied to each element in "my_list".
+output should be list, inside that we are calling the map function. Map function will make sure doubler function is applied to each element in "my_list".
 
-******** Lambda function also called as in-line functions/ anonymous functions in scala ********
+******** Lambda function also called as in-line functions/ anonymous functions in Scala ********
 
 2) using lambda function
 
@@ -2261,7 +2262,7 @@ print(output2)
 
 3) using lambda function
 
-from functiontools import reduce 	------------> without importing reduce function it will throw error. i.e name 'reduce' is not defined.
+from functiontools import reduce 	------------> without importing reduce function it will throw error i.e. name 'reduce' is not defined.
 output2 = list(reduce(lambda x,y: x+y,my_list1))
 print(output2)
 
@@ -2283,7 +2284,7 @@ order_id, date, customer_id, order_status
 
 2. Top 10 customers who placed the most number of orders
 
-3. Distinct count of customers who placed atleast one order
+3. Distinct count of customers who placed at least one order
 
 4. Which customer has the maximum number of orders where order_status is "closed"
 
@@ -2293,7 +2294,7 @@ Steps to execute to get the output for above queries
 
 1. To execute our code on spark cluster we have to create a spark session 
 
-Here is boiler plate code to create Spark Sessionfrom
+Here is boiler plate code to create Spark Session from
 
 from pyspark.sql import SparkSession
 import getpass
@@ -2319,8 +2320,8 @@ Input Data
 2, 2013-08-25 00:00:00.0, 11219, COMPLETED
 3, 2013-09-25 00:00:00.0, 12219, PENDING_PAYMENT
 
-Expeteced output
-----------------
+Expected output
+---------------
 CLOSED,1
 PENDING_PAYMENT,1
 COMPLETED,1
@@ -2369,8 +2370,8 @@ order_id, date, customer_id, order_status
 2, 2013-08-25 00:00:00.0, 11219, COMPLETED
 3, 2013-09-25 00:00:00.0, 12219, PENDING_PAYMENT
 
-Expeteced output
-----------------
+Expected output
+---------------
 11599,1
 11219,1
 12219,1
@@ -2386,7 +2387,7 @@ Expeteced output
 4.1 customer_sorted.take(10) --> to view top 10 customers who placed more Orders
 
 
-Query 3. Distinct count of customers who placed atleast one order
+Query 3. Distinct count of customers who placed at least one order
 
 1. As usual
 
@@ -2449,7 +2450,7 @@ We can run pyspark command even in Linux terminal
 
 step 1. Open the terminal, run "pyspark3"
 
-It will install the latest version of spark and sparkSession will be available by defualt as Spark. But we have to create a sparkSession in Jupiter notebook by using boiler plate code
+It will install the latest version of spark and sparkSession will be available by default as Spark. But we have to create a sparkSession in Jupiter notebook by using boiler plate code
 
 Step 2. Run "spark"
 
@@ -2465,12 +2466,12 @@ We can run the same commands that we have executed during the above use case Ord
 COMMAND - orders_rdd = sc.textFile("/public/trendytech/retail_db/orders/*")
 ******/
 
-To work with sample data inorder to develop the logic to find the frequency of each word. For 10Tb file
--------------------------------------------------------------------------------------------------------
+To work with sample data in order to develop the logic to find the frequency of each word. For 10Tb file
+--------------------------------------------------------------------------------------------------------
 
 ******** We create a RDD to make sure that a collection is distributed across the cluster ********
 
-***** By using parallelize we can create RDD with the local data (i.e data on Gateway node) *****
+***** By using parallelize we can create RDD with the local data (i.e. data on Gateway node) *****
 
 
 words = ("My","NAME","is","Sandeep","Expert","in","Data Engineering","Concepts","and","I","am","happy","to","get","30LPA","in","Deloitte")
@@ -2528,7 +2529,7 @@ result.collect()
 More on Spark parallelize 
 =========================
 
-RDD is made up of partitions i.e in-memory of the worker nodes as it distributed.
+RDD is made up of partitions i.e. in-memory of the worker nodes as it distributed.
 
 How to check that how many partitions your RDD is having
 --------------------------------------------------------
@@ -2572,7 +2573,8 @@ Let us consider that we are reading a file from text file from HDFS
 	orders_rdd.getNumPartitions()
 	output:- 2
 
-There is another property called "defaultMinPartitions". 
+There is another property called "defaultMinPartitions".
+
 This will make sure that we will have min of 2 partitions if the block size is <1, but if block is size >=2 then the partitions will be equal to the number of blocks
 
 	spark.sparkContext.defaultMinPartitions
@@ -2608,11 +2610,11 @@ Map + reduceByKey + collect
 
 This is a transformation.
 
-I would prefer using reduceByKey, when I thought of doing someother transformations later on this data. Because the results are still distributed across the cluster and I can do transformations using the parallelism.
+I would prefer using reduceByKey, when I thought of doing some other transformations later on this data. Because the results are still distributed across the cluster and I can do transformations using the parallelism.
 
 Basically we will go with reduceByKey, if I need to do anything extra in parallel and I can leverage the parallelism of the cluster.
 
-When we call a transformation we get a RDD which is across the cluster and when you perform some transformations in parellel.
+When we call a transformation we get a RDD which is across the cluster and when you perform some transformations in parallel.
 
 ***** Not the final results, want to do some other transformations by using the power of cluster (parallelism) --> reduceByKey *****
 	
@@ -2633,7 +2635,7 @@ I would prefer using countByValue, when I know after this I wont do any operatio
 
 When we call an action, all the results are computed and given to driver machine (Gateway Node). 
 					 
-But if I use countByValue, then I am getting results on my local machine (Gateway Node) and whatever I do with the result it will happen on my local machine and it will not happen across the cluster and wont get the power of cluster i.e parallelism.
+But if I use countByValue, then I am getting results on my local machine (Gateway Node) and whatever I do with the result it will happen on my local machine and it will not happen across the cluster and wont get the power of cluster i.e. parallelism.
 
 ***** Final Results --> countByValue *****
 
@@ -2664,10 +2666,10 @@ rdd1.map() (p1 will be processed on WN1 and give the results and there is no shu
 
 r1			r2			r3			r4	 ==> rdd2 
 (hi,1)                  (hi,1)
-(hi,1)					(hi,1)
-						(hi,1)
+(hi,1)			(hi,1)
+			(hi,1)
 
-(hi,2)					(hi,3)
+(hi,2)			(hi,3)
 local aggregation
 
 			(hi,2)
@@ -2676,7 +2678,7 @@ local aggregation
 			(hi,5)
 	global/final aggregation --> Here we are moving away from the concept of "Data Locality" bcz WN1 and WN3 data is moved to WN2
 		  
-Now data should be shuffled, then only 'hi' should goto one machine. So that we get the final output.
+Now data should be shuffled, then only 'hi' should go to one machine. So that we get the final output.
 
 rdd2.reduceByKey() (when ever we do shuffling its a wide transformation and we are moving away from the concept of Data Locality)
 
@@ -2732,7 +2734,7 @@ Reason behind Y reduce is action and Y reduceByKey is transformation?
 
 when we use reduce, we will get 1 single value as the output on driver machine. By executing reduce, our data is boiling down to the point that data that does not require any parallelism even if we want to do something with that output.
 
-when we use reduceByKey, we will get huge data in the form of (key,value) pairs (i.e incase of counting the frequency of each word) and on this output data we can apply some transformations like filtering using parallelism across the cluster. 
+when we use reduceByKey, we will get huge data in the form of (key,value) pairs (i.e. incase of counting the frequency of each word) and on this output data we can apply some transformations like filtering using parallelism across the cluster. 
 Result of reduceByKey is still a rdd. If we perform some transformations/operations on this rdd we will get parallelism, to maintain the parallelism reduceByKey is given as transformation.
 ********
 
@@ -2780,7 +2782,7 @@ In the History server,
 2. Click on "reduceByKey at" where Tasks =  Max/Max (Succeeded/Total)
 3. Here in Summary Metrics for 28 tasks
 		 Min, 25th Percentile, 50th Percentile, 75th Percentile, Max
-Duration 6s       7s				9s 				11s			 14s
+Duration         6s       7s		9s 		11s		 14s
 
 
 groupByKey
@@ -2806,7 +2808,9 @@ On machine-12, we will have 1000 rows of "closed" key, value pairs. By using "Sy
 This way we are shuffling very very less data, bcz we are aggregating the data locally to a stage where will have kb's of data.
 
 1. After running sparkSession boiler plate code
+
 2. base_rdd = spark.sparkContext.textFile("/user/itv028185/public/trendytech/orders/orders.csv")
+
 3. mapped_rdd = based_rdd.map(lambda x: (x.split(",")[3],x.split(",")[2]))
    output:-
    (closed,11234)
@@ -2826,6 +2830,7 @@ This way we are shuffling very very less data, bcz we are aggregating the data l
    .
    .
    9
+   
 5. result = grouped_rdd.map(lambda x: (x[0], len(x[1])))
    output:-
    (closed,12341)
@@ -2848,7 +2853,7 @@ m1000
 all of your - 1Tb of data will be finally sitting across just 9 machines.
 we are shuffling a lot of data and not doing anything in parallel.
 will lead to OOM as we holding 1Tb of data across just 9 machines.
-we are restricting parellelism.
+we are restricting parallelism.
 so groupByKey is not recommended.
 
 Here disadvantage is that we are not aggregating the data locally and loading huge amount of each unique key value to a single machine by avoiding parallelism which can cause OOM on the machine. So the machine end up taking lot of time to do the aggregation.
@@ -2860,11 +2865,13 @@ When we have used reduceByKey,
 Input File Size - 3.5 Gb
 Shuffle Read - 10.7 Kb (The amount of data read by tasks in a stage from shuffle files produced by the previous stage)
 Shuffle Write - 19.8 Kb (The amount of data written by tasks in a stage to disk (or memory) before it is sent to other executors for the next stage)
+
 2)
 In History Server --> click on stages --> click on "reduceByKey at" where Tasks =  Max/Max (Succeeded/Total)
 In Summary Metrics for 28 tasks
 		 Min, 25th Percentile, 50th Percentile, 75th Percentile, Max
 Duration 6s       7s				9s 				11s			 14s
+
 3)
 In History Server --> click on stages --> click on "collect at"
 In Summary Metrics for 28 tasks
@@ -2942,7 +2949,7 @@ Join transformation is a wide transformation and it is a costly operation as it 
 
 Broadcast Join(Narrow Transformation)
 =====================================
-How to optimize the problems that we have faced with Join tranformation.
+How to optimize the problems that we have faced with Join transformation.
 The below is the issue, we need to bring all the keys in order dataset and customers dataset on a same node to perform Join transformation.
 
 			node1 		node2 		node3 		node4
@@ -2952,7 +2959,7 @@ customers  	p1,p2(1012)										   ----- small dataset (Bcz 1 entry for 1 custo
 									p2(1012)
 
 To overcome this issue we are trying to copy the entire customers dataset on all the nodes bcz the customers dataset is small. 
-We may think this might be redundancy but the dataset is small i.e in Kb's. We are broadcasting the copy of customers dataset on all the nodes.
+We may think this might be redundancy but the dataset is small i.e. in Kb's. We are broadcasting the copy of customers dataset on all the nodes.
 
 			node1 		  node2 		  node3 		  node4
 orders		p1,p2		  p3,p4			  p5,p6			  p7,p8,p9(1012) ----- bigger dataset
@@ -2960,7 +2967,7 @@ orders		p1,p2		  p3,p4			  p5,p6			  p7,p8,p9(1012) ----- bigger dataset
 			(1012)		 (1012)			 (1012)			 (1012)
 			(1011)		 (1011)			 (1011)			 (1011)
 
-By broadcasting the data on all the nodes the memory consumption might increase 20 mb * 4 = 80 mb, but it may give some performance benifits.
+By broadcasting the data on all the nodes the memory consumption might increase 20 mb * 4 = 80 mb, but it may give some performance benefits.
 
 Each machine is capable/self-sufficient to do the join locally. It does not need to depend on any other machine for joining and no need to shuffle the data to bring the same key data on to a single machine.
 
@@ -2999,7 +3006,7 @@ step 5. customers_map = customer_base.map(lambda x: (x.split(",")[0],x.split(","
 		output:-
 			(1,78521)
 
-Now, orders_map and customers_map are pair RDD (k,v pairs)
+Now, orders_map and customers_map are pair RDD (k, v pairs)
 
 We want to broadcast the customers dataset.
 RDD cannot be broadcasted and data should be sitting on your driver node or on the machine on which you logged in. Then only we can broadcast the data.
@@ -3019,10 +3026,10 @@ node{1..n}
 (customer_id, pincode) 		--> customers dataset
 
 step 7. def get_pincode(customer_id):
-			try:
-				return customers_broadcast.value[customer_id] #returns pincode
-			except:
-				return -1
+	try:
+		return customers_broadcast.value[customer_id] #returns pincode
+	except:
+		return -1
 
 step 8. joined_rdd = orders_map.map(lambda x: (get_pincode(int(x[0])),x[1]))
 		output:-
@@ -3049,7 +3056,7 @@ When do we Increase the partitions? (To get more parallelism)
 
 Let us consider, we have 100 node cluster and we have 5 Gb file --> 40 blocks --> 40 partitions.
 
-So at max less than equal to 40 machines are going to be handle the 40 partitions in parallel, remaining 60 machines will be idle. In this case we can increase the number of partitions inorder to get more parallelism. 
+So at max less than equal to 40 machines are going to be handle the 40 partitions in parallel, remaining 60 machines will be idle. In this case we can increase the number of partitions in order to get more parallelism. 
 
 How do we increase the partitions?
 ---------------------------------
@@ -3069,7 +3076,7 @@ Run --> rdd.getNumPartitions() --> output:- 80
 When do we Decrease the partitions?
 -----------------------------------
 
-Let us consider that we have 100 node clusted and a 1Tb file | 8000 blocks in HDFS | 8000 partitions in RDD.
+Let us consider that we have 100 node clustered and a 1Tb file | 8000 blocks in HDFS | 8000 partitions in RDD.
 
 Each node is handling around 80 partitions. 
 
@@ -3089,7 +3096,7 @@ Example:- 80 partitions holding 100 Mb.
 
 Increase --> when we want to get more parallelism
 
-Decrease --> After tranformation when the data becomes very less in each partition, then we will merge some partitions
+Decrease --> After transformation when the data becomes very less in each partition, then we will merge some partitions
 
 
 Coalesce
@@ -3118,7 +3125,7 @@ node2 - p3,p4 --> merge -->np2
 node3 - p5,p6 --> merge -->np3
 node4 - p7,p8 --> merge -->np4
 
-When we want to decrease the number of partitions Coalesce will perform in a more effecient way compared to repartition decrease.
+When we want to decrease the number of partitions Coalesce will perform in a more efficient way compared to repartition decrease.
 
 when we want to increase the number of partitions repartition is the only way as it gives more parallelism.
 
@@ -3152,13 +3159,13 @@ If I run collet again, basically all the transformations will be executed from s
 
 Let us consider that below is our situation,
 
-Stage1			Stage2			Stage3
-------			------			------
-t1				  t4			  t7
+Stage1		Stage2		Stage3
+------		------		------
+t1			t4			  t7
 	
-t2				  t5			  t8
+t2			t5			  t8
 
-t3				  t6			  t9
+t3			t6			  t9
 
 collect - Stage1 --> Stage2 --> Stage3
 collect - Stage3
@@ -3172,13 +3179,15 @@ Lets consider that we have applied 10 transformations which are very costly and 
 
 --> rdd.cache()
 
-Cache is Lazy. It doesnot cache right now. It will be cached when we execute it (rdd.cache) one time using collect and from 2nd time execution becomes faster. 
-But first time execution will take time as the execution starts from beginnig and the result will be cached.
+Cache is Lazy. It does not cache right now. It will be cached when we execute it (rdd.cache) one time using collect and from 2nd time execution becomes faster.
+ 
+But first time execution will take time as the execution starts from beginning and the result will be cached.
 
-Only when we do a lot of processing and when you dont want to redo all the transformations from the beginnig then go for "Cache". 
+Only when we do a lot of processing and when you don't want to redo all the transformations from the beginning then go for "Cache".
+
 Basically it is not recommended or good caching the base_rdd as it consumes the memory.
 
-Only cache the data when you feel that you have performed lot of processing/transformations i.e medium, small sized resultant data as it consumes memory.
+Only cache the data when you feel that you have performed lot of processing/transformations i.e. medium, small sized resultant data as it consumes memory.
 
 When we run the "Cache" command you will a "Green" dot while loading the data from stage to Disk.
 
@@ -3195,11 +3204,12 @@ Caching is always in-memory
 Persist will give you more options like persist on disk, persist on memory, persist on memory and disk.
 
 -------------------------------------------------------------------------------------------------------
-
-											Datasets
-											========
-	All the required datasets are available in the Lab @ the following path 
+					Datasets
+					========
+	All the required datasets are available in the Lab @ the following path
+	
 	orders.csv is in HDFS @    /public/trendytech/retail_db/orders (for Spark Usecase1 practice)
+	
 						Spark Join practice datasets-
 		orders.csv is in HDFS @   /public/trendytech/orders/orders.csv
 		customers.csv is in HDFS @   /public/trendytech/retail_db/customers
@@ -3244,6 +3254,8 @@ rdd1 = spark.sparkContext.textFile("/user/{username}/data/inputfile.txt")
 
 -------------------------------------------------------------------------------------------------------
 
+
+
 Week-5
 ======
 
@@ -3253,7 +3265,7 @@ Higher Level API's in Apache Spark (Dataframes & Spark SQL)
 --> Data Frames
 --> Spark SQL
 
---> Datasets (language specific things available only for scala and java. Not required)
+--> Datasets (language specific things available only for Scala and java. Not required)
 
 Till now we have gone through RDD's.
 
@@ -3269,7 +3281,6 @@ Lets consider that we have a table in a Database (orders). It contains 2 things.
 
 2. Metadata/Schema (columns names like order_id - INT, order_date - DATETIME, customer_id - INT, order_status - VARCHAR) --> Will be kept in Metastore, it is the place that contains metadata or holds the schema of it.
 
-
 When we run,
 	select * from orders 
 metadata + data will get combine together and gives you output in the form of tabular view 
@@ -3280,7 +3291,6 @@ then it will check the metastore, that whether the mentioned columns are exists 
 If not available it will give "analysis exception".
 
 Same concept is applicable for Apache Spark.
-
 
 Spark SQL contains 2 things.
 
@@ -3307,7 +3317,7 @@ we can materilize "rdd_1",
 	
 But once we run,
 	spark.stop()
-we wont have "rdd_1, rdd_2", we loose it. As it is temporary thing valid during applciation.
+we wont have "rdd_1, rdd_2", we loose it. As it is temporary thing valid during application.
 
 Spark Dataframes vs Spark Table
 ==============================
@@ -3334,7 +3344,7 @@ Why Higher Level API's performance is better?
 
 Becuase whenever we create Dataframe OR Spark Table it is just like RDD + Schema (some extra information).
 
-Spark engine would have better idea how to optimise things bcz we are provinding extra information i.e metadata (How many columns and their datatypes and total columns) and data.
+Spark engine would have better idea how to optimise things bcz we are providing extra information i.e. metadata (How many columns and their datatypes and total columns) and data.
 
 
 
@@ -3366,14 +3376,14 @@ We call the below way of writing code as "Builder Pattern"
 
    1. standard dataframe reader API
    
-   orders_df = spark.read \								==> this is lazy just like RDD.
+   orders_df = spark.read \							==> this is lazy just like RDD.
    .format("csv") \ ==>(csv, json, avro, parquet)
    .option("header","true") \ 							==> consider first line as header
    .option("inferSchema","true") \ 						==> I am not providing the metadata/schema please infer it
    .load("/public/trendytech/orders_wh/*")
    
    2.
-   orders_df.show() --> to return the output on the screen. By defualt, "show" will return "20 rows" in a tabular format.
+   orders_df.show() --> to return the output on the screen. By default, "show" will return "20 rows" in a tabular format.
    
    3.
    orders_df.printSchema() --> to view the schema (column names, data types) associated with it.
@@ -3382,14 +3392,14 @@ We call the below way of writing code as "Builder Pattern"
    ------
    root
    |-- order_id : integer (nullable = true)
-   |-- order_date : string (nullable = true)   --> its not showing "order_date" as "Date" datatype thats why it is not recommended 2 use "inferSchema"
+   |-- order_date : string (nullable = true)   --> its not showing "order_date" as "Date" datatype that's why it is not recommended 2 use "inferSchema"
    |-- customer_id : integer (nullable = true)
    |-- order_status : string (nullable = true)
    
    It is not preffered to use "inferSchema" to infer the schema....
    
    -> Bcz it might not infer correctly.
-   -> It puts some extra load on the system, which leads to performance issue. As spark has to scan the data inorder to determine the datatypes.
+   -> It puts some extra load on the system, which leads to performance issue. As spark has to scan the data in order to determine the datatypes.
    
    4.
    transform_df1 = orders_df.withColumnRenamed("order_status","status")  --> to rename the column "order_status" to "status"
@@ -3399,7 +3409,7 @@ We call the below way of writing code as "Builder Pattern"
    
    5. to change the datatype of column name "order_date" from "string" to "timestamp"
    
-   from psyspark.sql.functions import *      --> we need this step as we used "to_timestamp", which is sql function
+   from psyspark.sql.functions import *      --> we need this step as we used "to_timestamp", which is SQL function
    
    transform_df2 = transform_df1.withColumn("order_date_new", to_timestamp(order_date))    -->  "withColumn" used to create a new column
    
@@ -3426,7 +3436,7 @@ How to create Dataframe using Dataframe reader API's?
 Standard Dataframe Reader API
 -----------------------------
    
-   orders_df = spark.read \								==> this is lazy just like RDD.
+   orders_df = spark.read \							==> this is lazy just like RDD.
    .format("csv") \ ==>(csv, json, avro, parquet)
    .option("header","true") \ 							==> consider first line as header
    .option("inferSchema","true") \ 						==> I am not providing the metadata/schema please infer it
@@ -3436,7 +3446,7 @@ Shortcut Methods to files from few formats
 ------------------------------------------
 spark.read.csv/json/...
 
-csv, json, jdbc (to read table in db (mysql,postgre) and create a Dataframe out of it), orc, parquet, table, text
+csv, json, jdbc (to read table in db (MySQL,PostgresSQL) and create a Dataframe out of it), orc, parquet, table, text
 
 Example for loading csv file:-
 
@@ -3451,7 +3461,7 @@ Example for loading json file:-
 Example for loading parquet file:-
 
 	orders_df = spark.read \
-	.parquet("/public/trendytech/datasets/ordersparquet/*") ==> parquet is very optimised i.e work well with spark
+	.parquet("/public/trendytech/datasets/ordersparquet/*") ==> parquet is very optimised i.e. work well with spark
 
 parquet is a column based file format where metadata is embedded in the data. Automatically it will read column names and datatypes.
 
@@ -3469,7 +3479,7 @@ Command to filter the data from a Dataframe
 
 	filtered_df = orders_df.filter("customer_id = 111")
 
-	filtered_df.show()     ==> to print first 20 rows of data
+	filtered_df.show()     								==> to print first 20 rows of data
 
 filtered_df.show(truncated = false)  ==> to make sure the output is visible clearly i.e instead of "23-10-1995 00:00:..." --> "23-10-1995 00:00:00.0"
 	By defult truncate will be true. when column width is more, it will not show entire column details then use this.
@@ -3483,7 +3493,7 @@ Dataframe and spark table are interchangable as both API's are Integrated
 
 Now we can use "orders" viewname as if it is a spark table in your database but it is distributed across the cluster.
 
-If we convert dataframe to saprk table/view using "createOrReplaceGlobalTempView" then "orders" view will be accessible across other applications.
+If we convert dataframe to spark table/view using "createOrReplaceGlobalTempView" then "orders" view will be accessible across other applications.
 
 To access the "orders" spark table
 ----------------------------------
@@ -3492,7 +3502,7 @@ To access the "orders" spark table
 
 whenever we run "spark.sql" we will get dataframe as a result
 
-Basically we convert dataframe to spark view/table is just to write the queries in sql.
+Basically we convert dataframe to spark view/table is just to write the queries in SQL.
 
 
 How to convert spark table to a dataframe?
@@ -3508,7 +3518,7 @@ Introduction to Spark SQL
 How to create Spark table?
 -------------------------
 
-By defuault, all the tables that we create get stored in the "Default" database unless we create a Database manually.
+By default, all the tables that we create get stored in the "Default" database unless we create a Database manually.
 
 1. Need to run the boiler plate code.
 
@@ -3523,17 +3533,17 @@ By defuault, all the tables that we create get stored in the "Default" database 
 		   master('yarn'). \
 		   getOrCreate()
    
-2. Create a databse
+2. Create a database
 
    spark.sql("create database if not exists itv028185_retail")
    
-3. To see all the databses
+3. To see all the databases
 	
    spark.sql("show databases").show()
    
 4. To find whether a database is there or Not
    
-   spark.sql("show databases").filter("namespace = 'itv028185_retail').show() ==> database is called as "namesapce"
+   spark.sql("show databases").filter("namespace = 'itv028185_retail').show() ==> database is called as "namespace"
    
    spark.sql("show databases").where("namespace like 'itv028185%').show()
     
@@ -3550,7 +3560,7 @@ By defuault, all the tables that we create get stored in the "Default" database 
    output:-
    
    databse		tableName		isTemporary
-				   Orders			   true             ==> this we created using the dataframe and it is not persistent table
+			Orders			   true             ==> this we created using the dataframe and it is not persistent table
 				   
 7. To create spark table
  
@@ -3612,7 +3622,8 @@ Here, we write some insert statements to load the data into the table.
 External Table
 --------------
 	#spark.sql("create table itv028185_retail.orders_ext (order_id integer, order_date string, customer_id integer, order_status string) using csv location '/public/trendytech/retail_db/orders/'")
-We are indicating that whatever is present the location, that is my data. The location is pointing to the HDFS path that contains some existing files are we are not interested to load any data (i.e, we don't need to write any insert statement to load the data which we write incase of Managed Tables).
+	
+We are indicating that whatever is present the location, that is my data. The location is pointing to the HDFS path that contains some existing files are we are not interested to load any data (i.e. we don't need to write any insert statement to load the data which we write incase of Managed Tables).
 
 Here we are simply creating structure/metadata on the top of the csv file. So that we get the output in tabular view.
 
@@ -3663,26 +3674,32 @@ Use Case - Dataframes & SparkSQL
 ================================
 
 1. Let us run the boiler plate code,
+
 	from pyspark.sql import SparkSession
 	import getpass
 	username = getpass.getuser()
 	spark = SparkSession. \
-			builder. \
-			config('spark.ui.port','0'). \
-			config("spark.sql.warehouse.dir", f"/user/{username}/warehouse"). \
-			enableHiveSupport(). \
-			master('yarn'). \
-			getOrCreate()
+		builder. \
+		config('spark.ui.port','0'). \
+		config("spark.sql.warehouse.dir", f"/user/{username}/warehouse"). \
+		enableHiveSupport(). \
+		master('yarn'). \
+		getOrCreate()
+		
 2. Let us create a dataframe using standard dataframe API, by calling read attribute to get the spark dataframe called "reader".
+
 	orders_df = spark.read \
 	.format("csv") \
 	.option("header","true") \
 	.option("inferSchema","true") \
 	.load("/public/trendytech/orders_wh/*")
+	
 3. Now I have created a spark table/view using "orders_df" dataframe. We can execute the Dataframe API using "orders_df" and spark sql code using "orders" view/table.
+
 	orders_df.createOrReplaceTempView("orders")
 
 Q1. Top 15 customers who placed more number of orders
+
 Dataframe
 ---------
 result = orders_df.groupBy("customer_id").count().sort("count",ascending = False).limit(15)
@@ -3694,11 +3711,13 @@ result1 = spark.sql("select customer_id, count(*) as count from orders group by 
 result1.show()
 
 Q2. Find the number of orders under each order_status
+
 Dataframe
 ---------
 result = orders_df.groupBy("order_status").count()  
 result.show()
---> Here, count() acts like a transformation. Bcz the result of groupBy will have multiple keys and this count still give multiple keys. Bcz one entry for each key. On the count output also we can have parallelism i.e the results are still present across the cluster.
+
+--> Here, count() acts like a transformation. Bcz the result of groupBy will have multiple keys and this count still give multiple keys. Bcz one entry for each key. On the count output also we can have parallelism i.e. the results are still present across the cluster.
 
 SparkSQL
 --------
@@ -3706,6 +3725,7 @@ result1 = spark.sql("select order_status, count(*) as count from orders group by
 result1.show()
 
 Q3. Number of active customers who placed at least one order
+
 Dataframe
 ---------
 result = orders_df.select("customer_id").distinct().count() ==> The output is a single value, so result is not a dataframe
@@ -3718,6 +3738,7 @@ SparkSQL
 spark.sql("select count(distinct customer_id) as active_customers from orders")
 
 Q4. Customers with most number of closed orders
+
 Dataframe
 ---------
 result = orders_df.filter("order_status='CLOSED').groupBy("customer_id").count().sort("count", ascending = False)
@@ -3732,7 +3753,7 @@ count (transformation/action)
 -----------------------------
 Transformation
 --------------
-It acts as a transformation if we use "groupy.action" because when the results are huge from the previous transformation then it should be given as input to another transformation. Because we need more parallelism.
+It acts as a transformation if we use "groupBy.action" because when the results are huge from the previous transformation then it should be given as input to another transformation. Because we need more parallelism.
 
 Ex:- 
 When we use "count" to find out the number of orders per each customer_id. Then we will get multiple key values as output from "groupBY" bcz it will return each row for each customer_id. 
@@ -3790,6 +3811,7 @@ Let us consider, we have a 10 Node cluster (10 worker nodes). In that each worke
 When we run the spark job, how much resources our spark job will get that's what we want to know.
 
 We need to understand about Executor. It is container which will hold the resources like CPU and RAM. And the amount of resources it will hold is depend on us.
+
 ***** Executor is a container that hold the resources like CPU and RAM *****
 
 1 Node can have more than 1 Executor. So that instead of a single Executor holding entire, we will breakdown into multiple containers bcz of that we can make use of resources more efficiently without loosing anything.
@@ -3839,10 +3861,14 @@ After this in each node we are now left with 15 CPU core and 63 Gb RAM.
 ***** 5 is the right choice of CPU core number in each executor. so that we can have 5 threads running in parallel within an executor without suffering HDFS throughput *****
 
 --> 15 CPU core, 63 Gb RAM - on each machine (Remaining after allocating 1 CPU core for background processing and 1 Gb RAM for OS)
+
 --> So we can have 3 executors running on each worker node
+
 --> And each executor contains 5 CPU core and 21 Gb RAM. So we can have 5 threads running in parallel within an executor supporting multi-threading.
+
 --> Out of 21 Gb RAM on each executor, some of this will go as a part of overhead (off heap memory - RAW memory - which is not a part of JVM/container).
-And this off heap memory size is ***** max (384 Mb (OR) 7% of executor memory (i.e 1.5 Gb in our case) ) ***** 
+And this off heap memory size is ***** max (384 Mb (OR) 7% of executor memory (i.e. 1.5 Gb in our case) ) *****
+
 --> So we can have 3 executors on each worker node machine. Each executor holds 5 CPU cores and ~19 Gb RAM (21-1.5)
 
 Total How many executors we can have is?
@@ -3850,7 +3876,8 @@ Total How many executors we can have is?
 we have 10 Node cluster (10 worker nodes). Each worker node can have 3 executors with 5 CPU Cores,19 Gb RAM.
 10 * 3 = 30 executors we can have across 10 node cluster
 
-30 executors with each executor holding 5 CPU Cores,19 Gb RAM 
+30 executors with each executor holding 5 CPU Cores,19 Gb RAM
+
 1 executor out of these 30 will be dedicated for YARN Application Manager. So eventually we will have 29 executors which we can use as part of cluster for spark jobs execution.
 
 ***** No.of tasks can run in an Executor = No.of CPU cores are there in an Executor (Each thread takes each task) *****
@@ -3860,5 +3887,1558 @@ we have 10 Node cluster (10 worker nodes). Each worker node can have 3 executors
 Off-heap Memory (RAW memory)
 ---------------------------
 --> It is outside the JVM/Container/Executor and it is kept for optimization.
+
 --> Basically when we create objects inside the executor, then garbage collection takes time to clean/remove the unused objects. But for off-heap memory, garbage collection does not come into picture. We avoid time spend on garbage collection if we store objects in off-heap memory (RAW memory).
+
 --> In off-heap memory we have to do our own Memory Management programmatically which is a bit difficult task.
+
+
+Week-6
+======
+
+Spark Transformations
+=====================
+
+Recap of the concepts we learnt
+-------------------------------
+
+What is Big Data --> (5 v's of data)
+
+Introduction to Hadoop --> (Hadoop core and its ecosystem)
+
+Big data the Big Picture --> (Multiple sources --> (Data Ingestion) --> Storage Layer (Date Lake Storage) --> Processing --> Serving layer)
+
+Advantages of Cloud
+
+Distributed Storage
+
+HDFS Architecture & it's commands
+
+Linux commands
+
+Distributed Processing
+
+MapReduce & how to execute it using jar File
+
+Challenges with MapReduce
+
+Apache Spark
+
+Spark Core RDD
+
+RDD - Why RDD's are Resilient, transformations vs actions, parallelize, reduce vs reduceByKey, join vs Broadcast Join, Repartition vs Coalesce, Cache, Spark UI
+
+Higher Level API's - Spark SQL & Dataframes - recommended manner
+
+Higher Level API's - Dataset - Specific to Scala & Java
+
+Standard Dataframe Reader API, shortcut methods
+
+How to create a spark table
+
+Managed vs External table
+
+we saw some transformations and actions
+
+Utlitiy functions
+
+Inside each worker node we can have multiple executors
+
+thin vs fat executors
+
+Ideal no.of CPU cores per executor
+
+whenever we were reading a dataframe, we were inferring the schema.
+
+Is inferring the schema a right choice?
+
+--> we can end up inferring wrong schema 
+
+--> for example a date column might be inferred as string
+
+--> Inferring will burden the system as spark has to scan the entire data. It will end up time consuming and non-perfoming.
+
+--> We should be enforcing the schema & should not infer it.
+
+
+Schema Enforcement
+==================
+
+Inferring schema will be a problem bcz it will be a burden on system as spark has to scan entire data and end up time consuming and non-perfoming, may infer wrong schema.
+
+Inferring schema may be good for small data files but not for huge data (10Gb) files as it may end up taking hours also.
+
+If you still want to infer schema and taking time, then there is a way that we can define "sampling ratio" as below
+
+	df = spark.read \
+	.format("csv") \
+	.option("header","true") \
+	.option("inferSchema","true") \
+	.option("samplingRatio",.1) \                      ==> 0.1 - 10 %, 0.5 - 50 % (so spark will scan 10% of dataset to inferSchema)
+	.load("/public/yelp-dataset/yelp-user.csv")
+	
+***** Less data we scan, less chances of data inferring correctly *****
+
+How do we enforse the schema?
+----------------------------
+
+We need to create 3 sample datasets for our learning.
+
+orders_sample1.csv, orders_sample2.csv & orders_sample3.csv to be created in Home directory of Gateway Node and moved it to HDFS "public/trendytech/datasets" 
+
+***** Even if we don't inferSchema then every column will be considered as "string" data type by default *****
+
+2 ways to enforce the Schema
+============================
+
+1. orders_schema = 'order_id long, order_date date, customer_id long, orders_status string'
+
+   schema definition is called schema DDL (Data Definition Language)
+	
+   #df = spark.read \
+	.format("csv") \
+	.schema(orders_schema) \
+	.load("/public/trendytech/datasets/orders_sample1.csv")
+	
+*** If there is any data type mismatch then the column values are shown as "NULL" ***
+
+	Example: orders_schema = 'order_id long, order_date date, customer_id long, orders_status long'
+	
+	"order_status" changed from string to long 
+	
+	then when we run #df.show() --> order_status values will be "NULL" bcz of data type mismatch
+	
+2. StructType (It is a system defined function, so we need to import)
+  
+   from pyspark.sql.types import *	(StructType and StructField is imported) 
+	
+   orders_schema_struct = StructType([
+   StructField("orderid", LongType()),
+   StructField("orderdate", DateType()),
+   StructField("customerid", IntegerType()),
+   StructField("orderstatus", StringType()),
+   ])
+   
+   df = spark.read \
+	.format("csv") \
+	.schema(orders_schema_struct) \
+	.load("/public/trendytech/datasets/orders_sample1.csv")
+	
+	
+How to deal with Data type
+==========================
+
+Spark understand date only it is in "YYYY-MM-DD" format.
+
+For example, if we try to load the file having a column with date values in the format "MM-DD-YYYY" then it will throw error "invalid datetime string"
+in pyspark 3.0 but with pyspark 2.0 it will return some random data.
+
+The dates are difficult to deal sometimes and different versions might have different behaviour.
+
+1 way to handle date values:-
+---------------------------
+
+   #orders_schema = 'order_id long, order_date date, customer_id long, orders_status string'
+   
+   #df = spark.read \
+   .format("csv") \
+   .schema(orders_schema) \
+   .option("dateFormat","MM-DD-YYYY") \
+   .load("/public/trendytech/datasets/orders_sample2.csv")
+   
+   #df.show()  --> returns the output without any error
+	
+Another way to handle date values:-
+---------------------------------
+
+Safe way is to load date as a string and then later convert it to relevant form.
+
+Initially load the date column as a string and then later apply a transforamtion and convert "string" datatype to "date"
+
+   #orders_schema = 'order_id long, order_date string, customer_id long, orders_status string'
+	
+   #df = spark.read \
+   .format("csv") \
+   .schema(orders_schema) \
+   .load("/public/trendytech/datasets/orders_sample2.csv")
+   
+   #df.show() 	--> returns the data without any issue
+   
+   #df.printSchema() 
+   
+   Output:-
+
+   root
+   |-- order_id : integer (nullable = true)
+   |-- order_date : string (nullable = true)   
+   |-- customer_id : integer (nullable = true)
+   |-- order_status : string (nullable = true)
+   
+   ==> add new column with date data type
+   
+   #from pyspark.sql.function import to_date
+   
+   #new_df = df.withColumn("order_date_new", to_date("order_date","MM-DD-YYYY")) --> create a new column with "date" data type of format "MM-DD-YYYY"
+   
+   #new_df.printSchema() 
+   
+   Output:-
+
+   root
+   |-- order_id : integer (nullable = true)
+   |-- order_date : string (nullable = true)   
+   |-- customer_id : integer (nullable = true)
+   |-- order_status : string (nullable = true)
+   |-- order_date_new : date (nullable = true)
+   
+   #new_df.show()
+   
+   output:-
+   
+   order_id   order_date   customer_id   order_status   order_date_new
+   
+   ==> transform and convert order_date columnn "string" datatype to "date"
+   
+   #from pyspark.sql.function import to_date
+   
+   #newdf = df.withColumn("order_date", to_date("order_date","MM-DD-YYYY")) --> modify "string" data type of order_date column to "date"("MM-DD-YYYY")
+   
+   #newdf.printSchema()
+   
+   Output:-
+   ------
+   root
+   |-- order_id : integer (nullable = true)
+   |-- order_date : date (nullable = true)   
+   |-- customer_id : integer (nullable = true)
+   |-- order_status : string (nullable = true)
+   
+   #newdf.show()
+   
+   output:-
+   ------
+   order_id   order_date   customer_id   order_status
+   
+   
+*** If there is any datatype/ date format mismatch then the column values are shown as "NULL" ***
+
+for eaxmple input data orders_sample3 file:-
+
+	order_id   order_date   customer_id   order_status
+	1		   2011-10-21   	10			complete
+	2		   2013-11-21   	12			pending
+	3		   2012-10-21     UNKNOWN		in-progress
+    2		   2014-10-21   	NA			complete
+
+   #orders_schema = 'order_id long, order_date string, customer_id long, orders_status string'
+	
+   #df = spark.read \
+   .format("csv") \
+   .schema(orders_schema) \
+   .load("/public/trendytech/datasets/orders_sample3.csv")
+   
+   #df.show() 	--> customer_id "UNKOWN","NA" values are shown as "NULL"
+
+
+Read Modes
+==========
+
+we will learn, why do we get "NULL" values and how to resolve this "NULL" values issue
+
+3 types of Modes
+================
+
+=> failfast (As soon as malformed records are found it will error out)
+	
+   #df = spark.read \
+   .format("csv") \
+   .option("mode","failfast") \
+   .load("/public/trendytech/datasets/orders_sample3.csv")
+   
+   #df.show()
+   
+   --> if there is a data type mismatch then it will return error "Malformed records are detected in record parsing. To process Malformed records as null, try setting mode as 'PERMISSIVE'.
+   
+   --> Useful when you don't want to process the data with issues. 
+
+   
+=> premissive (default) (If malformed records are found, then it will make those records as NULL without affecting other results)
+   
+   If spark is unable to parse the data due to data type mismatch then it will make it as "NULL" without impacting the other results
+   
+
+=> dropmalformed (If malformed records are found, then those records are dropped without affecting other results)
+
+   --> Simply drop the records which are unable to be parsed by spark and returns the remaining results
+	
+   #df = spark.read \
+   .format("csv") \
+   .option("mode","dropmalformed") \
+   .load("/public/trendytech/datasets/orders_sample3.csv")
+   
+   
+Different ways to create a Dataframe
+====================================
+
+1. spark.read  ==> this is a obvious choice as it gives lot of flexibility to create a dataframe
+
+2. spark.sql   ==> by running spark sql query we get dataframe 
+
+3. spark.table("itv028185_retail.orders_ext")  ==> if you have spark table and want to get dataframe quickly
+
+4. spark.range(5) 	==> gives you 1 column dataframe for testing purpose
+
+*** This is just like "range" function in python ***
+
+   Output:-
+   ------
+   id
+   --
+   0
+   1
+   2
+   3
+   4
+ 
+5. spark.createDataFrame() ==> used to create a dataframe for the collection of elements in a local list (i.e. data on Gateway node)
+
+We write spark.sparkContext.parallelize(my_list) --> used to create a rdd for the collection of elements in a local list (i.e. data on Gateway node)
+
+   #orders_list = [(1,'2013-07-25 00:00:00.0',11599,'CLOSED'),
+				  (2,'2013-07-28 00:00:00.0',2566,'PENDING_PAYMENT'),
+				  (3,'2013-07-31 00:00:00.0',12112,'COMPLETE')]
+				  
+   #orders_raw_df = spark.createDataFrame(orders_list)
+   
+   #orders_raw_df.show()
+   
+   #orders_raw_df.printSchema()
+   
+   Output:-
+   ------
+   root
+   |-- _1 : long (nullable = true)
+   |-- _2 : string (nullable = true)   
+   |-- _3 : long (nullable = true)
+   |-- _4 : string (nullable = true)
+   
+***** This will automatically infer the schema, basically we will use createDataframe while working with small dataset *****
+   
+Q) How to fix column names (i.e. to replace the random column names with required column names)? What if i want to enforce the datatypes? I don't want to go with the inferred datatypes?
+
+Process 1:-
+=========
+
+   2 step process i.e. creating a Dataframe using "createDataFrame" and adding column names using "toDF" transforamtion
+	
+   #orders_raw_df = spark.createDataFrame(orders_list).toDF('order_id','order_date','customer_id','order_status') 
+   
+   ------------------------------------------- OR -------------------------------------------
+   
+   #orders_df = orders_raw_df.toDF('order_id','order_date','customer_id','order_status')  ==> "toDF" is a transformation that converts dataframe from 1 form to another form and it changes from the default column names to our required column names
+   
+   #orders_df.show()
+   
+   output:-
+   ------
+   order_id   order_date   customer_id   order_status
+   
+   #orders_df.printSchema()
+   
+   Output:-
+   ------
+   root
+   |-- order_id : long (nullable = true)
+   |-- order_date : string (nullable = true)   
+   |-- customer_id : long (nullable = true)
+   |-- order_status : string (nullable = true)
+
+Process 2:-
+=========
+   
+   1 step process
+   
+   #orders_schema = ['order_id','order_status','customer_id','order_status'] ==> to just provide the column names without datatypes
+   
+   ----------------------------   OR   ----------------------------
+   
+   #orders_schema = 'order_id long, order_date string, customer_id int, orders_status string' ==> to provide the column names along with datatypes
+   
+   #df = spark.createDataFrame(orders_list, orders_schema)
+   
+   #df.show()
+	
+   output:-
+   ------
+   order_id   order_date   customer_id   order_status
+   
+   #df.printSchema()
+   
+   Output:-
+   ------
+   root
+   |-- order_id : long (nullable = true)
+   |-- order_date : string (nullable = true)   
+   |-- customer_id : long (nullable = true)
+   |-- order_status : string (nullable = true)
+   
+   ==> To convert "order_date" from string to timestamp
+   
+   #from pyspark.sql.functions import to_timestamp
+   
+   #new_df = df.withColumn("order_date",to_timestamp("order_date",to_timestamp("order_date"))
+   
+   #new_df.printSchema()
+   
+   Output:-
+   ------
+   root
+   |-- order_id : long (nullable = true)
+   |-- order_date : timestamp (nullable = true)   
+   |-- customer_id : long (nullable = true)
+   |-- order_status : string (nullable = true)
+
+
+
+Converting RDD to Dataframe
+===========================
+
+-> Till now we have created dummy dataframe with the local python list for testing purpose.
+
+***** createDataFrame allows you convert "RDD" to "DataFrame" *****
+
+Let us create a rdd,
+
+   #orders_rdd = spark.sparkContext.textFile("/public/trendytech/retails_db/orders/part-00000")
+   
+   #orders_rdd.take(5)  --> to get the top 5 rows on the screen
+   
+   output:-
+   ------
+   ['1,2013-07-25 00:00:00.0,11599,CLOSED',
+    '2,2013-07-28 00:00:00.0,2566,PENDING_PAYMENT',
+	'3,2013-07-31 00:00:00.0,12112,COMPLETE']
+   
+   #new_orders_rdd = orders_rdd.map(lambda x: int(x.split(",")[0]),x.split(",")[1],int(x.split(",")[2]),x.split(",")[3])
+   
+   #new_orders_rdd.show()
+   
+   output:-
+   ------   
+   [(1,'2013-07-25 00:00:00.0',11599,'CLOSED'),
+	(2,'2013-07-28 00:00:00.0',2566,'PENDING_PAYMENT'),
+	(3,'2013-07-31 00:00:00.0',12112,'COMPLETE')]
+	
+   #orders_schema = 'order_id long, order_date string, customer_id int, orders_status string'
+	
+   #new_orders_df = spark.createDataFrame(new_orders_rdd,orders_schema)
+   
+   #new_orders_df.show()  --> output will be in tabular format
+   
+To convert a rdd to DataFrame
+
+   #orders_rdd = spark.sparkContext.textFile("/public/trendytech/retails_db/orders/part-00000")
+   
+   #new_orders_rdd = orders_rdd.map(lambda x: int(x.split(",")[0]),x.split(",")[1],int(x.split(",")[2]),x.split(",")[3])
+   
+   #orders_schema = 'order_id long, order_date string, customer_id int, orders_status string'
+
+   #df = new_orders_rdd.toDF(orders_schema)
+   
+   #df.show()
+   
+   output:-
+   ------
+   order_id   order_date   customer_id   order_status
+   
+   #df.printSchema()
+   
+   Output:-
+   ------
+   root
+   |-- order_id : long (nullable = true)
+   |-- order_date : string (nullable = true)   
+   |-- customer_id : long (nullable = true)
+   |-- order_status : string (nullable = true)
+   
+2 Ways to convert a RDD to DataFrame:-
+------------------------------------
+
+   1. spark.createDataFrame(rdd,schema) --> 1 step approach
+	  spark.createDataFrame(rdd).toDF(list of column names) --> 2 step approach
+   
+   2. rdd.toDF(schema) ==> schema = column names + datatypes
+   
+   
+
+Nested Schema
+=============
+
+How to deal with Nested Schema
+
+{"customer_id": 1, "full_name":{"first_name":"sumit","last_name":"mittal"},"city":"Bangalore"}
+{"customer_id": 2, "full_name":{"first_name":"Ram","last_name":"Lalla"},"city":"Ayodhya"}
+{"customer_id": 3, "full_name":{"first_name":"Shiva","last_name":"Shankar"},"city":"Thiruvannamalai"}
+
+schema DDL
+----------
+
+   #ddl_schema = 'customer_id long, full_name struct<first_name:integer,last_name:integer>, city string"
+   
+   #df = spark.read.format("json").schema(ddl_schema).load("/public/trendytech/datasets/customer_nested/*")
+   
+   #df.show()
+   
+   output:-
+   ------
+   
+   customer_id			full_name		city
+   1				[sumit,mittal]	  Bangalore
+   2				[Ram,Lalla]		  Ayodhya
+   3				[Shiva,Shakar]	  Thiruvannamalai
+   
+   #df.printSchema()
+   
+   output:-
+   ------
+   
+   root
+   |-- customer_id: long  (nullable = true) 	
+   |-- full_name: struct  (nullable = true)
+   |	|--first_name: string  (nullable = true)
+   |	|--last_name: string  (nullable = true)
+   |-- city: string  (nullable = true)
+   
+StructField
+-----------
+	
+   #from pyspark.sql.types import *
+   
+   #customer_schema = StructType([
+   StructField("customer_id",LongType()),
+   StructField("full_name",StructType([StructField("first_name",StringType()),StructField("last_name",StringType())])),
+   StructField("city",StringType())
+   ])
+   
+   #df = spark.read.format("json").schema(customer_schema).load("/public/trendytech/datasets/customer_nested/*")
+   
+   #df.show()
+   
+   #df.printSchema()
+   
+   output:-
+   ------
+   
+   root
+   |-- customer_id: long  (nullable = true) 	
+   |-- full_name: struct  (nullable = true)
+   |	|--first_name: string  (nullable = true)
+   |	|--last_name: string  (nullable = true)
+   |-- city: string  (nullable = true)
+   
+   
+Working with Nested List
+------------------------
+ 
+   #customer_list = 
+   [
+	(1, ("sumit","mittal"), "Bangalore"),
+	(2, ("Ram","Lalla"), "Ayodhya"),
+	(3, ("Shiva","Shakar"), "Thiruvannamalai"),
+   ]
+	
+   #ddl_schema = 'customer_id long, full_name struct<first_name:integer,last_name:integer>, city string"
+   
+   #df = spark.createDataFrame(customer_list, ddl_schema)
+   
+   #df.show()
+   
+   #df.printSchema()
+   
+   output:-
+   ------
+   
+   root
+   |-- customer_id: long  (nullable = true) 	
+   |-- full_name: struct  (nullable = true)
+   |	|--first_name: string  (nullable = true)
+   |	|--last_name: string  (nullable = true)
+   |-- city: string  (nullable = true)
+   
+   
+
+Dataframe Transformations | select vs selectExpr
+================================================
+
+To add new column/modify the existing column we use - withColumn Transformation
+
+To rename an existing column we use - withColumnRenamed
+
+To drop a column we use - drop
+
+Step 1. Run the boiler plate code
+
+Step 2.
+	 #raw_df = spark.read \
+	 .format("csv") \
+	 .option("inferSchema","true") \
+	 .load("/public/trendytech/retails_db/order_items/part-00000")
+	
+Step 3.
+	#raw_df.show()
+	
+	output:-
+	------
+	_c0		_c1		_c2		_c3		_c4		_c5
+	1		1		957		1		299.98	299.98
+	2		2		1078	5		250.0	50.0
+	3		2 		502		2		54.0	27.0
+	
+Step 4.
+	#raw_df.printSchema()
+	
+	output:-
+	------
+	root
+    |-- _c1 : integer (nullable = true)
+    |-- _c2 : integer (nullable = true)   
+    |-- _c3 : integer (nullable = true)
+    |-- _c4 : integer (nullable = true)
+	|-- _c5 : double (nullable = true)
+	|-- _c6	: double (nullable = true)
+	
+Step 5. To change the defualt column names with required column names
+	#refined_df = raw_df.toDF("order_item_id","order_id","product_id","quantity","subtotal","product_price")
+	
+Step 6.
+	#refined_df.show()
+	
+	output:-
+	------                                     
+	order_item_id order_id product_id quantity subtotal product_price
+	1				1		957			1		299.98	299.98
+	2				2		1078		5		250.0	50.0
+	3				2 		502			2		54.0	27.0
+
+Step 7. Drop "subtotal" as subtotal = quantity * product_price
+	#df1 = refined_df.drop("subtotal")
+	
+Step 8.
+	#df1.show()
+	
+	--- OR ---
+	
+	#df1.select("*").show()
+	
+	output:-
+	------                                     
+	order_item_id 	order_id 	  product_id  quantity    product_price
+	1					1			957				1			299.98
+	2					2			1078			5			50.0
+	3					2 	   		502				2			27.0
+	
+Step 8.1. To view few columns from the Dataframe
+	#df1.select("order_item_id","order_id","product_id").show()
+	
+	output:-
+	------                                     
+	order_item_id order_id product_id 
+	1				1		957
+	2				2		1078		
+	3				2 		502			
+	
+
+Step 9. Now want to create "subtotal" column
+	#from pyspark.sql.functions 	import *
+	
+	#df1.select("*",expr("product_price * quantity as subtotal")).show()
+	
+	----------------------            OR            --------------------
+	
+	#df1.selectExpr("*","product_price * quantity as subtotal").show()
+	
+	output:-
+	------                                     
+	order_item_id order_id product_id quantity  product_price  subtotal
+	1				1		957			1		299.98         299.98 
+	2				2		1078		5		50.0           250.0  
+	3				2 		502			2		27.0           54.0   
+
+Scenario 1:-
+----------	
+After loading the products table, if you want to increase product price by 20%
+
+	#df1 = products_df.withColumn("product_price",expr("product_price * 1.20"))
+	
+	#df2.show() --> to view increased product_price with all other columns 
+	
+Scenario 2:-
+----------
+Let us consider that we want to categorise the products as 3 groups "Nike","Armour","Others" and increase their price by 20,10,0 percent respectively
+
+	#new_df = df1.withColumn("product_price", expr("CASE WHEN product_name like '%Nike%' THEN product_price * 1.2
+												WHEN product_name like '%Armour%' THEN product_price * 1.1
+												ELSE product_price"))
+												
+//*****												
+selectExpr - Used once at start and we perform any number of calculation by writing the expressions	*** write one execute many times i.e. reduces redundancy ***	
+expr - We need to wrap each expression inside the "expr" to perform calculation
+																		 *****//
+
+
+Removal of Duplicates from Dataframe
+====================================
+
+How to remove duplicate records from dataframe?
+----------------------------------------------
+
+myList = [
+(1,"Ram",27),
+(2,"Shyam",28),
+(1,"Ram",27),
+(3,"Shyam",28)
+] 
+	
+	#df = spark.createDataFrame(myList).toDF("id","name","age")
+	
+	#df.show()
+	
+	#df1 = df.distinct()  ==> to remove the rows having duplicate values for all columns
+	
+	--   OR --
+	#df1 = df.dropDuplicates()
+	
+	#df1.show()
+	
+	output:-
+	------
+	id   name   age
+	1	 Ram	27
+	2 	 Shyam  28
+	3	 Shyam  28
+	
+	#df2 = df.select("id").distinct().show() ==> to return distinct "id" values
+	
+	output:-
+	------
+	Id
+	1
+	2
+	3
+	
+Distinct ==> when we want to remove duplicate rows across all the columns in a table but not on subset of columns 
+
+For example: A dataframe having 20 columns, you want to remove all the indentical rows in table.
+
+dropDuplicates() ==> when we want to remove duplicates from selected columns
+
+	#new_df = df.dropDuplicates(["name","age"]).show()
+	
+	output:-
+	------
+	id 	 name	age
+	1	 Ram	27
+	2	 Shyam 	28
+	
+**** dropDuplicates is more flexibile than distinct bcz it can work on all columns and subset of columns in a table ****
+
+
+Spark Session in Detail
+=======================
+
+How to create Spark Session
+---------------------------
+
+We create spark session, as it is an entry point to the spark cluster for Higher Level API's (DataFrame, Spark SQL)
+
+If we want to deal with Higher Level API's and run the code across the cluster we need to create spark session and then we need write the code so that our code will run on the cluster.
+
+Instead of having sparkContext, HiveContext, sqlContext seperately all of them are encapsulated in a single spark session like an umbrella.
+
+If we want to deal with RDD level or Spark Core then we need sparkContext.
+
+Step 1.
+
+builder --> we are mentioning that we are using builder pattern
+
+Step 2.
+
+appName("Sandeep Spark Demo")
+
+While creating the spark session we use appName --> to set the application Name in the spark history server
+
+Step 3.
+
+config("spark.sql.warehouse.dir","/user/itv028185/warehouse")  --> to indicate whenever we create spark managed table our data should be stored in this location {/user/itv028185/warehouse}
+
+enableHiveSupport() --> to access the hive metastore. Hive contains tables so it will have metastore. Metastore contains schema i.e. table structure.
+and mainly to access the hive tables from spark. From spark to query the hive metastore. If we dont use this we need to store the metadata in-memory metastore.
+
+Step 4.
+
+master('yarn') --> decides where my spark job will run? and on what cluster?
+
+I am mentioning that my spark job should be running on yarn managed Hadoop cluster.
+
+YARN will give us the parallelism.
+
+mastr("local[*]") --> If we want run the code on the local Gateway Node and make use of all CPU cores to get the parallelism.
+
+How does the system will get to know the path of the cluster?
+
+It will check the configuration files and will get to know the exact path of the master node else we need to give entire path to it.
+
+Step 5.
+
+getOrCreate() --> get the spark session if available else create it. So that there will 1 session per application
+
+
+spark = sparkSession. \
+builder. \
+appName("Sandeep Spark Demo"). \
+config("spark.sql.warehouse.dir","/user/itv028185/warehouse"). \
+enableHiveSupport(). \
+master("yarn"). \
+getOrCreate() 
+
+
+What is the need of spark session when we are having spark context?
+------------------------------------------------------------------
+
+-> Spark session like a umbrella and it contains spark/sql/hive context.
+
+-> you will get two isolated environments within the same application in the same session itself.
+
+-> when we create 2 seperate spark contexts within the same application there are some issues if 1 of them crashes another 1 also will get crashed.
+
+-> By using spark session we can avoid those issues.
+
+-> we can have more than 1 spark session in a single application. Each session have isolated environments.
+
+--> Sparksession2 = spark.newSession() --> to create another new spark session in the same application
+
+--> Basically this is necessary when we want to access temp tables only in that session.
+
+--> Within one spark application we will have only one spark context so both spark sessions will share the same spark context. 
+
+
+Deploy mode is client
+
+For one spark application we have a driver (Master which take care of co-ordination, work allocation and make sure that work is done by worker machines) and multiple executors (workers which will do the work). Executors will process the code on data.
+
+Driver goes down application will go down.
+
+2 modes to run the spark application
+====================================
+
+1. Client Mode (Development Purpose) (Interactive Mode)
+   -----------
+
+-> In which driver runs at client machine. Client machine is nothing but the machine where we are running (Gateway Node)
+
+-> If Gateway node goes down, when the application is running then the application also will goes down. Application dependant on Client Machine/ Gateway Node.
+
+-> We need to hooked to your system to make sure that application is running and to check the progress.
+
+-> Useful when we want to run the notebook and see the results upfront / immediately to build logic.
+
+-> It is not handy incase of production ready scenario.
+
+
+2. Cluster Mode (Production Ready Purpose) (Non-Interactive Mode)
+   ------------
+
+-> In which driver runs at in the cluster itself. Cluster means drvier wille be a part of one of the executors. i.e. driver will be running on the worker node in one of the executor.
+
+-> We build code, run it and package it and then this package should be running across the cluster. We can logout from the system and code will be running and we can see the results later but not upfront.  
+
+-> Once we build the logic and we need to package it and deploy it using cluster mode.
+
+-> Driver should not be impacted with the machine on which we logged in.
+
+***** Whenever we are working on a Notebook or spark terminal or spark shell it is a client mode *****
+
+
+If we run the below boiler plate code i.e. instead of using yarn we use local,
+
+spark = sparkSession. \
+builder. \
+appName("Sandeep Spark Demo"). \
+config("spark.sql.warehouse.dir","/user/itv028185/warehouse"). \
+enableHiveSupport(). \
+master("local[*]"). \
+getOrCreate() 
+
+then Application ID will look like 'local-.....' in the history server.
+
+In this case driver itself will act as executor bcz it is single machine. Parallelism depends on no.of cores here.
+
+Its not a good practise to set master in Gateway Node.
+
+In general (production scenarios), we have seperate clusters for Dev, Stage, Prod.
+
+
+
+Week-7
+======
+
+Understading cache & persist
+============================
+
+***** Cache improves performance and to save computational cost by redoing the same computation i.e. reading a file from the disk. *****
+
+Cache - Holding some data in memory
+
+RDD or Dataframe or Spark Tables are in-memory things
+
+Why do we need to cache when they are already in-memory?
+-------------------------------------------------------
+
+Caching should not be done as RDD or Dataframe or Spark Tables are in-memory right.
+
+	#df1 = read an orders file from the Disk
+	
+	#df2 = df1.transformation1
+	
+	#df3 = df2.transformation2
+	
+	#df3.show()
+	
+	#df3.show()
+
+In the above code execution whenever we try to run "df.show()" 2nd time also it will start the execution from step 1. This is the problem that we want to solve.
+
+By using the below code, we use the cache to avoid reading the orders file from disk
+
+	#df1 = read an orders file from the Disk
+	
+	#df1.cache() 					==> Useful when we want to re-use the "df1" dataframe results mulitple times
+	
+	#df2 = df1.transformation1
+	
+	#df3 = df2.transformation2
+	
+	#df3.show()
+	
+	#df3.show()
+	
+Cache 
+-----
+1. We should cache dataframe which has to be reused multiple times.
+
+2. we should not cache a very large dataframe becuase results in performance issues.
+
+3. Cache is lazy like transformations. It wont be executed immediately.
+
+
+Cache using Dataframes and Spark Tables
+
+We will be bringing things to memory and disk.
+
+RDD --> by default it will be cached in memory
+
+Dataframes --> by default it will be cached in memory and disk (bascilly it will try to cache in memory and whatever cannont fit in memory will be put to disk) (This stroage level is fixed)
+
+Let us consider that we have 10 Gb file in HDFS
+
+so there will be 80 blocks based on default block size of 128 Mb
+
+Only 50 partitions it is able to cache in memory and remaining 30 partitions will be cached in Disk. (Memory and Disk)
+
+Only 50 partitions it is able to cache in memory and remaining 30 partitions will be skipped. (Memory)
+
+***** 1 complete partition will be either on disk or in-memory *****
+
+We need to think why do we need to cache on Disk as the file itself is in the HDFS (DisK)
+-----------------------------------------------------------------------------------------
+
+Disk has 2 parts...
+
+If there is a Worker Node (10 Tb) - 1 part is HDFS (8 Tb) some disk as a part of HDFS and another part is local disk (2 Tb) which is not a part of HDFS.
+
+So whenever we perform the caching of Dataframe firstly it will get cached in memory and remaining will be cached on disk nothing but the local disk and this will be slightly faster.
+
+
+Persist
+-------
+
+Persist is more flexibile than cache.
+
+Default caching will be on memory and disk. This stroage level can be changed by setting an optional parameter.
+
+***** Whenever we perform caching, results will be seen in storage tab in Spark UI. We can check the results when application is running. But on termination of application we check in the History server but we can not see the cached results *****
+
+We use pyspark2 instead of pyspark3 to work/learn on caching bcz pyspark3 cluster is unstable.
+
+
+Cache practicals
+================
+
+After running the boiler plate code,
+
+we will open the "SPARK UI ALL APPLICATIONS" link, click on the "Application ID", and in that open the "Tracking URL - ApplicationMaster" to go to spark UI.
+
+Let us consider that we have 1.1 Gb file,
+
+so that we will have 9 blocks in HDFS,
+
+How count works is?
+
+9 blocks = 9 partitions in Dataframe = 9 executors will be working in parellel or one-by-one (i.e. 1 executor may execute 2 tasks also) = 9 tasks
+
+Per each task one executor will be taking a partition and counting/calculating the number of records.
+
+1 worker machine can have multiple executors.
+
+Each task will be take by 1 executor and returns the local count and output of 9 executors will goes to a final executor so that we will get the final count.
+
+Whenever we are working with High Level API's we need to go to SQL tab.
+
+After running the boiler plat code, creating a dataframe using the 1.1 Gb sized file.
+
+When we run below commands,
+
+	#cached_df = df.cache()
+	
+	#cached_df.show() --> it will cache the 1st partition bcz show will return initial 20 records so it wont cache everything
+	
+If we open the "http://rm.itversity.com/cluster" and go to storage to check the cached results we will see only 1 "cached partitions" and 11% "Fraction Cached"
+
+This is because spark is smart that is why we get this output. It means when we run "show" action, it will show first 20 records then we can cache the 1 partition only right why do need to cache all the 9 partitions.
+
+	#cached_df.head() --> returns the same output as the 1st parition is already cached (1 "cached partitions" and 11% "Fraction Cached"
+	
+	#cached_df.tail(10) --> returns 2 "cached partitions" and 22% "Fraction Cached" bcz now bcz of tail it should cache the 9th partition
+	
+***** spark will cache only the partitions that are required *****
+
+To check the below details open the "storage" tab and click on the "RDD Name" link:-
+
+/*****
+
+We can see Data Distribution on _ Executors 
+
+_ partitions
+
+			*****/
+
+***** Cached data of block will be compressed to 33 Mb but when it was on the disk it was 128 Mb and this is in Memory *****
+
+Storage Level is Memory Deserialized 1x Replicated --> Whatever can be fit in memory it will be kept in memory otherwise it will be kept in Disk.
+
+Serialized 
+-----------
+=> Kept in binary format (which will be more optimized interms of space, will take less space to store)
+
+=> It takes extra CPU computation cycles to change from binary format to normal format (Deserialized)
+
+Deserialized
+------------
+=> Keeping it in object format (this takes slightly more space but in terms of computation this is fast)
+
+***** On disk data is always kept in Serialized form but in memory data is kept in Deserialized form *****
+
+When we talk about caching
+--------------------------
+In case of Disk - It is always Serialized
+
+In case of memory - It can Serialized or Deserialized
+
+when we run the below command,
+	#cached_df.count() --> return 9 "cached partitions" and 100% "Fraction Cached"
+	
+Here when we run the count command,
+	#df.count() --> this will be executed in few seconds (4s) 
+
+--> To understand why it has taken, we need to open SQL tab.
+
+	=> Then we can find it read from file "Scan csv" <=
+
+But after running the cache command and execute the count command followed by it,
+	#cached_df = df.cache()
+	
+	#cached_df.count() --> this will take more time because it is lazy and it need to put extra effort to cache the results in memory (16s)
+	
+**** Locality Level - Node_Local (It works on the principle of Data Locality i.e. process the data on the same machine where data is kept) ****
+
+Now if we run the same count command again,
+	#cached_df.count() --> this will take 0.2s 
+
+--> To understand why it has taken, we need to open SQL tab.
+
+	=> Then we can find it from "InMemoryTableScan" instead of "Scan csv" <=
+
+In this cluster, "Dynamic Resource Allocation" enabled bcz of that we can see different number of executors each time we run the action..,
+
+we started with 1 driver and 2 executors and once we performed caching then other executors added. After some time if the cluster is idle some of the executors will be killed.
+
+Min - 2 executors 
+
+Max - 10 execuctors
+
+To check this configuration we need to go to "Evironment" tab 
+
+spark.dynamicAllocation.enabled  	  	- true
+spark.dynamicAllocation.MaxExecutors    - 10
+spark.dynamicAllocation.MinExecutors    - 2
+
+*** Before Caching Locality Level will be "NODE_LOCAL" (following Data Locality concept) after caching Locality Level will be "PROCESS_LOCAL" (In Memory of the machine) ***
+
+If I want to uncache?
+--------------------
+	#orders_df_cached.unpersist() --> With this you wont find content in the "Storage" tab.
+	
+	output:-
+	------
+	order_id	order_status	customer_id		order_status
+
+
+More on cache
+=============
+When we run the below command,
+	#orders_df.cache() --> returns the output as "orders_df.show()" i.e. first 20 rows and output format is "orders_df_cached.unpersist()"
+	and in "Storage" tab it shows 1 "cached partitions" and 11% "Fraction Cached"
+	
+After this if I run the command,
+	#filtered_results = orders_df.filter("customer_id == 100000") --> wont happen anything bcz it is a transforamtion
+	
+	#filtered_results.show() --> then it will scan the entire orders data bcz it needs to perfrom the above filter transformation as a part of Execution plan so that cachcing of enitre data will happen simultaneously each block by block.	
+	
+	We can check the "Storage" tab then you will find 9 "cached partitions" and 100% "Fraction Cached"
+	
+***** If we re-execute the same steps/run the action after caching the output will be really quick bcz of InMemoryTableScan *****
+----------------
+When we run the below command,
+	#orders_df.select("order_id","order_status").filter("order_status = 'CLOSED'").cache()
+
+My doubt is that in "Storage" Tab of "Spark UI" it should return 9 "cached partitions" and 100% "Fraction Cached" bcz of filter it has to scan entire data.
+
+But bcz of ".cache()" which is just like ".show()" it will scan only the 1st partition" and "Storage" Tab of "Spark UI" it will return 1 "cached partitions" and 11% "Fraction Cached" and cached memory of the partition size will be 343 Kb, previously it was 33 Mb
+
+If i run any action followd by above command then it scan and cache the entire data so that it returns 9 "cached partitions" and 100% "Fraction Cached".
+----------------
+
+If we would have run the below command,
+	#cached_result = orders_df.select("order_id","order_status").filter("order_status = CLOSED").cache() --> then it would have not cached anything bcz it is assigned to a dataframe
+	
+Interms of scanning the data both
+	#orders_df.cache()		and 	#orders_df.show()  ==> will scan 1 partition only bcz they will return top 10 rows
+	
+Scenario:-
+--------
+If we would have run the below command,
+	1. orders_df.select("order_id","order_status").filter("order_status = 'CLOSED'").cache()
+	
+and if we run almost same command by modifying few things,
+	2. orders_df.filter("order_status = CLOSED").select("order_id","order_status").count()
+	
+2nd command won't make use of cache 
+
+During optimization filter has given more priority by spark, which means moving the filter ahead (immediately after reading the file) so that data gets limited in the Initial Stages (Predicate pushdown)
+
+In Details section of "Sql" tab you can find 4 things,
+	- Parsed Logical plan    => initially written logic
+	- Analyzed Logical plan  
+	- Optimized Logical plan
+	- Physical plan
+
+In the above scenario, spark will check the "Analyzed Logical plan" and it would differ from 1 and 2
+
+If we would have run the below cache command,
+	3. orders_df.select("order_id","order_status").filter("order_id > 10").cache()
+	
+and if we run count,
+	4. orders_df.select("order_id","order_status").filter("order_id > 10").count()
+	
+and if we run almost same command by modifying filter condition,
+	5. orders_df.select("order_id","order_status").filter("order_id > 100").count()
+	
+and if we run almost same command by modifying few things,
+	6. orders_df.select("order_status").filter("order_id > 100").count()
+	
+step 5 and 6 won't make use of cache bcz of difference in "Analyzed Plan" i.e. filter condition different.
+
+*****
+
+So it is recommended to put the output to another dataframe
+	#cached_result = orders_df.select("order_id","order_status").filter("order_id > 10").cache() 
+	
+and make use of "cached_result" dataframe it will make sure that "Analyzed Plan" is same and caching will happen.
+
+	#cached_df.select("order_id","order_status").filter("order_id > 10").count() ==> now caching will take place
+	
+*****
+	
+
+
+Parsed | Analyzed | Optimized Logical Plan
+==========================================
+
+Here we run the below commands,
+	1. orders_df.select("order_status","order_id").filter("order_id > 10").cache()
+	
+	2. orders_df.select("order_status","order_id").filter("order_id > 10").count() --> it will scan and cache all partitions but size of file is less
+	
+	3. orders_df.select("order_status").filter("order_id > 10").count() --> it will make use of cached data
+	
+Now 2, 3 internally works the same way though in step 3 "order_id" is not there, internally it will add "order_id"
+
+If we run the below commands,
+	1. orders_df.select("order_id","order_status").filter("order_id > 10").cache()
+	
+	2. orders_df.select("order_id","order_status").filter("order_id > 10").count() --> it will scan and cache all partitions but size of file is less
+	
+	3. orders_df.select("order_status").filter("order_id > 10").count() --> it won't make use of cached data
+	
+Now 2, 3 works different bcz, step 3 internally becomes as below,
+
+	3. orders_df.select("order_status","order_id").filter("order_id > 10").count()
+	
+
+Cache - InMemory Table Cache | Node Local & Process Local
+=========================================================
+
+Here we ran code,
+Step 1. Boiler plate code
+
+Step 2. orders_schema = 'order_id long, order_date date, customer_id long, orders_status string'
+
+Step 3. orders_df = spark.read \
+			.format("csv") \
+			.schema(orders_schema) \
+			.load("/public/trendytech/orders/orders_1gb.csv")
+			
+Step 4. orders_df.count() #25831125
+
+step 5. orders_df.distinct().count() #68883
+
+we have 1.1 Gb file
+
+9 blocks 
+
+9 partitions
+
+9 tasks
+
+executor 1 - 128 Mb - 25L records - local distinct - 68883
+
+executor 2 - 128 Mb - 25L records - local distinct - 68883
+
+.
+.
+.
+executor 9 - 128 Mb - 25L records - local distinct - 68883
+
+3 stages for step 5  
+-------------------
+In stage 1, 
+
+we have 9 tasks i.e. executor performing local distinct by taking 128 Mb data with 30M records and providing output 1.1Mb data with 68883 records (Locality Level - Node Local)
+
+In stage 2, 
+
+Whenever we invoke a wide transforamtion (High Level API's).
+
+200 partitions are created and it is the default number.
+
+The results from 9 tasks go to 200 partitions...
+
+If there is a record gone to a particular partition next time same record will go to same partition. Hash function should be consistent.
+
+Here,
+we have 200 tasks i.e. executor performing local distinct by taking around 55 Mb data with 30M records and providing output 59 Bytes data with 1 record (Locality Level - Node Local)
+
+***** With any wide transformation, we will have shuffle stage and then we will have 200 partitions. *****
+
+9 tasks -> 200 tasks -> 1 task (Final)
+
+In Stage 3,
+
+Counting the records will take place. Here we got 200 records as each executor has given 1 record
+
+Step 6. cached_df = orders_df.cache()
+
+step 7. cached_df.count() --> everything will be cached, so it takes times and result will be available in "Storage" tab of Spark UI in Deserialized form.
+
+Step 8. cached_df.distinct().count() --> this will take very few seconds bcz of caching and 3 stages (Locality Level - PROCESS LOCAL)
+
+
+**** 
+	 cached_df = orders_df.cache()
+when we run,
+	 orders_df.count() --> caching will work 
+	 
+To check this we can go to "SQL" tab and check "InMemoryTableScan" or not 
+
+and "Jobs" tab click on latest Job ID Description in (Locality Level - PROCESS LOCAL)
+								
+****
+
+
+
+Caching Spark Table
+===================
+
+For this,
+
+Step 1. Run the boiler plate code
+
+Step 2. create orders_schema
+
+Step 3. create orders_df and enfore the schema
+
+		#orders_df = spark.read \	
+		.format("csv") \
+		.schema(orders_schema) \
+		.load("/public/trendytech/orders/orders_1gb.csv")
+		
+Step 4. orders_df.show()
+
+Step 5. create a Database
+
+		#spark.sql("create database itv028185_sparktable_caching")
+		
+Step 6. I want to load this "orders_df" data as a table inside the above created database. To load/write data/results to the disk we use "spark.write". Just like in RDD instead of "collect" we use "saveAsTextFile" to the disk so that driver is not crashing. 
+
+		#orders_df.write.format("csv").saveAsTable("itv028185_sparktable_caching.itv028185_orders")
+	
+With the above command, data will get loaded into the "/user/itv000173/warehouse/itv028185_sparktable_caching.db/itv028185_orders/" path in the form of 9 csv files as 1.1 Gb will have 9 HDFS blocks.
+
+This table "itv028185_sparktable_caching.itv028185_orders" is a Managed Table.
+
+To verify this run,
+		#spark.sql("describe extended itv028185_sparktable_caching.itv028185_orders").show()
+		
+Step 7. Runnig some queries to get the total count
+		#spark.sql("select count(*) from itv028185_sparktable_caching.itv028185_orders").show() ==> taken 5s to return the output
+		
+		Output:-
+		------
+		count(1)
+		25831125
+			
+Here if we go to the "Spark UI" -> "Jobs" -> In "Details" page, you will Input data as "801.9 Mb" this is because while enforcing the schema instead of timestamp we selected date.
+
+Step 8. Lets cache the spark table
+		#spark.sql("cache table itv028185_sparktable_caching.itv028185_orders")   ==> this is not a Lazy operation
+		
+Caching is done and we can check the results in "Storage" tab.
+		
+Step 9. Runnig same query to get the total count
+		#spark.sql("select count(*) from itv028185_sparktable_caching.itv028185_orders").show() ==> taken 0.2s to return the output
+		
+It will take data from "InMemoryTableScan"
+
+Step 10. Run some query
+		 #spark.sql("select distinct("order_status") from itv028185_sparktable_caching.itv028185_orders").show() 
+
+Bcz of this action, multiple jobs are created. But in "SQL" tab only 1 ID gets created for multiple Job ID's.
+
+But overall 209 tasks will gets created by combining all the jobs
+
+Step 11. Run some query
+		 #spark.sql("select count(distinct("order_status")) from itv028185_sparktable_caching.itv028185_orders").show()
+		 
+Bcz of this action, 1 job is created.
+
+But overall 210 tasks will gets created bcz 200 for wide transforamtion (bcz of 200 partitions), 9 for blocks and 1 for final count.
+
+Step 12. How to uncache
+		 #spark.sql("uncache table itv028185_sparktable_caching.itv028185_orders")
+		 
+Step 13. To make cache lazy
+		 #spark.sql("cache lazy table itv028185_sparktable_caching.itv028185_orders")
+		 
+We have 9 files. So 9 partitions.
+
+***** cache is a lazy operation incase of RDD & Dataframe but it is eager in case of Spark Sql *****
+
+Step 14. Try inserting a record into Spark Sql table
+		 #spark.sql("insert into itv028185_sparktable_caching.itv028185_orders values (1111, '2026-10-21', 22222, 'BOOKED')")
+
+with this a new file will gets created in the "/user/itv000173/warehouse/itv028185_sparktable_caching.db/itv028185_orders/" path
+
+Step 15. If we run this query now,
+		 #spark.sql("select count(distinct("order_status")) from itv028185_sparktable_caching.itv028185_orders").show()
+		 
+It will give correct results but it will take time as it needs to add the newly inserted data to cache. (So It will get the data from disk)
+
+From the next query onwards the result will be returned quickly.
+
+How to uncache multiple tables?
+------------------------------
+
+#spark.sql("clear cache") ==> This will take care of removing everything from cache for this particular session.
+
+
+
+Spark Catalog, Managed & External Tables
+========================================
+
+	#spark.sql("clear cache") ==> Removes everything from the cache for this particular session
+	
+	#spark.sql("uncache table <table_name>") ==> Removes cache only for this table
+	
+Another way to remove cache is using in-memory catalog methods
+--------------------------------------------------------------
+	
+	#spark.catalog.currentDatabase() --> returns 'default'
+	
+	#spark.sql("use itv028185_sparktable_caching") --> to use the mentioned Database
+	
+	#spark.catalog.currentDatabase() --> returns 'itv028185_sparktable_caching'
+	
+	#spark.catalog.isCached("itv028185_orders")  --> returns "True" as it is cached.
+	
+	#spark.catalog.cacheTable("itv028185_orders")  --> to cache the Table
+	
+	#spark.catalog.clearCache() ==> this will uncache all the objects from this particular session
+	
+Till now we worked with the Managed Table, let's look at the External Table.
+
+External table already have a file in HDFS, we created the table definition and pointed to the folder path where our file is kept. We just attached schema to it.
+
+	#spark.sql("create database itv028185_caching_demo_db") --> to create new Database
+	
+	#spark.sql("create table itv028185_caching_demo_db.itv028185_orders_ext (order_id long, order_date string, customer_id long, order_status string)
+	using csv location "/user/itv028185/orders'") 
+	
+	#spark.sql("select * from itv028185_caching_demo_db.itv028185_orders_ext").show() --> to return the output on the screen
+	
+	#spark.sql("select * from itv028185_caching_demo_db.itv028185_orders_ext").show() --> returns 1000 records
+	
+	#spark.sql("describe extended itv028185_caching_demo_db.itv028185_orders_ext").show() --> to know table related details
+	
+	#spark.sql("cache table itv028185_caching_demo_db.itv028185_orders_ext")
+	
+	#spark.sql("insert into itv028185_caching_demo_db.itv028185_orders_ext values (1111, '2026-10-21', 22222, 'BOOKED')") --> to insert the records into External table it will create a new file named "part-00000" in this location "/user/itv028185/orders"
+	
+If we run the count command,
+	#spark.sql("select count(*) from itv028185_caching_demo_db.itv028185_orders_ext").show() --> it will scan the disk so it will take time and returns 1001 records
+	
+Initially this folder has 1 file and we have inserted a record so that new file gets added. Now total 2 files...
+
+If someone adds incremental file in to this directory "/user/itv028185/orders" 
+
+	#hadoop fs -put orders_incremental.csv /user/itv028185/orders --> file with 200 records added
+	
+If we run the count(*) from table command you wont see the updated count,	
+
+	#spark.sql("select count(*) from itv028185_caching_demo_db.itv028185_orders_ext").show() --> return same 1001 records
+	
+To get the updated records count,
+
+	#spark.catalog.refreshTable("itv028185_caching_demo_db.itv028185_orders_ext") 
+	
+	---------------------------			OR       ---------------------------
+	
+	#spark.sql("refresh table itv028185_caching_demo_db.itv028185_orders_ext")
+	
+By using the above two commands, we will refresh the table by verifying "what is there in the table" VS "what is there as a part of metadata" and will check whether it is updated or not.
+
+If we run the count(*) from table command you will see the updated count,	
+
+	#spark.sql("select count(*) from itv028185_caching_demo_db.itv028185_orders_ext").show() --> return same 1201 records
+
+*****
+	When we run "insert into tablename" command to insert the data into External table, spark will detect it and it will automatically refresh it on subsequent use.
+	
+	But when we add file in the backend to the folder i.e. using incremental load, spark will not have a track and you have to refresh the table inorder to make it work
+*****
+
+What if I delete the incremental file from the folder path "/user/itv028185/orders"?
+-----------------------------------------------------------------------------------
+
+If we run the count(*) from table command you wont see the updated count,	
+
+	#spark.sql("select count(*) from itv028185_caching_demo_db.itv028185_orders_ext").show() --> return same 1201 records
+	
+Only after running the "refresh table" command and if we run the above query then we can get the updated count
+
+Overview
+--------
+
+When you insert data using insert command then only spark will detect or know that the cache is invalidated and in the next subsequent use it will refresh automatically.
+
+When we add or remove files from backend then spark cannot track it and we need to refresh the table manually.
+
+It depends on your Admin. If Admin provides you auto refresh and all of that, it also depends on spark version, spark flavours. Cloudera might give a way to refresh automatically
+
+Caching Summary
+---------------
+
+RDD		-> caching in Memory (whatever partitions it can cache it will cache other partitions it won't)
+
+Dataframe -> caching in Memory and Disk (First priority is memory by defualt and if it can't cache some partitions then it will cache in Disk)
+
+In case of RDD & Dataframe, caching is Lazy operation. But incase of Spark Sql it is eager by default and we can make it Lazy by adding Lazy Keyword.
+
+When we create dataframe,
+	df.filter(...).cache() --> not a recommended or correct approach
+	
+Instead,
+	cached_df = df.filter(...).cache() --> recommended this way otherwise Analyzed plan wont match then it wont make use of cache and go back to disk.
+	
+	
+	
+Cache Performance
+=================
+
+If we add any new file in the backend to "/user/itv028185/orders" the base table itself won't get updated unless we refresh the table.
+
+backend data --> Dataframe/Spark Sql Table --> cached results
+
+change 		 --> (change using refresh table) --> Change
+
+***** Two levels of refreshing is required inorder to make changes to the cached data. First refresh will refresh Dataframe and second refresh will sync Dataframe with the cached results in this cluster. Unless Admin made the set up differently. Because few things will depend up on which version of spark we are using, are we using Databricks or cloudera and some other factors for that we need to go to internals to understand how cluster is working *****
+
+Admin plays a important role in how they set the cluster and how refreshing works, is it auto-refreshing and all others.	  
+
+Sometimes while trying to run any query without refreshing the table after making changes in the backend, throw error "It is possible the underlying files have been updated. You can explicitly invalidate the cache in Spark by running 'REFRESH TABLE tableName' command in SQL or by recreating Dataset/DataFrame involved.
+
+Can cache results in lower performance?
+--------------------------------------
+Scenario
+--------
+
+Let us consider that we have a table which is having data in parquet format.
+
+Firstly we ran the boiler plate code, and created a "orders_schema" and enfored the schema to create a Dataframe
+
+We read a csv file with 1.1 Gb from HDFS and created a Dataframe using below command,
+	
+	#orders_df = spark.read \	
+				.format("csv") \
+				.schema(orders_schema) \
+				.load("/public/trendytech/orders/orders_1gb.csv")
+		
+Now we want to put the results of Dataframe back to HDFS,
+
+	1. orders_df.write.saveAsTable("itv028185_caching_demo_db.itv028185_orders_ext")
+	
+									----- OR ----- 		
+									
+	2. orders_df.write.format("parquet").saveAsTable("itv028185_caching_demo_db.itv028185_orders1_ext")
+	
+Bcz command 1 by default will works as command 2, bcz parquet format works very will spark. parquet is a optimized format requires less space, so much faster for processing, not human readable and default format in latest version of spark.
+
+To check whether the files are saved or not,
+
+	#hadoop fs -ls /user/itv028185/warehouse/itv028185_caching_demo_db/itv028185_orders1_ext
+	
+	You can see 9 parquet files got created bcz 1.1 Gb is 9 blocks. And "parquet" format data will be more compressed compared to "csv" format files.
+	
+	ex: Same 802 Mb csv file size will be 111.4 Mb parquet file size bcz of snappy compression.
+
+2 Kinds of file formats
+-----------------------
+
+1. Row based 	- csv, avro
+
+This is how data is stored in row based format
+
+1, 2013-07-25 00:00:00.0, 11599, CLOSED | 2, 2013-07-26 00:00:00.0, 22131, PENDING_PAYMENT | 3, 2013-07-27 00:00:00.0, 20912, COMPLETE |
+
+when you run 
+
+2. Column based	- parquet, orc
