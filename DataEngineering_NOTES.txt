@@ -4942,7 +4942,7 @@ When we talk about caching
 --------------------------
 In case of Disk - It is always Serialized
 
-In case of memory - It can Serialized or Deserialized
+In case of memory - It can be Serialized or Deserialized
 
 when we run the below command,
 	#cached_df.count() --> return 9 "cached partitions" and 100% "Fraction Cached"
@@ -5133,7 +5133,7 @@ executor 9 - 128 Mb - 25L records - local distinct - 68883
 -------------------
 In stage 1, 
 
-we have 9 tasks i.e. executor performing local distinct by taking 128 Mb data with 30M records and providing output 1.1Mb data with 68883 records (Locality Level - Node Local)
+we have 9 tasks i.e. executor performing local distinct by taking 128 Mb data with 30M records and providing output 1.1Mb data with 68883 records (Locality Level - NODE_LOCAL)
 
 In stage 2, 
 
@@ -5146,7 +5146,7 @@ The results from 9 tasks go to 200 partitions...
 If there is a record gone to a particular partition next time same record will go to same partition. Hash function should be consistent.
 
 Here,
-we have 200 tasks i.e. executor performing local distinct by taking around 55 Mb data with 30M records and providing output 59 Bytes data with 1 record (Locality Level - Node Local)
+we have 200 tasks i.e. executor performing local distinct by taking around 55 Mb data with 30M records and providing output 59 Bytes data with 1 record (Locality Level - NODE_LOCAL)
 
 ***** With any wide transformation, we will have shuffle stage and then we will have 200 partitions. *****
 
@@ -5160,7 +5160,7 @@ Step 6. cached_df = orders_df.cache()
 
 step 7. cached_df.count() --> everything will be cached, so it takes times and result will be available in "Storage" tab of Spark UI in Deserialized form.
 
-Step 8. cached_df.distinct().count() --> this will take very few seconds bcz of caching and 3 stages (Locality Level - PROCESS LOCAL)
+Step 8. cached_df.distinct().count() --> this will take very few seconds bcz of caching and 3 stages (Locality Level - PROCESS_LOCAL)
 
 
 **** 
@@ -5170,7 +5170,7 @@ when we run,
 	 
 To check this we can go to "SQL" tab and check "InMemoryTableScan" or not 
 
-and "Jobs" tab click on latest Job ID Description in (Locality Level - PROCESS LOCAL)
+and "Jobs" tab click on latest Job ID Description in (Locality Level - PROCESS_LOCAL)
 								
 ****
 
@@ -5360,6 +5360,8 @@ Overview
 
 When you insert data using insert command then only spark will detect or know that the cache is invalidated and in the next subsequent use it will refresh automatically.
 
+After running the insert query the cache gets invalidated, whenever we perform an action first time after insert query it will refresh the cache.
+
 When we add or remove files from backend then spark cannot track it and we need to refresh the table manually.
 
 It depends on your Admin. If Admin provides you auto refresh and all of that, it also depends on spark version, spark flavours. Cloudera might give a way to refresh automatically
@@ -5378,6 +5380,8 @@ When we create dataframe,
 	
 Instead,
 	cached_df = df.filter(...).cache() --> recommended this way otherwise Analyzed plan wont match then it wont make use of cache and go back to disk.
+
+***** By assigning the cached DataFrame to a new DataFrame, you ensure that the cached data is preserved and accessible for subsequent operations. This approach guarantees consistent behavior because the new DataFrame will have the cached data available, and we do not have to really check about analysed plan. *****
 	
 	
 	
@@ -5390,7 +5394,7 @@ backend data --> Dataframe/Spark Sql Table --> cached results
 
 change 		 --> (change using refresh table) --> Change
 
-***** Two levels of refreshing is required inorder to make changes to the cached data. First refresh will refresh Dataframe and second refresh will sync Dataframe with the cached results in this cluster. Unless Admin made the set up differently. Because few things will depend up on which version of spark we are using, are we using Databricks or cloudera and some other factors for that we need to go to internals to understand how cluster is working *****
+***** Two levels of refreshing is required in order to make changes to the cached data. First refresh will refresh Dataframe and second refresh will sync Dataframe with the cached results in this cluster. We need this two level Unless Admin made the set up differently. Because few things will depend up on which version of spark we are using, are we using Databricks or cloudera and some other factors for that we need to go to internals to understand how cluster is working *****
 
 Admin plays a important role in how they set the cluster and how refreshing works, is it auto-refreshing and all others.	  
 
@@ -5422,6 +5426,8 @@ Now we want to put the results of Dataframe back to HDFS,
 	
 Bcz command 1 by default will works as command 2, bcz parquet format works very will spark. parquet is a optimized format requires less space, so much faster for processing, not human readable and default format in latest version of spark.
 
+Parquet holds metadata along with data i.e. how many records, data types of columns. So it will be quick when we run count(*) kind of commands. 
+
 To check whether the files are saved or not,
 
 	#hadoop fs -ls /user/itv028185/warehouse/itv028185_caching_demo_db/itv028185_orders1_ext
@@ -5432,13 +5438,109 @@ To check whether the files are saved or not,
 
 2 Kinds of file formats
 -----------------------
+Actual Data:-
+-----------
+1, 2013-07-25 00:00:00.0, 11599, CLOSED
+2, 2013-07-26 00:00:00.0, 22131, PENDING_PAYMENT
+3, 2013-07-27 00:00:00.0, 20912, COMPLETE
+4, 2013-07-28 00:00:00.0, 29810, CLOSED
+5, 2013-07-28 00:00:00.0, 19873, COMPLETE
 
-1. Row based 	- csv, avro
+1. Row based - csv, avro   ==> When you want all the column values from the table
 
 This is how data is stored in row based format
 
-1, 2013-07-25 00:00:00.0, 11599, CLOSED | 2, 2013-07-26 00:00:00.0, 22131, PENDING_PAYMENT | 3, 2013-07-27 00:00:00.0, 20912, COMPLETE |
+1, 2013-07-25 00:00:00.0, 11599, CLOSED | 2, 2013-07-26 00:00:00.0, 22131, PENDING_PAYMENT | 3, 2013-07-27 00:00:00.0, 20912, COMPLETE | 4, 2013-07-28 00:00:00.0, 29810, CLOSED | 5, 2013-07-28 00:00:00.0, 19873, COMPLETE
 
-when you run 
+when you run the below command,
 
-2. Column based	- parquet, orc
+	select order_id, customer_id from orders
+
+It has to read the entire rows in order to get the order_id and customer_id columns bcz of row based storage. We cannot pick the values of required columns directly.
+
+2. Column based	- parquet, orc (works well with HIVE) ==> When you want only subset of the column values from the table
+
+This is how data is stored in column based format i.e. all values of one column followed by another column 
+
+1 2 3 4 5 | 2013-07-25 00:00:00.0 2013-07-26 00:00:00.0 2013-07-27 00:00:00.0 2013-07-28 00:00:00.0 2013-07-28 00:00:00.0 | 11599 22131 20912 29810 19873 | CLOSED PENDING_PAYMENT COMPLETE CLOSED COMPLETE
+
+when you run the below command,
+
+	select order_id, customer_id from orders
+
+It will give the values of required columns only no need to scan the entire rows. Bcz of this it is optimized.
+
+After saving table in parquet format,
+when we run the count command for this table output will seamless without any caching that is bcz of parquet as it will check the metadata which is stored in the file along with data. Amount of data it will scan also will very less (i.e. 17 Kb metadata) (Locality Level - NODE_LOCAL)
+	#spark.sql("select count(*) from itv028185_caching_demo_db.itv028185_orders1_ext").show()
+
+But when we run the count command for another table where data is stored in csv format it will take time (i.e. scanning entire data 801.9 Mb)
+	#spark.sql("select count(*) from itv028185_caching_demo_db.itv028185_orders_ext").show()
+
+Now let us cache the table where data is stored in parquet format,
+	#spark.sql("cache table itv028185_caching_demo_db.itv028185_orders1_ext")
+
+Cached data will be available in "Storage" tab of Spark UI results like 3 - "Cached Partitions"  100% Fraction - Cached	 Size in Memory - 269.4 Mb
+
+When we run the same count command on the cached table it will scan the cached data (269.4 Mb) and takes time bcz it cannot use the optimization of parquet where it can check the metadata. (Locality Level - PROCESS_LOCAL)
+	#spark.sql("select count(*) from itv028185_caching_demo_db.itv028185_orders_ext").show()
+
+
+Understanding Persist
+=====================
+Caching is always in memory
+Persist is to cache data and it will give you more options like persist on disk, persist on memory, persist on memory and disk.
+
+Incase of cache - Dataframe and Spark Tables - Default caching level - Memory & Disk (i.e. whatever fits in memory it will put to memory otherwise it will put to disk). Here we cannot change the storage level.
+
+Incase of persist - Dataframe and Spark Tables - Default caching level - Memory & Disk (i.e. whatever fits in memory it will put to memory otherwise it will put to disk). Here by default it works like cache but we can change the storage level using optional parameter.
+
+Let us run boiler plate code, create orders_schema and enforce it to create dataframe "orders_df"
+After that to use persist we need to import "StorageLevel" class
+	#from pyspark.storagelevel import StorageLevel
+
+Persist StorageLevel takes 5 parameters:-
+1. To store it in Disk or not (Disk - Local disk of that worker node beyond HDFS. HDFS is contribution to cluster)
+2. To store it in Memory or not (Memory - Memory inside the executors)
+3. To store it in off-heap or not (off-heap memory - It is a raw memory which is not a part of any container)
+4. Data is in Serialized or Deserialized format (Disk by default - Deserialized)
+5. Number of replicas of cache
+
+  #orders_df.persist(StorageLevel (True,False,False,False,1)) --> Store my data in Disk, do not keep it in memory, off-heap and serialized format with 1 replica
+  #orders_df.persist(StorageLevel (True,True,False,True,1)) --> Store my data in Memory & then disk, do not keep in off-heap and Deserialized format with 1 replica
+
+Memory - Deserialized or Serialized
+Disk - Only Serialized
+
+when we run the command,
+	#orders_df.persist(StorageLevel (True,False,False,False,1))  --> by default it is Lazy but on this cluster it works like show and cache the 1st partition and Storage Level - Disk Serialized
+	useDisk = True 
+	useMemory = False
+	useOffHeap = False
+	deserialized = False → Serialized
+	replication = 1
+
+But when we run the command and assign it to somether,
+	#persist_df = orders_df.persist(StorageLevel (True,False,False,False,1)) --> nothing would have cahed
+
+If we run,
+	#orders_df.count() --> with this all the partitions / entire data will be cached
+
+To unpersist the data,
+	#orders_df.unpersist() --> to delete the cached data and it will return 20 records just like show command
+
+Now if we run the below command,
+	#orders_df.persist(StorageLevel (True,True,False,True,2)) --> Storage Level - Memory Serialized 2x Replicated (Default is Memory Deserialized)
+
+After running the below
+	#orders_df.count() --> with this entire data / all the partitions will be cached
+
+***** Storage Level - Memory Serialized 2x Replicated --> This means each partition will be held by 2 executors i.e. each block is cached by 2 executors but it does not mean that same executor caches the block 2 times. So the Size in Memory is 2 times of actual *****
+
+Other way to persist the data
+-----------------------------
+disk only
+	#orders_df.persist(StorageLevel.DISK_ONLY)   =  #orders_df.persist(StorageLevel (True,False,False,False,1))
+
+disk only 2 
+	#orders_df.persist(StorageLevel.DISK_ONLY_2)   =  #orders_df.persist(StorageLevel (True,False,False,False,2))
