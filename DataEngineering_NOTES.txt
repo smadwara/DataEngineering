@@ -3218,24 +3218,15 @@ Persist will give you more options like persist on disk, persist on memory, pers
 Here is boiler plate code to create Spark Session-
 
 from pyspark.sql import SparkSession
-
 import getpass
-
 username = getpass.getuser()
-
 spark = SparkSession. \
-
-builder. \
-
-config('spark.ui.port','0'). \
-
-config("spark.sql.warehouse.dir", f"/user/itv000173/warehouse"). \
-
-enableHiveSupport(). \
-
-master('yarn'). \
-
-getOrCreate()
+        builder. \
+        config('spark.ui.port','0'). \
+        config("spark.sql.warehouse.dir", f"/user/{username}/warehouse"). \
+        enableHiveSupport(). \
+        master('yarn'). \
+        getOrCreate()
 
 -------------------------------------------------------------------------------------------------------
 
@@ -3376,7 +3367,7 @@ We call the below way of writing code as "Builder Pattern"
 
    1. standard dataframe reader API
    
-   orders_df = spark.read \							==> this is lazy just like RDD.
+   orders_df = spark.read \								==> this is lazy just like RDD.
    .format("csv") \ ==>(csv, json, avro, parquet)
    .option("header","true") \ 							==> consider first line as header
    .option("inferSchema","true") \ 						==> I am not providing the metadata/schema please infer it
@@ -4500,12 +4491,12 @@ Step 4.
 	output:-
 	------
 	root
-    |-- _c1 : integer (nullable = true)
-    |-- _c2 : integer (nullable = true)   
+    |-- _c0 : integer (nullable = true)
+    |-- _c1 : integer (nullable = true)   
+    |-- _c2 : integer (nullable = true)
     |-- _c3 : integer (nullable = true)
-    |-- _c4 : integer (nullable = true)
-	|-- _c5 : double (nullable = true)
-	|-- _c6	: double (nullable = true)
+	|-- _c4 : double (nullable = true)
+	|-- _c5	: double (nullable = true)
 	
 Step 5. To change the defualt column names with required column names
 	#refined_df = raw_df.toDF("order_item_id","order_id","product_id","quantity","subtotal","product_price")
@@ -4694,12 +4685,12 @@ getOrCreate() --> get the spark session if available else create it. So that the
 
 
 spark = sparkSession. \
-builder. \
-appName("Sandeep Spark Demo"). \
-config("spark.sql.warehouse.dir","/user/itv028185/warehouse"). \
-enableHiveSupport(). \
-master("yarn"). \
-getOrCreate() 
+		builder. \
+		appName("Sandeep Spark Demo"). \
+		config("spark.sql.warehouse.dir","/user/itv028185/warehouse"). \
+		enableHiveSupport(). \
+		master("yarn"). \
+		getOrCreate() 
 
 
 What is the need of spark session when we are having spark context?
@@ -4762,12 +4753,12 @@ Driver goes down application will go down.
 If we run the below boiler plate code i.e. instead of using yarn we use local,
 
 spark = sparkSession. \
-builder. \
-appName("Sandeep Spark Demo"). \
-config("spark.sql.warehouse.dir","/user/itv028185/warehouse"). \
-enableHiveSupport(). \
-master("local[*]"). \
-getOrCreate() 
+		builder. \
+		appName("Sandeep Spark Demo"). \
+		config("spark.sql.warehouse.dir","/user/itv028185/warehouse"). \
+		enableHiveSupport(). \
+		master("local[*]"). \
+		getOrCreate() 
 
 then Application ID will look like 'local-.....' in the history server.
 
