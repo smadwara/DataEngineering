@@ -1,6 +1,9 @@
 Data Engineering 
 ----------------
 
+Week-1(Big Data- The Big Picture)
+======
+
 The Ultimate Big Data Program (Cloud Focused)
 =============================================
 
@@ -8,7 +11,7 @@ Any data which is characterised by 5 V's is considered as Big Data
 
 Volume - Huge amount of data that cannot be handled by Traditional systems (Peta Bytes)
 
-Variety - format of data i.e..e Structured, Semi-Structured, Unstructured 
+Variety - format of data i.e. Structured, Semi-Structured, Unstructured 
 
 Structured
 ----------
@@ -208,7 +211,7 @@ On-premise vs private Cloud
 ---------------------------
 
 On-premise     ==> we need to buy our own infrastructure and set everything else yourself in your company
-private cloud  ==> Similar to on-premise with in our organization, we need to build everything from scartch.
+private cloud  ==> Similar to on-premise with in our organization, we need to build everything from scratch.
 
 Only difference is that, in case of private we have an UI by the click of a button we can add resources, clusters will be up and running on the fly as per user request by their organization people. 
 
@@ -255,7 +258,7 @@ python / Scala / Java / R (mostly for machine learning experts and data science)
 
 python is easy to learn and provides good support for data science and machine learning
 
-spark with python - pyspark
+spark with python - PySpark
 
 spark is written in Scala, Scala is hard to learn.
 
@@ -579,7 +582,7 @@ Data Engineers acts as bridge / glue between operational/transactional data stor
 
 
 
-Week-2
+Week-2(Distributed Storage and Data Lake)
 ======
 
 HDFS
@@ -1267,7 +1270,7 @@ System/framework will do shuffle and sort.
 
 
 
-Week-3
+Week-3(Distributed Processing Fundamentals)
 ======
 
 MapReduce
@@ -1804,7 +1807,7 @@ If the file contains below Data
 Input
 ===================================
 Sandeep is an Expert in DataEngineering
-He is working in Deloitte as as Senior Data Engineer with 25LPA for his experience
+He is working in Deloitte as a Senior Data Engineer with 25LPA for his experience
 ===================================
 
 Expected output
@@ -2194,7 +2197,7 @@ rdd4.savAsTextFile("/user/itv028185/data/newoutput") --> to save the output in t
 
 
 
-Week-4
+Week-4(Apache Spark Core APIs)
 ======
 
 Python Basics
@@ -3247,7 +3250,7 @@ rdd1 = spark.sparkContext.textFile("/user/{username}/data/inputfile.txt")
 
 
 
-Week-5
+Week-5(Spark APIs - Dataframes & Spark SQL)
 ======
 
 Higher Level API's in Apache Spark (Dataframes & Spark SQL)
@@ -3884,7 +3887,9 @@ Off-heap Memory (RAW memory)
 --> In off-heap memory we have to do our own Memory Management programmatically which is a bit difficult task.
 
 
-Week-6
+
+
+Week-6(Spark Dataframe Transformations)
 ======
 
 Spark Transformations
@@ -3931,7 +3936,7 @@ Managed vs External table
 
 we saw some transformations and actions
 
-Utlitiy functions
+Utility functions
 
 Inside each worker node we can have multiple executors
 
@@ -3947,7 +3952,7 @@ Is inferring the schema a right choice?
 
 --> for example a date column might be inferred as string
 
---> Inferring will burden the system as spark has to scan the entire data. It will end up time consuming and non-perfoming.
+--> Inferring will burden the system as spark has to scan the entire data. It will end up time consuming and non-performing.
 
 --> We should be enforcing the schema & should not infer it.
 
@@ -3955,7 +3960,7 @@ Is inferring the schema a right choice?
 Schema Enforcement
 ==================
 
-Inferring schema will be a problem bcz it will be a burden on system as spark has to scan entire data and end up time consuming and non-perfoming, may infer wrong schema.
+Inferring schema will be a problem bcz it will be a burden on system as spark has to scan entire data and end up time consuming and non-performing, may infer wrong schema.
 
 Inferring schema may be good for small data files but not for huge data (10Gb) files as it may end up taking hours also.
 
@@ -4044,7 +4049,7 @@ Another way to handle date values:-
 
 Safe way is to load date as a string and then later convert it to relevant form.
 
-Initially load the date column as a string and then later apply a transforamtion and convert "string" datatype to "date"
+Initially load the date column as a string and then later apply a transformation and convert "string" datatype to "date"
 
    #orders_schema = 'order_id long, order_date string, customer_id long, orders_status string'
 	
@@ -4153,7 +4158,7 @@ we will learn, why do we get "NULL" values and how to resolve this "NULL" values
    --> Useful when you don't want to process the data with issues. 
 
    
-=> premissive (default) (If malformed records are found, then it will make those records as NULL without affecting other results)
+=> permissive (default) (If malformed records are found, then it will make those records as NULL without affecting other results)
    
    If spark is unable to parse the data due to data type mismatch then it will make it as "NULL" without impacting the other results
    
@@ -4619,7 +4624,7 @@ myList = [
 	
 Distinct ==> when we want to remove duplicate rows across all the columns in a table but not on subset of columns 
 
-For example: A dataframe having 20 columns, you want to remove all the indentical rows in table.
+For example: A dataframe having 20 columns, you want to remove all the identical rows in table.
 
 dropDuplicates() ==> when we want to remove duplicates from selected columns
 
@@ -4700,7 +4705,7 @@ What is the need of spark session when we are having spark context?
 
 -> you will get two isolated environments within the same application in the same session itself.
 
--> when we create 2 seperate spark contexts within the same application there are some issues if 1 of them crashes another 1 also will get crashed.
+-> when we create 2 separate spark contexts within the same application there are some issues if 1 of them crashes another 1 also will get crashed.
 
 -> By using spark session we can avoid those issues.
 
@@ -4739,7 +4744,7 @@ Driver goes down application will go down.
 2. Cluster Mode (Production Ready Purpose) (Non-Interactive Mode)
    ------------
 
--> In which driver runs at in the cluster itself. Cluster means drvier wille be a part of one of the executors. i.e. driver will be running on the worker node in one of the executor.
+-> In which driver runs at in the cluster itself. Cluster means driver will be a part of one of the executors. i.e. driver will be running on the worker node in one of the executor.
 
 -> We build code, run it and package it and then this package should be running across the cluster. We can logout from the system and code will be running and we can see the results later but not upfront.  
 
@@ -4766,15 +4771,15 @@ In this case driver itself will act as executor bcz it is single machine. Parall
 
 Its not a good practise to set master in Gateway Node.
 
-In general (production scenarios), we have seperate clusters for Dev, Stage, Prod.
+In general (production scenarios), we have separate clusters for Dev, Stage, Prod.
 
 
 
-Week-7
+Week-7(Apache Spark Caching In-Depth)
 ======
 
-Understading cache & persist
-============================
+Understanding cache & persist
+=============================
 
 ***** Cache improves performance and to save computational cost by redoing the same computation i.e. reading a file from the disk. *****
 
@@ -4803,7 +4808,7 @@ By using the below code, we use the cache to avoid reading the orders file from 
 
 	#df1 = read an orders file from the Disk
 	
-	#df1.cache() 					==> Useful when we want to re-use the "df1" dataframe results mulitple times
+	#df1.cache() 					==> Useful when we want to re-use the "df1" dataframe results multiple times
 	
 	#df2 = df1.transformation1
 	
@@ -4817,7 +4822,7 @@ Cache
 -----
 1. We should cache dataframe which has to be reused multiple times.
 
-2. we should not cache a very large dataframe becuase results in performance issues.
+2. we should not cache a very large dataframe because results in performance issues.
 
 3. Cache is lazy like transformations. It wont be executed immediately.
 
@@ -4828,7 +4833,7 @@ We will be bringing things to memory and disk.
 
 RDD --> by default it will be cached in memory
 
-Dataframes --> by default it will be cached in memory and disk (bascilly it will try to cache in memory and whatever cannont fit in memory will be put to disk) (This stroage level is fixed)
+Dataframes --> by default it will be cached in memory and disk (basically it will try to cache in memory and whatever cannot fit in memory will be put to disk) (This storage level is fixed)
 
 Let us consider that we have 10 Gb file in HDFS
 
@@ -4840,7 +4845,7 @@ Only 50 partitions it is able to cache in memory and remaining 30 partitions wil
 
 ***** 1 complete partition will be either on disk or in-memory *****
 
-We need to think why do we need to cache on Disk as the file itself is in the HDFS (DisK)
+We need to think why do we need to cache on Disk as the file itself is in the HDFS (Disk)
 -----------------------------------------------------------------------------------------
 
 Disk has 2 parts...
@@ -4853,17 +4858,17 @@ So whenever we perform the caching of Dataframe firstly it will get cached in me
 Persist
 -------
 
-Persist is more flexibile than cache.
+Persist is more flexible than cache.
 
-Default caching will be on memory and disk. This stroage level can be changed by setting an optional parameter.
+Default caching will be on memory and disk. This storage level can be changed by setting an optional parameter.
 
 ***** Whenever we perform caching, results will be seen in storage tab in Spark UI. We can check the results when application is running. But on termination of application we check in the History server but we can not see the cached results *****
 
 We use pyspark2 instead of pyspark3 to work/learn on caching bcz pyspark3 cluster is unstable.
 
 
-Cache practicals
-================
+Cache practical's
+=================
 
 After running the boiler plate code,
 
@@ -4875,7 +4880,7 @@ so that we will have 9 blocks in HDFS,
 
 How count works is?
 
-9 blocks = 9 partitions in Dataframe = 9 executors will be working in parellel or one-by-one (i.e. 1 executor may execute 2 tasks also) = 9 tasks
+9 blocks = 9 partitions in Dataframe = 9 executors will be working in parallel or one-by-one (i.e. 1 executor may execute 2 tasks also) = 9 tasks
 
 Per each task one executor will be taking a partition and counting/calculating the number of records.
 
@@ -4897,9 +4902,9 @@ If we open the "http://rm.itversity.com/cluster" and go to storage to check the 
 
 This is because spark is smart that is why we get this output. It means when we run "show" action, it will show first 20 records then we can cache the 1 partition only right why do need to cache all the 9 partitions.
 
-	#cached_df.head() --> returns the same output as the 1st parition is already cached (1 "cached partitions" and 11% "Fraction Cached"
+	#cached_df.head() --> returns the same output as the 1st partition is already cached (1 "cached partitions" and 11% "Fraction Cached"
 	
-	#cached_df.tail(10) --> returns 2 "cached partitions" and 22% "Fraction Cached" bcz now bcz of tail it should cache the 9th partition
+	#cached_df.tail(10) --> returns 2 "cached partitions" and 22% "Fraction Cached" bcz of tail it should cache the 9th partition
 	
 ***** spark will cache only the partitions that are required *****
 
@@ -4911,7 +4916,7 @@ We can see Data Distribution on _ Executors
 
 _ partitions
 
-			*****/
+*****/
 
 ***** Cached data of block will be compressed to 33 Mb but when it was on the disk it was 128 Mb and this is in Memory *****
 
@@ -4919,7 +4924,7 @@ Storage Level is Memory Deserialized 1x Replicated --> Whatever can be fit in me
 
 Serialized 
 -----------
-=> Kept in binary format (which will be more optimized interms of space, will take less space to store)
+=> Kept in binary format (which will be more optimized in terms of space, will take less space to store)
 
 => It takes extra CPU computation cycles to change from binary format to normal format (Deserialized)
 
@@ -4965,9 +4970,9 @@ we started with 1 driver and 2 executors and once we performed caching then othe
 
 Min - 2 executors 
 
-Max - 10 execuctors
+Max - 10 executors
 
-To check this configuration we need to go to "Evironment" tab 
+To check this configuration we need to go to "Environment" tab 
 
 spark.dynamicAllocation.enabled  	  	- true
 spark.dynamicAllocation.MaxExecutors    - 10
@@ -4991,9 +4996,9 @@ When we run the below command,
 	and in "Storage" tab it shows 1 "cached partitions" and 11% "Fraction Cached"
 	
 After this if I run the command,
-	#filtered_results = orders_df.filter("customer_id == 100000") --> wont happen anything bcz it is a transforamtion
+	#filtered_results = orders_df.filter("customer_id == 100000") --> wont happen anything bcz it is a transformation
 	
-	#filtered_results.show() --> then it will scan the entire orders data bcz it needs to perfrom the above filter transformation as a part of Execution plan so that cachcing of enitre data will happen simultaneously each block by block.	
+	#filtered_results.show() --> then it will scan the entire orders data bcz it needs to perform the above filter transformation as a part of Execution plan so that caching of entire data will happen simultaneously each block by block.	
 	
 	We can check the "Storage" tab then you will find 9 "cached partitions" and 100% "Fraction Cached"
 	
@@ -5006,13 +5011,13 @@ My doubt is that in "Storage" Tab of "Spark UI" it should return 9 "cached parti
 
 But bcz of ".cache()" which is just like ".show()" it will scan only the 1st partition" and "Storage" Tab of "Spark UI" it will return 1 "cached partitions" and 11% "Fraction Cached" and cached memory of the partition size will be 343 Kb, previously it was 33 Mb
 
-If i run any action followd by above command then it scan and cache the entire data so that it returns 9 "cached partitions" and 100% "Fraction Cached".
+If i run any action followed by above command then it scan and cache the entire data so that it returns 9 "cached partitions" and 100% "Fraction Cached".
 ----------------
 
 If we would have run the below command,
 	#cached_result = orders_df.select("order_id","order_status").filter("order_status = CLOSED").cache() --> then it would have not cached anything bcz it is assigned to a dataframe
 	
-Interms of scanning the data both
+In terms of scanning the data both
 	#orders_df.cache()		and 	#orders_df.show()  ==> will scan 1 partition only bcz they will return top 10 rows
 	
 Scenario:-
@@ -5027,7 +5032,7 @@ and if we run almost same command by modifying few things,
 
 During optimization filter has given more priority by spark, which means moving the filter ahead (immediately after reading the file) so that data gets limited in the Initial Stages (Predicate pushdown)
 
-In Details section of "Sql" tab you can find 4 things,
+In Details section of "SQL" tab you can find 4 things,
 	- Parsed Logical plan    => initially written logic
 	- Analyzed Logical plan  
 	- Optimized Logical plan
@@ -5128,7 +5133,7 @@ we have 9 tasks i.e. executor performing local distinct by taking 128 Mb data wi
 
 In stage 2, 
 
-Whenever we invoke a wide transforamtion (High Level API's).
+Whenever we invoke a wide transformation (High Level API's).
 
 200 partitions are created and it is the default number.
 
@@ -5176,7 +5181,7 @@ Step 1. Run the boiler plate code
 
 Step 2. create orders_schema
 
-Step 3. create orders_df and enfore the schema
+Step 3. create orders_df and enforce the schema
 
 		#orders_df = spark.read \	
 		.format("csv") \
@@ -5200,7 +5205,7 @@ This table "itv028185_sparktable_caching.itv028185_orders" is a Managed Table.
 To verify this run,
 		#spark.sql("describe extended itv028185_sparktable_caching.itv028185_orders").show()
 		
-Step 7. Runnig some queries to get the total count
+Step 7. Running some queries to get the total count
 		#spark.sql("select count(*) from itv028185_sparktable_caching.itv028185_orders").show() ==> taken 5s to return the output
 		
 		Output:-
@@ -5215,7 +5220,7 @@ Step 8. Lets cache the spark table
 		
 Caching is done and we can check the results in "Storage" tab.
 		
-Step 9. Runnig same query to get the total count
+Step 9. Running same query to get the total count
 		#spark.sql("select count(*) from itv028185_sparktable_caching.itv028185_orders").show() ==> taken 0.2s to return the output
 		
 It will take data from "InMemoryTableScan"
@@ -5232,7 +5237,7 @@ Step 11. Run some query
 		 
 Bcz of this action, 1 job is created.
 
-But overall 210 tasks will gets created bcz 200 for wide transforamtion (bcz of 200 partitions), 9 for blocks and 1 for final count.
+But overall 210 tasks will gets created bcz 200 for wide transformation (bcz of 200 partitions), 9 for blocks and 1 for final count.
 
 Step 12. How to uncache
 		 #spark.sql("uncache table itv028185_sparktable_caching.itv028185_orders")
@@ -5334,7 +5339,7 @@ If we run the count(*) from table command you will see the updated count,
 *****
 	When we run "insert into tablename" command to insert the data into External table, spark will detect it and it will automatically refresh it on subsequent use.
 	
-	But when we add file in the backend to the folder i.e. using incremental load, spark will not have a track and you have to refresh the table inorder to make it work
+	But when we add file in the backend to the folder i.e. using incremental load, spark will not have a track and you have to refresh the table in order to make it work
 *****
 
 What if I delete the incremental file from the folder path "/user/itv028185/orders"?
@@ -5362,7 +5367,7 @@ Caching Summary
 
 RDD		-> caching in Memory (whatever partitions it can cache it will cache other partitions it won't)
 
-Dataframe -> caching in Memory and Disk (First priority is memory by defualt and if it can't cache some partitions then it will cache in Disk)
+Dataframe -> caching in Memory and Disk (First priority is memory by default and if it can't cache some partitions then it will cache in Disk)
 
 In case of RDD & Dataframe, caching is Lazy operation. But incase of Spark Sql it is eager by default and we can make it Lazy by adding Lazy Keyword.
 
@@ -5398,7 +5403,7 @@ Scenario
 
 Let us consider that we have a table which is having data in parquet format.
 
-Firstly we ran the boiler plate code, and created a "orders_schema" and enfored the schema to create a Dataframe
+Firstly we ran the boiler plate code, and created a "orders_schema" and enforced the schema to create a Dataframe
 
 We read a csv file with 1.1 Gb from HDFS and created a Dataframe using below command,
 	
@@ -5535,3 +5540,606 @@ disk only
 
 disk only 2 
 	#orders_df.persist(StorageLevel.DISK_ONLY_2)   =  #orders_df.persist(StorageLevel (True,False,False,False,2))
+
+
+
+Week-8(Apache Spark Architecture)
+======
+
+Spark on YARN Architecture
+==========================
+
+Spark Architecture is similar to YARN Architecture. So we will learn YARN Architecture.
+
+Spark on YARN
+
+Hadoop - 3 core components
+
+HDFS	    - Master (Namenode) (holds metadata), Worker (Datanode) (holds actual data)   (Distributed Storage)
+MapReduce   - Distributed Computation/Processing
+YARN	    - Master (Resource Manager), Worker/Slave (Node Mananger)
+
+As per our scenario, we have 2 Gateway nodes, 1 Master and 3 Slaves/Workers.
+
+On Master, in terms of HDFS/for storage, Namenode is the service running
+On Workers, in terms of HDFS/for storage, Datanode is the service running
+
+Just like above there are some services running on Master and Workers related to YARN
+
+On Master, the services related to YARN for Managing Resources, Resource Manager is running.
+On Workers, the services related to YARN for Managing Resources, Node Manager is running.
+
+Scenario:-
+--------
+
+Being a Developer, whenever you invoke a hadoop command/job from the client machine (i.e. Gateway node)
+
+#hadoop jar <jar_name> <input_file_path> <output_directory>
+
+#hadoop jar mapreduce_prog.jar /user/itv028185/data/input/inputfile.txt /user/itv028185/data/output
+
+What will happen is?
+
+The request goes to Resource Manager in the Master Node for CPU and Memory. (i.e. Resource Manager understands that there is an application to be run)
+
+Resource Manager will co-ordinate with one of the Node Managers on the worker node and it will create a container.
+
+Let us consider that a container is created on Worker Node 3. Inside that container it will start a service called ApplicationMaster.
+
+This ApplicatonMaster will act as local manager to manage this application. (Actually ApplicationMaster is created bcz Resource Manager will gets overburdened with lot of requests getting from multiple developers) 
+
+***** 1 ApplicationMaster per Application which will manage the completely *****
+
+Now this container that got created on Worker Node 3 with ApplicationMaster, will not be sufficient to execute the entire job invoked by Developer. It will need other containers. This container is just created to create ApplicationMaster which will manage the application.
+
+Now this ApplicationMaster is responsible to get more resources for the application. 
+
+Firstly the ApplicationMaster will interact with the Namenode to understand where the blocks of file is kept in HDFS, and then it will connect back to/request the Resource Manager for more resources i.e. containers here based on Namenode information.
+
+I need 3 containers/executors, 
+
+2 container of size 1 Gb RAM and 1 CORE CPU and it might ask these containers to be created on worker node 1
+1 container of size 1 Gb RAM and 1 CORE CPU and it might ask this container to be created on worker node 2
+
+Q) Why ApplicationMaster has to mention that on which worker node, containers has to be created?
+
+Let us consider that we have 1 Master node and 5 Worker node cluster, and 300 Mb file in HDFS so there will be 3 blocks.
+
+Block 1 - WN1
+Block 2 - WN3
+Block 4 - WN4
+
+and think that our container with ApplicationMaster got created on WN5. It will connect with Resource Manager and request for more resources and it should feel that we need to work on the concept of "Data Locality". So it will request for containers on WN1, WN3 and WN4.
+
+*****  YARN and HDFS services interact with each other so that we get the containers on Worker nodes where blocks of files is kept to follow the concept of "Data Locality"  *****
+
+Once we get the containers on WN1, WN3 and WN4 as per our request from Resource Manager. Now, the role of Node Manager will come in.
+
+Node Manager which is the local manager at each worker node, will manage all the containers running on worker nodes and make sure that the work is done as expected.
+
+Uber Mode --> It is a scenario in which the job is so small that it can run in the container in which ApplicationMaster is running and it does not need other containers.
+
+***** In case of Spark Architecture, think of "ApplicationMaster" as a "Driver". *****
+
+Driver fails job/application fails as it is heart of Spark Application. 
+
+Every spark job has 1 Driver.
+
+Once the user has invoked the job, it says AM registered with RM and started running. Whenever the job is invoked request goes to Resource Manager and it creates an ApplicationMaster.
+
+Whenever we create spark session, you can see a job getting triggered/ new application launched request goes to RM and AM will be registered and we will see Tracking URL to track entire job.
+
+A user has bundled the code and submitted the application / run the spark job using "Spark Submit". For this there are 2 ways,
+
+1. Interactive Mode - Using Notebooks, Pyspark shell
+
+2. Bundle the Application submit the job - Using spark-submit command.
+
+Spark will run in 2 modes:-
+
+1. Client Mode - Notebook, pyspark shell - Interactive Mode - Spark Driver runs outside the cluster. It runs on the Gateway/Edge Node.
+
+In this case, Driver will running on Gateway/Edge Node as a part of client mode. Driver wont run as part of cluster, it is running outside the cluster i.e. on Gateway/Edge Node bcz we want to see the results.
+
+Whenever we run "collect", "show" results are brought to driver, if driver runs on the Gateway/Edge Node (locally) then only we can see the results.
+
+Once we logout from Application or Gateway node crashes then entire application will be down. It is not a safe way, so we use this for Development purpose. 
+
+2. Cluster Mode - Production scenario where we bundle the code and submit the application/ run the spark job using "spark-submit" command.
+- Spark Driver runs inside the cluster on one of the worker node.
+
+Once we develop the code, done enough testing then we will package the code and deploy it using "spark-submit" command. So driver will be running on one of the worker nodes in the cluster.  
+Even if client machine crashes or logout from Gateway/Edge Node there will no impact to application as our driver will be safely running on one of the worker nodes in the cluster.
+
+
+More on Spark Architecture
+==========================
+
+YARN - Yet Another Resource Negotiator
+
+Resource Manager - Master
+Node Manager - Slave/Worker
+
+Resource Manager UI
+===================
+
+Link:- http://m02.itversity.com:19088/cluster
+
+Total memory - 151 Gb (Memory)
+Total VCores - 90 (CPU)
+
+We have 1 Master Node, 3 Worker Nodes in the cluster.
+
+3 Worker Nodes
+
+Each worker node configuration
+==============================
+12 CPU cores - 12 * 2.5 =  36 VCPUs and 30 VCPUs will be used for executors and remaining for other purposes
+64 Gb RAM - 50.33 Gb is used as a part of executor memory and remaining for other purposes
+
+To check where the Driver is?
+
+--> Open the "All Application Link" -> click on "Application ID" -> Go to "Executors" 
+
+Here in this page, you will see Summary and Executors sections.
+
+Under Executors section, 
+Executor ID - 		Address		  - Disk Used - Cores 
+Driver      -  g02.itversity.com:41905 	  -	0     -  0 
+
+For now we have,
+1 Driver - Gateway node (client mode)
+2 Workers - Min allocation
+
+Each Worker Node
+1 CPU Core
+2 Gb RAM - It is divided into Execution Memory and Storage Memory 
+
+To check the below details, 
+
+In "All Applications" link -> under "Cluster" -> click on "Nodes". It will open the "Nodes of the cluster" page.
+
+Min Executor Size as per our cluster,
+<memory: 1024 Mb, vCores:1>
+
+Max Executor Size as per our cluster,
+<memory: 8192 Mb, vCores:4>
+
+We can this even in "Tools" -> "Configuration" -> Search with "yarn.scheduler.minimum-allocation-mb"
+
+To check whether "spark.DynamicAllocation.enabled" - True. Go to "Environment"
+
+YARN is like an Operating System, it manages the resources.
+
+Scheduler Type - Capacity Scheduler. It will divide the cluster into multiple parts so that different can make use of the cluster more efficiently (Marketing, Sales)
+
+We can find out this in Queue. Jobs will be executed based on FiFoOrdering
+
+
+Ways of Accessing Columns in PySpark
+====================================
+
+1)orders_df.select("order_id","order_date").show()
+
+  "order_id" --> column string
+
+2)orders_df.select("order_id", orders_df.order_date, orders_df['order_date'], column('cust_id'), col('cust_id'), expr("order_status")).show() 
+
+   "order_id" 		--> column string (Most commonly used)
+   orders_df.order_date 
+   col('cust_id') 	--> column object
+   expr("order_status") --> column expression
+
+orders_df.order_date
+====================
+This way of accessing columns is useful when you are joining 2 dataframes (customer_df and orders_df). And both dataframes having a column named "cust_id". In this case if we mention column name "cust_id' without mentioning the dataframe name system will get confused that we are referring to the column that belongs to which dataframe. Basically this removes ambiguity while joining dataframes.
+prefixing the dataframe name before the column name to remove the ambiguity.
+
+expr("order_status") - (expr / selectexpr)
+====================
+This way of accessing columns is useful when we want to do some calculations / computations / to evaluate something in SQL like expression.
+Example:- You want to increase the salary by 10% to all employees.
+#employees_df.select("employee_id", "salary", expr("salary + (salary * 0.1) as updated_salary")).show()
+#employees_df.selectExpr("employee_id", "salary", ("salary + (salary * 0.1) as updated_salary")).show()
+
+output:-
+employee_id    salary   updated_salary
+
+col('cust_id') - (column / col)
+==============
+This way of accessing columns is useful when you want to get all the "order_status" that starts with "PENDING"
+Example:-
+#orders_df.select("order_id",orders_df.order_date,orders_df['cust_id'],col('order_status'),expr("order_status")). where(col('order_status').like('PENDING%')).show()
+
+This gives an advantage to work with various methods like .equal, .mod, .mulitply, etc... programmatical way of doing things.
+
+We can write this in sql way also,
+#orders_df.select("order_id",orders_df.order_date,orders_df['cust_id'],col('order_status'),expr("order_status")). 
+where("order_status like 'PENDING%'").show()
+
+
+
+Simple Aggregate Functions
+==========================
+3 types of aggregate functions
+
+1. Simple Aggregations    -  for multiple input rows we will get only 1 output row (count, sum, min, max, avg)
+
+   Dataset used - /public/trendytech/datasets/order_data.csv
+
+   It has columns like InvoiceNo, StockCode, Description, Quantity, InvoiceDate, UnitPrice, CustomerID, Country
+
+   1. Count the number of records
+   2. Count the number of distinct InvoiceNo's
+   3. Sum of quantities
+   4. Average Unit Price
+
+We can execute the above queries in 3 ways:-
+
+Firstly we have created an orders dataframe by reading a csv file (45 Mb) in HDFS "/public/trendytech/datasets/order_data.csv" and loaded the data into orders_df using Standard Dataframe Reader API
+
+1. Programmatic style
+
+   #from pyspark.sql.functions import * 
+   #orders_df.select(count("*").alias("row_count"),countDistinct("Invoiceno").alias("unique_invoice"),
+	sum("Quantity").alias("total_quantity"), avg("UnitPrice").alias("avg_unit_price")).show()
+
+2. Select Expression
+	
+   #orders_df.selectExpr("count(*) as row_count", "count(Distinct(Invoiceno)) as unique_invoice","sum(Quantity) as total_quantity",
+   	avg(UnitPrice) as avg_unit_price").show()
+
+3. Spark SQL
+ 
+   #orders_df.createOrReplaceTempView("orders") --> creating a table from dataframe
+   #spark.sql("select count(*) as row_count, count(distinct (Invoiceno)) as unique_invoice, sum(quantity) as total_quantity,
+	avg(unit_price) as avg_unit_price from orders").show()
+
+2. Grouping Aggregations  -  will get 1 output row for each group (i.e. category)
+3. Windowing Aggregations - we aggregate the data across fixed size window
+
+
+
+Grouping Aggregations
+=====================	
+
+Grouping Aggregations  -  for multiple input rows we will get 1 output row for each group (i.e. category)
+
+Q) Total quantity and total invoice amount per country and invoice
+
+1. Programmatic style
+ 
+   #from pyspark.sql.functions import * 
+   #summary_df = orders_df \
+    .groupBy("country","InvoiceNo") \
+    .agg(sum("quantity").alias("total_quantity"),sum(expr("quantity * unitprice")).alias("invoicevalue")) \
+    .sort("invoiceno")
+   
+   #summary_df.show()
+
+2. Select Expression
+
+   #summary_df1 = orders_df \
+    .groupBy("country","InvoiceNo") \
+    .agg(expr("sum(quantity) as total_quantity"),expr("sum(quantity * unitprice) as invoicevalue")) \
+    .sort("invoiceno")
+
+   #summary_df1.show()
+
+3. Spark SQL
+    
+   #orders_df.createOrReplaceTempView("orders")
+   #spark.sql(''' select country, invoiceno, sum(quantity) as total_quantity, sum(quantity * unitprice) as invoicevalue
+		  from orders
+	          group by country, invoiceno
+		  order by invoiceno ''').show()
+
+
+Windowing Aggregations
+======================
+Windowing Aggregations - we aggregate the data across fixed size window/ on a fixed subset of data.
+
+We are working with this dataset "/public/trendytech/datasets/windowdata.csv"
+
+In this data we have columns like country, weeknum, numininvoices, totalquantity, invoicevalue
+
+Q) I want to calculate last few days invoicevalue
+
+1. Partition by country
+2. Sort the data by weeknum
+3. Define the window size
+
+1. Programmatic style
+
+   #from pyspark.sql   import *
+   
+   #my_window = Window.partitionBy("country") \
+	  	      .orderBy("weeknum") \
+          	      .rowsBetween(Window.unboundedPreceding, Window.currentRow)
+   
+   #results_df = orders_df.withColumn("running_total", sum("invoicevalue").over(my_window))
+   #results_df.show()
+
+2. Spark SQL
+    
+   #orders_df.createOrReplaceTempView("orders")
+   #spark.sql('''SELECT *,
+       		SUM(invoicevalue) 
+  	OVER (
+           	PARTITION BY country
+           	ORDER BY weeknum
+           	ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+       	     ) AS running_total
+   FROM orders ''').show()
+
+
+Understanding Rank, Dense Rank & Row Number
+===========================================
+
+We are working with this dataset "/public/trendytech/datasets/windowdatamodified.csv"
+
+And created a dataframe called "orders_df" by reading the data from "/public/trendytech/datasets/windowdatamodified.csv" and loading the data into "orders_df"
+
+Rank	    - whenever there is a tie, rank will skip the number based on number of ties occurred
+dense_rank  - whenever there is a tie, dense_rank will not be skip the number
+row_number  - this will give a unique row_number for each row (just like AUTO_INCREMENT constraint)
+
+***** If all the values are different then rank, dense_rank, row_number functions will work similarly *****
+
+rank
+----
+
+  #from pyspark.sql import *
+  #my_window = Window.partitionBy("country") \
+		     .orderBy(desc("invoicevalue"))
+  #from pyspark.sql.funtions import *
+  #result_df = orders_df.withColumn("rank", rank().over(my_window))
+  #result_df.show()
+
+Basically we use rank, when we have 100 seats and we want to allocate only 100 students
+
+
+dense_rank
+----------
+  
+  #from pyspark.sql import *
+  #my_window = Window.partitionBy("country") \
+		     .orderBy(desc("invoicevalue"))
+  #from pyspark.sql.funtions import *
+  #result_df = orders_df.withColumn("dense_rank", dense_rank().over(my_window))
+  #result_df.show()
+
+Basically we use dens_rank, when there are 10 teams if 2 teams got equal points at that time we cannot skip the next rank right.
+
+Gold Medal, Silver Medal, Bronze Medal
+
+2 person - 100 points - 1st rank
+1 person - 99 points  - 2nd rank
+1 person - 98 points  - 3rd rank
+
+Here if we apply rank(), Silver medal will be missed. So we will use dense_rank()
+
+To get top record from each country
+-----------------------------------
+  #result_df.select("*").where("dense_rank == 1").show()  --> all columns including rank
+
+  #result_df.select("*").where("dense_rank == 1").drop("dense_rank").show() --> removing rank column as we are selecting only rank 1
+
+
+row_number
+----------
+  
+  #from pyspark.sql import *
+  #my_window = Window.partitionBy("country") \
+		     .orderBy(desc("invoicevalue"))
+  #from pyspark.sql.funtions import *
+  #result_df = orders_df.withColumn("row_number", row_number().over(my_window))
+  #result_df.show()
+
+Basically this will give a serial number starting from 1 for all the rows in each country window.
+
+
+Understanding Lead and Lag Functions
+====================================
+
+Basically when we want to compare 2 rows then we will use "lead, lag" functions
+
+Lag - to compare current row with previous rows
+Lead - to compare current row with next rows
+
+Lag
+---
+  
+  #from pyspark.sql import *
+  #my_window = Window.partitionBy("country") \
+		     .orderBy("weeknum")
+  #from pyspark.sql.funtions import *
+  #result_df = orders_df.withColumn("prev_invoicevalue", lag("invoicevalue").over(my_window))
+  #result_df.show()
+  #result_df1 = result_df.withColumn("invoice_diff", expr("invoicevalue - prev_invoicevalue))
+  #result_df1.show()
+ 
+We can add a column "weekly_contribution" then we can even do that by using below commands,
+	
+  #from pyspark.sql import *
+  #my_window = Window.partitionBy("country")
+  #from pyspark.sql.funtions import *
+  #result_df = orders_df.withColumn("total_invoicevalue", sum("invoicevalue").over(my_window))
+  #final_df = result_df.withColumn("weekly_contribution", expr("(invoicevaley / total_invoicevalue)*100"))
+  #final_df.show()
+
+
+Analyzing Log Files
+===================
+
+Basically our log data files are stored in HDFS and we will try to analyze them and find some inference.
+
+HDFS path for file: "/public/trendytech/datasets/logdata1m.csv"
+
+This csv file contains 2 columns
+
+Log_level	log_time
+INFO		2010-20-02 20:39:10
+WARN		2010-20-03 21:39:10
+INFO		2010-20-04 20:40:10
+DEBUG		2010-20-05 20:41:10
+FATAL		2010-20-06 20:45:10
+
+When we try to analyze the log files and find some inference, we basically try to work with sample data, build some logic and work on it. Once everything is fine then we will bring our main file and apply the same logic.
+
+Our intention is to find for each month log_level count
+
+i.e. January  INFO  20000
+     February WARN  10909
+
+For this what we are doing is, we are creating some sample data as a local list
+
+1)
+local_list = [("INFO","2010-20-02 20:39:10"),
+("WARN","2010-20-03 21:39:10"),
+("INFO","2010-20-04 20:40:10"),
+("DEBUG","2010-20-05 20:41:10"),
+("FATAL","2010-20-06 20:45:10")]
+
+2)
+create a dataframe with this data by adding the column names
+  #log_df = spark.createDataframe(local_list).toDF("log_level","log_time")
+
+3)
+Check the output, verify the datatype and convert "string" to "timestamp.
+  #log_df.show()
+
+  #log_df.printSchema()
+
+  #from pyspark.sql.function import *
+  #new_log_df = log_df.withColumn("log_time",to_timestamp("log_time"))
+
+  #new_log_df.printSchema()
+
+4)
+Convert the dataframe to Spark Table so that I can get the month name's
+  #new_log_df.createOrReplaceTempView("serverlogs")
+
+  #spark.sql("Select * from serverlogs").show()
+
+  #spark.sql("select log_level, date_format(log_time,"MMMM") as Month, count(log_level) as total_occurance 
+	     from serverlogs group by log_level, date_format(log_time,"MMMM")").show()
+
+5)
+Now our logic is working and we can implement same logic on complete data.
+  #log_schema = "log_level string,log_time timestamp"
+  #new_logs_df = spark.read \
+                 .format("csv") \
+                 .schema(log_schema) \
+                 .load(""/public/trendytech/datasets/logdata1m.csv")
+
+
+Continuation of Analyzing Log Files
+===================================
+Find out the number of rows in dataframe
+  #new_logs_df.count()
+
+Now same thing we will follow i.e. creating a spark table and running our expected logic after that we want to sort the data based on calendar month.
+
+  #spark.sql("select log_level, date_format(log_time,"MMMM") as Month, count(log_level) as total_occurance 
+	     from serverlogs 
+	     group by log_level, Month order by Month").show() 
+  
+  output:- (Not Expected Output - Bcz sorting is happening based on the MonthName in dictionary order)
+  log_level	Month	  total_occurance
+                April
+                August
+                December
+                February
+
+  #spark.sql("select log_level, date_format(log_time,"MMMM") as Month, 
+	     count(log_level) as total_occurance, date_format(log_time,"M") as Month_num
+	     from serverlogs 
+	     group by log_level, Month order by Month_num).show()
+
+  output:- (Not Expected Output - Bcz sorting is happening based on the Month_num (string) in dictionary order)
+  log_level	Month	  total_occurance     Month_num
+                January                          1
+                October                         10 
+                November                        11 
+                December                        12    
+                February                         2
+                March                            3
+
+  #result_df = spark.sql("select log_level, date_format(log_time,"MMMM") as Month, 
+	     count(log_level) as total_occurance, int(date_format(log_time,"M")) as Month_num
+	     from serverlogs 
+	     group by log_level, Month, Month_num order by Month_num).show()
+  output:- 
+    log_level	Month	  total_occurance     Month_num
+                January				1
+                February			2
+                March				3
+
+Now we will get the expected output as we converted the Month_num from "string" to "int" using cast
+
+  ----------------------------   OR  ----------------------------
+  
+  #result_df = spark.sql("select log_level, date_format(log_time,"MMMM") as Month, 
+	     count(log_level) as total_occurance, date_format(log_time,"MM") as Month_num
+	     from serverlogs 
+	     group by log_level, Month, Month_num order by Month_num).show()
+  
+  output:- ('0' will get added in the Month_num so in this case even 'string' format will work)
+    log_level	Month	  total_occurance     Month_num
+                January				01
+                February			02
+                March				03
+
+  ----------------------------   OR  ----------------------------
+
+  #result_df = spark.sql("select log_level, date_format(log_time,"MMMM") as Month, 
+	     count(log_level) as total_occurance, first(date_format(log_time,"MM")) as Month_num
+	     from serverlogs 
+	     group by log_level, Month order by Month_num).show()
+
+  #final_df = result_df.drop("Month_num")
+  #final_df.show()
+
+
+Optimization - Pivot Table
+==========================
+
+Pivoting - Converting distinct rows into columns
+
+Our actual output is in below format,
+
+log_level	Month	  total_occurance
+                January				
+                February			
+                March			
+
+we want it to be in the below format as this will give clear picture how each month count is changing,
+
+log_level   January   February  ... 
+INFO	    10000      9801
+DEBUG       19201      12097
+
+ #spark.sql(" select log_level, date_format(log_time,"MMMM") as Month
+            from serverlogs").groupBy("log_level").pivot("Month").count().show()
+
+ output:-
+ log_levl  April  August  December  
+
+
+optimization that we can do
+---------------------------
+
+We are giving month_list by default to the spark, bcz when we mention 'pivot("month")' so that spark need not to scan the 'log_time' data and fetch the month values as no.of months are fixed and along with this we get the output columns starting from January, February,...
+
+month_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+  #spark.sql(" select log_level, date_format(log_time,"MMMM") as Month
+            from serverlogs").groupBy("log_level").pivot("Month", month_list).count().show()
+
+ output:-
+ log_levl  January  February  March  April
+
+
+
+Week
