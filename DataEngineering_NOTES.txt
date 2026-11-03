@@ -2712,7 +2712,7 @@ What happens actually is, whenever we execute wide transformations then result o
 
 If we have 2 wide transformations, then it will be 3 stages. After every wide transformation the result will go back to the disk and write the output and next stage will take the result from the disk because shuffling will happen.
 
-**** No.of tasks = No.of parititions in RDD = No.of blocks in HDFS *****
+**** No.of tasks = No.of partitions in RDD = No.of blocks in HDFS *****
 
 
 Difference between reduceByKey and reduce?
@@ -5430,7 +5430,7 @@ To check whether the files are saved or not,
 	
 	You can see 9 parquet files got created bcz 1.1 Gb is 9 blocks. And "parquet" format data will be more compressed compared to "csv" format files.
 	
-	ex: Same 802 Mb csv file size will be 111.4 Mb parquet file size bcz of snappy compression.
+	ex: Same 802 Mb csv file size will be 111.4 Mb parquet file size bcz of "snappy" compression.
 
 2 Kinds of file formats
 -----------------------
@@ -6110,9 +6110,9 @@ Pivoting - Converting distinct rows into columns
 Our actual output is in below format,
 
 log_level	Month	  total_occurance
-                January				
-                February			
-                March			
+            January				
+            February			
+            March			
 
 we want it to be in the below format as this will give clear picture how each month count is changing,
 
@@ -6142,4 +6142,292 @@ month_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'A
 
 
 
-Week
+Week-9(Apache Spark Internals)
+======
+
+Dataframe Writer API
+====================
+Till now we have,
+
+created Dataframe by reading a file - Internal and External
+
+Did a bunch of transformations / optimization
+
+Now we need to write it back to target location
+
+Reading Dataframe
+=================
+Internal - Data is stored in Datalake (i.e. HDFS, Amazon S3, Azure ADLS Gen2, Google Cloud Storage (GCS)). Native to spark.
+
+External - Connecting through JDBC connection and talking to Oracle / MySQL DB, NoSQL (Mongodb, Cassandra, Snowflake)
+		   For this we need to do some configuration at the cluster end, and we need to import various jar files.
+
+**** Spark can interact with Datalake by default ****
+
+If you have a file in HDFS, then using Spark Standard Dataframe Reader API you will read the file and create the Dataframe
+
+If you have table in MySQL orders, customers table, those tables are external to spark so we want to have these tables in spark and do the join in Spark.
+
+How do you process these tables in Spark?
+
+For this 2 ways are available:-
+
+1. Ingest (orders/customers tables) from MySQL to Datalake (i.e. HDFS, Amazon S3, Azure ADLS Gen2, GCS) using ADF (modern stack & cloud based solution), ETL Tools like (Informatica, Abinitio) 
+*** Get the datasets from Database to Datalake using an Ingestion framework and once it is in Datalke we then process data in spark using Standard Dataframe Reader API (Best Approach) ***
+
+2. To connect to External Sources from Spark Directly  *** Not recommended approach bcz Datalake should be our storage not others ***
+You can connect to MySQL and create a spark dataframe from there. Data is residing in MySQL, Mongodb, Cassandra, Snowflake and we can directly connect to them using spark API and create a Dataframe. 
+	
+But this way is not recommended bcz spark works based on partitions in our Datalake i.e. block size. So we will have controll and flexibility if we have data in our Datalake. Bcz these data sources / systems will have their own capacities / functionalities.
+
+External sources should not be our storage, instead our storage should be the datalake only.
+
+Bcz spark works in parallel how do we know how many jobs will run, how many tasks will run?
+
+3 Modes in reading
+==================
+1. PERMISSIVE 	 - Default, If malformed records are found, then it will make those records as NULL without affecting other results
+
+2. dropmalformed - As soon as malformed records are found, then those records are dropped without affecting other results) 
+
+3. failfast      - As soon as malformed records are found it will error out
+
+Dataframe Writer API
+====================
+
+Let us create a "Spark Session" by using boiler plate code,
+
+create orders_schema,
+
+created a dataframe (orders_df) by enforcing the schema,
+
+Now to find out the numberofpartitions for dataframe, we need to go down to RDD from Higher Level API's and use lower level constructs
+
+#orders_df.rdd.getNumPartitions()
+
+**** There are scenarios where we will have partition count > number of blocks ****
+
+Dataframe Writer Modes
+======================
+
+4 different modes while writing
+
+1. overwrite		- replaces new files with existing files, if the folder already exists
+
+2. ignore			- ignores the command if the folder exists			
+
+3. append			- add new files to existing files in the folder
+
+4. errorIfExists	- throws error if the folder exists
+
+While reading a dataframe we can mention file/folder location.
+
+when writing a dataframe back to the disk we have to mention folder location.
+
+#orders_df.write \
+.format("csv") \
+.mode("overwrite") \
+.option("path","/user/itv028185/sparkwriterdemo1")
+.save()
+
+with above command 9 "part-*" files with 1 success file got created in the above mentioned folder
+
+While writing the dataframe to disk
+
+--> parquet will be best as it get compressed using snappy and takes less space and easy for Computation/Processing
+
+--> csv will take more space compared to Parquet
+
+--> json will be the worst format, as it will be bulkier than csv bcz it would have to embed the column names with each record i.e. key,value pair
+
+--> orc will be very optimized but it will be next to parquet interms of performance but take less space compared to parquet
+
+--> Avro will throw error i.e. Avro is built-in external data source module since Spark 2.4. So we need to do some configurations on the cluster and import few things w.r.t this cluster.
+
+
+
+PartitionBy Clause
+==================
+
+***** No.of files created = No.of partitions in the Dataframe *****
+
+Basically, when we run query based on this conditio#spark.sql("select count(*) from orders where order_status = 'CLOSED'") 
+
+Then system has to scan all the 9 files that we have written in to the folder so it will consume time and leads to lower performance.(285L records scanned)
+
+To do this,
+
+we have created a dataframe by reading the files in the folder "/user/itv028185/sparkwriterdemo1" and then created a temporary table "orders" and now we ran the query on top of it. 
+
+And we observed that, the query will scan all the 9 files as system does not know which file contains what.
+
+To overcome this issue we need to partition the data based on some logic. 
+
+#orders_df.write \
+.format("csv") \
+.mode("overwrite") \
+.partitionBy("order_status") \  				==> we will mention the column name which is most frequntly used in the where condition
+.option("path","/user/itv028185/sparkwriter_partition_demo1")
+.save()
+
+with this it will create each folder for each partition with each unique order_status
+
+i.e. we have 9 distinct orders_status and also have 9 partitions then we will have 9 different folders (based on no.of distinct order_status values). Inside each folder we will have 9 files.
+
+After this, when we try to create a new dataframe by reading the files in the folder "/user/itv028185/sparkwriter_partition_demo1" and then created a temporary table "orders_new" and now we ran the query on top of it.
+
+when we run #spark.sql("select count(*) from orders where order_status = 'CLOSED'")
+
+Now the system need to scan only 9 files in 1 partition (since it will check only the 1 folder "/user/itv028185/sparkwriter_partition_demo1/orders_status=CLOSED") and this is bcz we have usedx partitionBy while writing the Dataframe to disk.
+(28L records scanned)
+
+To verify how many records scanned, open "ALL APPLICATIONS UI" --> Click on ur "application_id" --> Click on "ApplicationMaster" --> Go to SQL and verify by opening the Query Description.
+
+Basically we use partitionBy, incase when we do filtering based on 1 column and these queries are common. Just like indexing creating index on columns which is mostly used in filter condition in order to improve the performance.
+
+***** PartitionBy should be used on the columns which are having few distinct values  *****
+ 
+
+More on Partition's Performance Benefits
+========================================
+
+Actually by using Dataframe writer API we write the Dataframe to Disk, if we wont use partitionBy then,
+
+1.1 Gb file - 9 partitions - 9 files will be created in the target folder
+
+After using partitionBy with order_status column, 9 folders with each order_status will be created and 9 files in each folder
+
+Scenario 1:-
+----------
+but when we run the query,
+
+#spark.sql("select count(*) from orders where cust_id = 8827")
+
+this can't make use of the optimization benifit that we get using partitionBy
+
+Scenario 2:-
+----------
+but incase when we run the queries,
+
+#spark.sql("select count(*) from orders where order_status = 'CLOSED' and cust_id = 8827")
+
+#spark.sql("select count(*) from orders where cust_id = 8827 and order_status = 'CLOSED'")
+
+this will make sure that we use optimisation though we mention order_status at 1st or 2nd in where Clause
+
+***** partitionBy plays a vital role in skipping major portion of data from scanning, when we try to run the query on the table *****
+
+2 layer partitionBy
+-------------------
+created a Dataframe by reading a file from "/public/trendytech/retail_db/customers/part-00000"
+
+#orders_df.write \
+.format("csv") \
+.mode("overwrite") \
+.partitionBy("customer_state","customer_city") \  				
+.option("path","/user/itv028185/sparkwriter_partition_demo1")
+.save()
+
+In this path "/user/itv028185/sparkwriter_partition_demo1" the folder count will be equal to number of distinct customer_states (top level folders) and inside each of those folders the number of folders will be equal to number of distinct customer_city (sub folders) and inside the subfolder we will have files based on the amount of data.
+
+Lets create a dataframe by reading the files in the above folders and then check how 2 layer partitionBy works
+
+#customer_final_df.write \
+.format("parquet") \
+.mode("overwrite") \
+.partitionBy("customer_state","customer_city") \
+.option("path","/user/itv028185/partition_demo_output2") \
+.save()
+
+#customer_final_df.rdd.getNumPartitions()  output:- 1 (bcz only 1 partition, so 1 file in each subfolder)
+
+Now when we run the below queries system will scan only 1 file, bcz customer_city='Caguas' is only in customer_state='PR'. If it is in 2 folders then it has to scan 2 files.
+
+#spark.sql("select count(*) from customers where customer_state='PR' and customer_city='Caguas'").show()
+
+#spark.sql("select count(*) from customers where customer_city='Caguas'").show()
+
+but when we run the below query, system will scan all the files in customer_state='PR' top level folder,
+
+#spark.sql("select count(*) from customers where customer_state='PR' and customer_id= 19").show()
+
+***** This way of optimization using partitionBy is called "partition pruning" *****
+
+Basically we need to apply partitionBy on the column which is having minimum cardinality but not huge, for suppose if we create partitionBy on "customer_id" it will create 1000's of folders then metadata will be huge and system will get overburdened to store that amount of metadata. 
+Instead of searching for a particular record, we will endup searching for folder. 
+
+***** 50 - 60 partitions of top level folders is good and make use of the column in partitonBy which is frequently used in where clause. So that we can avoid major portion of data scanning *****
+
+partitioning is nothing but storing the data in a structured manner (top level folder --> subfolder --> file(s))
+
+
+
+Understanding Bucketing and its Performance Gains
+=================================================
+When you have large number of distinct values then we can go with Bucketing.
+
+Bucketing helps in 2 purposes.
+1. Could help in skipping the data. (Depends on spark version we are using)
+2. Joins
+
+
+***** when we are working with "Bucket" we should mention the "fixed number of buckets" and the "bucketing column" *****
+
+If we want to have 8 buckets, 8 files will be created for each partition.
+
+For 1.1 Gb of data that we load and create dataframe will have 9 partitions.
+
+For each partition 8 buckets will be created. So overall we will have 72 files.
+
+How system will select what data to be put in which file?
+
+Basically it will follow Hash Function (MapReduce). It will decide what records will go to which file.
+
+***** In case of bucketing we have to create a Managed Spark Table. We cannot directly dump it to a folder location like this ".option("path","/user/itv028185/partition_demo_output2"" *****
+
+#spark.sql("create database itv028185_bucketingdb")
+
+#customer_final_df.write \
+.format("parquet") \
+.mode("overwrite") \
+.bucketBy(4,"customer_id") \
+.saveAsTable("itv028185_bucketingdb.customers_new")
+
+So bcz of this 4 folders will get created inside the path "/user/itv028185/Warehouse/itv028185_bucketingdb.db/customers_new" as we mentioned 4 Buckets.
+
+Partitioning - Gives folders i.e. no.of folders = no.of distinct values in the partitioned column
+
+Bucket - Gives the no.of files that we have mentioned in each folder
+
+We have created a datafram by using both partitioning and bucketing,
+
+#customer_final_df.write \
+.format("parquet") \
+.mode("overwrite") \
+.partitionBy("order_status") \
+.bucketBy(4,"order_id") \
+.saveAsTable("itv028185_bucketingdb.customers_new")
+
+When we run the below query,
+
+  #spark.sql("select count(*) from orders where order_status = 'CLOSED' and order_id = 10")
+  
+then system will scan 1 folder and 1 bucket and 1 file by skipping other folders and remaining 3 buckets.
+
+Hash Function
+-------------
+
+Bucket 0 - 4,8,12
+Bucket 1 - 1,5,9
+Bucket 2 - 2,6,10
+Bucket 3 - 3,7,11
+
+
+If we have 20 order_id's and each order will be divided by 4
+
+1 % 4 = 1
+2 % 4 = 2
+
+Partitioning - On column having less unique values (order_status)
+
+Bucketing - On column having more unique values (Order_id, customer_id)
