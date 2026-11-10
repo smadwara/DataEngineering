@@ -688,14 +688,15 @@ Login URL: http://g02.itversity.com
 username: itv028185 
 password: ier1ag4toa1y639iq68buhaysj97awz8
 
+Support ticket link: https://trendytech.in/support/
+
 Namenode : http://m01.itversity.com:9870/
 
 If each Machine has 10 Tb of Hard disk
 
 3 data nodes * 10 Tb of Hard disk ==> Total 30 Tb
 
-each datanode will allocate - 9 Tb for HDFS (admin will decide)
-							  1 Tb for local
+each datanode will allocate - 9 Tb for HDFS (admin will decide) 1 Tb for local
 				
 HDFS Total Size - 27 Tb
 
@@ -2012,7 +2013,7 @@ Let us consider we have a file named file1 in HDFS of size (512Mb).
 
 4. rdd3.collect()
 
-when we run 1,2,3 nothing will happen, but when we run 4 everything will happen. Basically after running 1,2,3 internally these lines were added to a plan and when we run 4 it execute.
+when we run 1,2,3 nothing will happen, but when we run 4 everything will happen. Basically after running 1,2,3 internally these lines were added to a plan and when we run 4 it will execute all of them in sequence.
 
 There are 2 kind of operations in Apache Spark
 ----------------------------------------------
@@ -2201,7 +2202,7 @@ Week-4(Apache Spark Core APIs)
 ======
 
 Python Basics
--=-=-=-=-=-=-
+=============
 
 Map transformation in spark
 
@@ -2583,13 +2584,13 @@ This will make sure that we will have min of 2 partitions if the block size is <
 	spark.sparkContext.defaultMinPartitions
 	output:- 2
 
-/////
+&&&&&
 getNumPartitions --> to check how many partitions are there in the RDD
 
 defaultParallelism --> Default 2 - when we use parallelize, the number of partitions are defined by this property
 
 defaultMinPartitions --> Default 2 - when we load the file from HDFS, if blocks are less than 1 then 2 partitions by default else partitions = no.of blocks.
-/////
+&&&&&
 
 CountByValue (Action)
 =====================
@@ -3089,7 +3090,7 @@ After applying filter transformation, we are getting 1 mb of data.
 
 8000 partitions each holding around 1 mb of data.
 
-In this case, maintaining 8000 partitions is not ideal because the time to manage the tasks would become difficult.
+In this case, maintaining 8000 partitions is not ideal because the time taken to manage the tasks would become difficult.
 
 So we want to reduce the partitions, bcz instead of having multiple partitions with sparse data. But better to have lesser partitions with filled data.
 
@@ -3114,13 +3115,13 @@ It will do complete reshuffling of data
 
 Let us consider we have 4 partitions, to make it 8 partitions we need to shuffle the data.
 
-Let us consider we have 40 partitions, you want to make it 10 partitions. It will do complete reshuffling of data, bcz it want to male sure that 10 partitions holding same amount of data.
+Let us consider we have 40 partitions, you want to make it 10 partitions. It will do complete reshuffling of data, bcz it want to make sure that 10 partitions holding same amount of data.
 
 Coalesce
 --------
 Let us consider we have 4 node cluster and have 8 partitions. If we want to make it to 4 partitions. 
 
-Coalesce will try to merge the partitions on same machine and give us new partition (np). So that it can try avoid shuffling Whenever possible. 
+Coalesce will try to merge the partitions on same machine and give us new partition (np). So that it can try avoid shuffling whenever possible. 
 But this new partitions can be of un-equal of size of data.
 
 node1 - p1,p2 --> merge -->np1 
@@ -3321,7 +3322,7 @@ Spark Dataframes is available only for your session.
 
 Spark Table is persistent. We use spark sql to write Spark Table. Data and Metadata will be available even after closing the spark session. We can see the data in the tables until we drop the table.
 
-Spark Table is accessible acorss other sessions.
+Spark Table is accessible across other sessions.
 
 
 RDD's are not recommended... But we need to know how Spark Sql, Dataframes internally works as it works at higher level to RDD.
@@ -3808,13 +3809,13 @@ We need to understand about Executor. It is container which will hold the resour
 
 ***** Executor is a container that hold the resources like CPU and RAM *****
 
-1 Node can have more than 1 Executor. So that instead of a single Executor holding entire, we will breakdown into multiple containers bcz of that we can make use of resources more efficiently without loosing anything.
+1 Node can have more than 1 Executor. So that instead of a single Executor holding entire resources, we will breakdown into multiple containers bcz of that we can make use of resources more efficiently without loosing anything.
 
 1 worker node can have multiple executors (multiple containers)
 
 Executor/Container/JVM (Java Virtual Machine)
 
-As per our scenario, in a 10 Node cluster with 16 CPU cores and 64 Gb RAM. How many executors/containers we can have in a single worker node. 
+As per our scenario, in a 10 Node cluster with 16 CPU cores and 64 Gb RAM. How many executors/containers we can have in a single worker node? 
 There are two strategies when creating containers:-
 
 1. Thin executor -
@@ -6141,6 +6142,43 @@ month_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'A
  log_levl  January  February  March  April
 
 
+-------------------------
+
+spark.sql("""select user_state, 
+        SUM(CASE WHEN user_gender = 'Male' THEN 1 ELSE 0 END) AS Male,
+        SUM(CASE WHEN user_gender = 'Female' THEN 1 ELSE 0 END) AS Female
+        FROM users_vw
+        WHERE user_phone_numbers is not null
+        GROUP BY user_state 
+        ORDER BY user_state""").show()
+
++--------------------+-----+------+
+|          user_state| Male|Female|
++--------------------+-----+------+
+|             Alabama| 9307|  9178|
+|              Alaska| 1882|  1938|
+|             Arizona| 9406|  9543|
+|            Arkansas| 2420|  2416|
+|          California|49120| 48716|
+|            Colorado|10128| 10125|
+|         Connecticut| 5797|  5917|
+|            Delaware| 1651|  1654|
+|District of Columbia|14212| 14292|
+|             Florida|36692| 36688|
+|             Georgia|13008| 13028|
+|              Hawaii| 2172|  2062|
+|               Idaho| 2058|  2101|
+|            Illinois|11178| 11267|
+|             Indiana| 9604|  9676|
+|                Iowa| 4706|  4726|
+|              Kansas| 5962|  5776|
+|            Kentucky| 6216|  6108|
+|           Louisiana| 8706|  8631|
+|               Maine|  225|   228|
++--------------------+-----+------+
+
+
+
 
 Week-9(Apache Spark Internals)
 ======
@@ -6173,12 +6211,12 @@ How do you process these tables in Spark?
 For this 2 ways are available:-
 
 1. Ingest (orders/customers tables) from MySQL to Datalake (i.e. HDFS, Amazon S3, Azure ADLS Gen2, GCS) using ADF (modern stack & cloud based solution), ETL Tools like (Informatica, Abinitio) 
-*** Get the datasets from Database to Datalake using an Ingestion framework and once it is in Datalke we then process data in spark using Standard Dataframe Reader API (Best Approach) ***
+*** Get the datasets from Database to Datalake using an Ingestion framework and once it is in Datalake we then process data in spark using Standard Dataframe Reader API (Best Approach) ***
 
 2. To connect to External Sources from Spark Directly  *** Not recommended approach bcz Datalake should be our storage not others ***
 You can connect to MySQL and create a spark dataframe from there. Data is residing in MySQL, Mongodb, Cassandra, Snowflake and we can directly connect to them using spark API and create a Dataframe. 
 	
-But this way is not recommended bcz spark works based on partitions in our Datalake i.e. block size. So we will have controll and flexibility if we have data in our Datalake. Bcz these data sources / systems will have their own capacities / functionalities.
+But this way is not recommended bcz spark works based on partitions in our Datalake i.e. block size. So we will have control and flexibility if we have data in our Datalake. Bcz these data sources / systems will have their own capacities / functionalities.
 
 External sources should not be our storage, instead our storage should be the datalake only.
 
@@ -6201,7 +6239,7 @@ create orders_schema,
 
 created a dataframe (orders_df) by enforcing the schema,
 
-Now to find out the numberofpartitions for dataframe, we need to go down to RDD from Higher Level API's and use lower level constructs
+Now to find out the number of partitions for dataframe, we need to go down to RDD from Higher Level API's and use lower level constructs
 
 #orders_df.rdd.getNumPartitions()
 
@@ -6214,9 +6252,9 @@ Dataframe Writer Modes
 
 1. overwrite		- replaces new files with existing files, if the folder already exists
 
-2. ignore			- ignores the command if the folder exists			
+2. ignore		- ignores the command if the folder exists			
 
-3. append			- add new files to existing files in the folder
+3. append		- add new files to existing files in the folder
 
 4. errorIfExists	- throws error if the folder exists
 
@@ -6227,7 +6265,7 @@ when writing a dataframe back to the disk we have to mention folder location.
 #orders_df.write \
 .format("csv") \
 .mode("overwrite") \
-.option("path","/user/itv028185/sparkwriterdemo1")
+.option("path","/user/itv028185/sparkwriterdemo1") \
 .save()
 
 with above command 9 "part-*" files with 1 success file got created in the above mentioned folder
@@ -6238,11 +6276,11 @@ While writing the dataframe to disk
 
 --> csv will take more space compared to Parquet
 
---> json will be the worst format, as it will be bulkier than csv bcz it would have to embed the column names with each record i.e. key,value pair
+--> json will be the worst format, as it will be bulkier than csv bcz it would have to embed the column names with each record i.e. key, value pair
 
---> orc will be very optimized but it will be next to parquet interms of performance but take less space compared to parquet
+--> orc will be very optimized but it will be next to parquet in terms of performance but take less space compared to parquet
 
---> Avro will throw error i.e. Avro is built-in external data source module since Spark 2.4. So we need to do some configurations on the cluster and import few things w.r.t this cluster.
+--> Avro will throw error "AnalysisException: Failed to find data source: avro. Avro is built-in but external data source module since Spark 2.4. Please deploy the application as per the deployment section of "Apache Avro Data Source Guide"."
 
 
 
@@ -6251,7 +6289,7 @@ PartitionBy Clause
 
 ***** No.of files created = No.of partitions in the Dataframe *****
 
-Basically, when we run query based on this conditio#spark.sql("select count(*) from orders where order_status = 'CLOSED'") 
+Basically, when we run query based on this condition #spark.sql("select count(*) from orders where order_status = 'CLOSED'") 
 
 Then system has to scan all the 9 files that we have written in to the folder so it will consume time and leads to lower performance.(285L records scanned)
 
@@ -6266,19 +6304,19 @@ To overcome this issue we need to partition the data based on some logic.
 #orders_df.write \
 .format("csv") \
 .mode("overwrite") \
-.partitionBy("order_status") \  				==> we will mention the column name which is most frequntly used in the where condition
-.option("path","/user/itv028185/sparkwriter_partition_demo1")
+.partitionBy("order_status") \        ==> we will mention the column name which is most frequently used in the where condition
+.option("path","/user/itv028185/sparkwriter_partition_demo1") \
 .save()
 
 with this it will create each folder for each partition with each unique order_status
 
-i.e. we have 9 distinct orders_status and also have 9 partitions then we will have 9 different folders (based on no.of distinct order_status values). Inside each folder we will have 9 files.
+i.e. we have 9 distinct orders_status and also have 9 partitions then we will have 9 different folders (based on no.of distinct order_status values). Inside each folder we will have 9 files. And inside the file order_status value wont be there as folder itself got created with order_status=CLOSED.
 
 After this, when we try to create a new dataframe by reading the files in the folder "/user/itv028185/sparkwriter_partition_demo1" and then created a temporary table "orders_new" and now we ran the query on top of it.
 
 when we run #spark.sql("select count(*) from orders where order_status = 'CLOSED'")
 
-Now the system need to scan only 9 files in 1 partition (since it will check only the 1 folder "/user/itv028185/sparkwriter_partition_demo1/orders_status=CLOSED") and this is bcz we have usedx partitionBy while writing the Dataframe to disk.
+Now the system need to scan only 9 files in 1 partition (since it will check only the 1 folder "/user/itv028185/sparkwriter_partition_demo1/orders_status=CLOSED") and this is bcz we have used partitionBy while writing the Dataframe to disk.
 (28L records scanned)
 
 To verify how many records scanned, open "ALL APPLICATIONS UI" --> Click on ur "application_id" --> Click on "ApplicationMaster" --> Go to SQL and verify by opening the Query Description.
@@ -6303,7 +6341,7 @@ but when we run the query,
 
 #spark.sql("select count(*) from orders where cust_id = 8827")
 
-this can't make use of the optimization benifit that we get using partitionBy
+this can't make use of the optimization benefit that we get using partitionBy
 
 Scenario 2:-
 ----------
@@ -6315,7 +6353,9 @@ but incase when we run the queries,
 
 this will make sure that we use optimisation though we mention order_status at 1st or 2nd in where Clause
 
-***** partitionBy plays a vital role in skipping major portion of data from scanning, when we try to run the query on the table *****
+***** 
+partitionBy plays a vital role in skipping major portion of data from scanning, when we try to run the query on the table but we need to use the column which is used in partitionBy column while filtering the data.
+*****
 
 2 layer partitionBy
 -------------------
@@ -6325,7 +6365,7 @@ created a Dataframe by reading a file from "/public/trendytech/retail_db/custome
 .format("csv") \
 .mode("overwrite") \
 .partitionBy("customer_state","customer_city") \  				
-.option("path","/user/itv028185/sparkwriter_partition_demo1")
+.option("path","/user/itv028185/sparkwriter_partition_demo1") \
 .save()
 
 In this path "/user/itv028185/sparkwriter_partition_demo1" the folder count will be equal to number of distinct customer_states (top level folders) and inside each of those folders the number of folders will be equal to number of distinct customer_city (sub folders) and inside the subfolder we will have files based on the amount of data.
@@ -6354,7 +6394,7 @@ but when we run the below query, system will scan all the files in customer_stat
 ***** This way of optimization using partitionBy is called "partition pruning" *****
 
 Basically we need to apply partitionBy on the column which is having minimum cardinality but not huge, for suppose if we create partitionBy on "customer_id" it will create 1000's of folders then metadata will be huge and system will get overburdened to store that amount of metadata. 
-Instead of searching for a particular record, we will endup searching for folder. 
+Instead of searching for a particular record, we will end up searching for folder. 
 
 ***** 50 - 60 partitions of top level folders is good and make use of the column in partitonBy which is frequently used in where clause. So that we can avoid major portion of data scanning *****
 
@@ -6383,7 +6423,7 @@ How system will select what data to be put in which file?
 
 Basically it will follow Hash Function (MapReduce). It will decide what records will go to which file.
 
-***** In case of bucketing we have to create a Managed Spark Table. We cannot directly dump it to a folder location like this ".option("path","/user/itv028185/partition_demo_output2"" *****
+***** In case of bucketing we have to create a Managed Spark Table. We cannot directly dump it to a folder location like this ".option("path","/user/itv028185/partition_demo_output2")" *****
 
 #spark.sql("create database itv028185_bucketingdb")
 
@@ -6399,7 +6439,7 @@ Partitioning - Gives folders i.e. no.of folders = no.of distinct values in the p
 
 Bucket - Gives the no.of files that we have mentioned in each folder
 
-We have created a datafram by using both partitioning and bucketing,
+We have created a dataframe by using both partitioning and bucketing,
 
 #customer_final_df.write \
 .format("parquet") \
@@ -6408,9 +6448,11 @@ We have created a datafram by using both partitioning and bucketing,
 .bucketBy(4,"order_id") \
 .saveAsTable("itv028185_bucketingdb.customers_new")
 
+As customer file is of size 1.1 Gb, 9 partitions and we have mentioned 4 buckets. So in each folder("order_status=COMPLETE") - 9 partitions * 4 buckets = 36 files will get created.
+
 When we run the below query,
 
-  #spark.sql("select count(*) from orders where order_status = 'CLOSED' and order_id = 10")
+  #spark.sql("select count(*) from customers_new where order_status = 'CLOSED' and order_id = 10")
   
 then system will scan 1 folder and 1 bucket and 1 file by skipping other folders and remaining 3 buckets.
 
@@ -6430,4 +6472,621 @@ If we have 20 order_id's and each order will be divided by 4
 
 Partitioning - On column having less unique values (order_status)
 
-Bucketing - On column having more unique values (Order_id, customer_id)
+Bucketing - On column having more unique values (order_id, customer_id)
+
+
+***** Spark Internals *****
+===========================
+
+Action -> Job -> Stages -> Task
+
+Whenever we are creating a dataframe by reading a "orders.csv" file of size 1.1 Gb
+
+there will be 9 partitions in your dataframe 
+
+if we apply any wide transformation (ex:- distinct) on this dataframe,
+
+then system has to do local distinct (on each machine) and global distinct (output of multiple machines again on a machine) so there will be shuffling of data takes place.
+
+**** Stages are marked by shuffle boundaries i.e. whenever there is a shuffle a new stage will get created. ****
+
+Stages will internally have tasks. It is the smallest unit. 
+
+***** No.of partitions = No.of tasks &&&&& No.of Stages = No.of Wide Transformations + 1 *****
+
+Let us consider that we have 20 node spark cluster i.e. worker nodes. Master Node are not meant for processing. 20 does not include Gateway Node, Master node.
+
+Each machine size is 16 CPU cores and 64 Gb RAM.
+
+Total cluster has 320 CPU cores and 1280 GB RAM
+
+How many parallel tasks can be run on this cluster?
+--------------------------------------------------
+320 parallel tasks bcz we have 320 CPU core (i.e. 1 CPU core for 1 task execution) but some will go for background process and others.
+
+Let us consider that we can have an executor of size
+5 CPU core (1 CPU core for background processing) 
+~19.5 Gb RAM  (1 Gb RAM for OS) (max (384 Mb (OR) 7% of executor memory (i.e. 1.5 Gb in our case)) for off-heap memory)
+
+So after this, we can have 3 executors on each node. So we will 20 * 3 = 60 executors across the cluster. 
+
+Let us consider that we have requested for 4 executors, so we will have -
+20 CPU core
+78 GB RAM 
+
+As a part of Memory Management, 84 GB RAM is divided into below parts
+	- reserved memory (~300 Mb)
+	- user memory
+	- storage memory (30%)
+	- execution memory (30% - 26 Gb)
+
+Now, you can run 20 parallel tasks bcz 1 CPU core for 1 task execution 
+
+Each core will get ~1.3 GB of RAM (execution memory). If we try to handle partition more than 1.4 GB then the processing will be very slow as it might spill few things to disk and take it back / throw OOM exception.
+
+Lets consider that we have a 100 GB file so that we will have 800 partitions, each partition would be 128 Mb. So the resources that we have (1 CPU core and 1.4 GB memory) will be able to handle this data easily.
+
+But when we do repartition,
+
+new_df = df.repartition(50)
+
+we will have 50 partitions each will have 2 GB memory then our resources wont be able to handle and returns OOM error.
+
+On disk, data is kept in serialized format which is more compressed and compact form so that it will consume less more. But when we bring the data to memory it will be kept in deserialized format and takes more space than disk. (i.e. 1 GB in Disk might be 1.5 GB in Memory). So we need to keep that buffer while processing the data in memory.
+
+Scenario(1)
+--------
+
+Let us consider that we have a file of size 10.1 GB in HDFS (81 Blocks)
+81 partitions in Dataframe
+
+we requested for 4 executors -
+20 CPU core
+84 GB RAM
+
+each CPU core can process 1.3 GB of partitioned data.
+
+We can run 20 tasks in parallel as we have 20 CPU cores
+
+As we have overall 81 tasks i.e. 81 partitions, now lets consider below case:-
+
+20 tasks will be done in parallel - 10 sec (batch 1)
+.
+.
+.
+1 task - 7 sec (batch 5) -> 19 CPU cores will be free. So utilization is only 5 %
+
+overall 47 sec to complete all the tasks in a job... 
+
+Scenario(2)
+--------
+Let us consider that we have a file of size 1.5 GB in HDFS (12 Blocks)
+12 partitions in Dataframe
+
+we requested for 4 executors -
+20 CPU core
+84 GB RAM
+
+All the 12 tasks can be done in parallel and 8 CPU cores will be idle as we have 20. 
+
+In this case we are not using the resources wisely, we are wasting some of the resources (8 CPU cores).
+
+12 partitions each of 128 Mb
+
+each task - 10 sec to complete
+
+Our entire job will be completed in 10 sec.
+
+So if we increase the partitions to 20 using "repartition", we can make use of all 20 CPU cores.
+
+Each partition will have 75 Mb instead of 128 Mb in the earlier case. 
+
+20 partitions each of 75 Mb
+
+each task - 7 sec to complete
+
+Now it will take 7 sec to complete the entire job. (Here we are making use of parallelism)
+
+
+Continuation of Spark Internals
+===============================
+As usual, we created a dataframe "orders_df" by reading a csv file "orders" of size >1 Gb 
+
+Here is boiler plate code to create Spark Session from
+
+from pyspark.sql import SparkSession
+import getpass
+username = getpass.getuser()
+spark = SparkSession. \
+	builder. \
+	config('spark.shuffle.useOldFetchProtocol','true'). \   --> Admin has to take care and with this task wont fail in pyspark3
+	config("spark.sql.warehouse.dir", f"/user/{username}/warehouse"). \
+	enableHiveSupport(). \
+	master('yarn'). \
+	getOrCreate()
+
+#spark.spartContext.defaultParallelism = 2 (changes based on the amount of load from 2 to 10, as per this cluster)
+Bcz I have 2 CPU cores only, so 2 executors - 1 CPU Core and 1 GB RAM for this moment. To verify this,
+
+Open "All Applications UI" --> click on 'Application_ID' --> click on 'ApplicationMaster' 
+
+Here you will see "Executor 1 and 2 added & Executor Driver added". This is bcz of "Dynamic Resource Allocator" is enabled. To verify this,
+
+Go to "Environment" --> search with "dynamicAllocation" then you will "true" and Max and Min Executors also.
+
+If we go to "Executors" --> Here we can see details like driver node, executors will running on which worker nodes
+
+
+#orders_df.rdd.getNumPartitions() = 9
+
+For 9 partitions 9 tasks will be created and all the tasks are executed parallelly and the output of all task will be executed finally on a machine after shuffling.
+
+Whenever we call a wide transformation 200 tasks gets launched.
+
+9 partitions --> 9 tasks --> 200 tasks (wide transformation) --> 1 final task
+
+In Stage 1 - 9 partitions --> 9 tasks (We would have done local distinct with in each partition on each node based on Data locality)
+
+Total we have 25M records
+
+task 1 - found the distinct values of order_status in partition 1 (128 Mb data i.e. ~2.75M records are processed)
+.
+.
+.
+
+The results of Stage 1 are shuffled and Stage 2 will get created bcz of wide transformation with 200 shuffle partitions
+
+In Stage 2 - all the CLOSED would have gone to 1 partition based on Hash Function Concept
+
+So even though 200 partitions got created, only 9 partitions will get data to do processing as we have only 9 unique order_status.
+
+*** we can even control the number of shuffle partitions to be created by changing the value in "spark.sql.shuffle.partitions" ***
+
+Parallelism is decided on how many resources we have.
+
+If we have 20 CPU cores, then we cannot get more than 20 tasks running in parallel. 
+20 is decided based on number of partitions we have.
+
+If you have 10 partitions but we have 20 CPU cores, then 10 tasks will run in parallel and 10 CPU cores will remain idle and we are wasting the resources.
+
+
+Disabling Dynamic Executor Allocation
+=====================================
+
+How to turn off dynamic allocation at application level?
+-------------------------------------------------------
+
+Along with this we request for static amount of executors with specific amount of resources.
+
+Amount of resources
+-------------------
+No.of executors/containers	- 2 containers
+No.of CPU core per executor	- 2 CPU cores
+Amount of Memory per executor	- 2 Gb RAM
+
+While executing the spark-submit we can request for more resources, once the job is completed resources are released till then resources will be blocked by the user.
+
+Boiler plate code disabling dynamic executor allocation and with static amount resources request,
+
+#from pyspark.sql import sparkSession
+ import getpass
+ username = getpass.getuser()
+ spark = SparkSession. \
+         builder. \
+	 appName('Sandeep'). \
+	 config('spark.shuffle.useOldFetchProtocal','true'). \
+         config('spark.dynamicAllocation.enabled','false'). \
+         config('spark.executor.instances','2'). \
+	 config('spark.executor.cores','2'). \
+         config('spark.executor.memorry','2g'). \
+         config("spark.sql.warehouse.dir",f"/user/{username}/warehouse"). \
+         enableHiveSupport(). \
+	 master('yarn'). \
+         getOrCreate()
+
+#spark.sparkContext.defaultParallelism() = 4 (2 instances * 2 cores)
+
+#orders_df.createOrRepalceTempView("orders")
+
+#spark.sql("select count(*) from orders where order_status = 'CLOSED'").show()
+
+Explanation:-
+when we run above query, 1 job will be created and we will get 2 executors with 2 CPU cores as we mentioned and as our file size is 1.1 Gb there will be 9 partitions and 9 tasks. So 4 tasks on 2 executors will run parallelly as we have 4 CPU cores. 
+
+***** In our cluster, 4 CPU cores and 8 Gb RAM is max allocation *****
+
+
+
+Spark-Submit at a High-Level
+============================
+
+spark-submit (Higher Level Overview) 
+------------
+It is a utility to package your code and deploy it on the cluster to make this code run on daily basis. We use this utility when we want more resources for executing the job and to avoid holding the resources for longer period.
+
+Lets create a "program1.py" python file containing below details,
+1. Boiler plate code
+2. create orders_schema
+3. create order_df
+4. print no.of partitions in order_df
+5. create sql table
+6. Run spark.sql query
+7. Spark.stop()
+
+and upload the file.
+
+Now we need to go to terminal and run the below command
+
+#spark-submit \
+--master yarn \
+--num-executors 1 \
+--executor-cores 1 \
+--executor-memory 1G \
+--conf spark.dynamicAllocation.enabled=False \
+program1.py (better to give complete path to where you uploaded the file)
+
+Once the file content gets executed, application will be finished, all the resources will be free, and if you want to check the details we need to go to History Server.
+
+When working on the notebook by default the mode is client mode. Driver will be running on Gateway machine.
+
+But when submitting the job through "spark-submit", it gives 2 options client mode or cluster mode. By default it is client mode.
+
+Whenever we run using client mode, we will see the output on the screen.
+
+with the below code, driver runs on one of the worker node so you wont be able to view the output on screen.
+
+#spark-submit \		-->(spark 2 version we used for spark3 use "spark3-submit") 
+--deploy-mode cluster \
+--master yarn \
+--num-executors 1 \
+--executor-cores 1 \
+--executor-memory 1G \
+--driver-memory 2G \ 	-->(Optional - by default 1 Gb)
+--driver-cores 1 \      -->(Optional - by default 1)
+--conf spark.dynamicAllocation.enabled=False \
+--verbose 		-->(to get more additional details)
+program1.py 		-->(better to give complete path to where you uploaded the file)
+
+Basically results would be printed on "worker machine" but we are on Gateway machine this is one reason and another is better to use dataframe writer API we should store the result in a path.
+
+Best practise is give the configurations while running the "spark-submit" instead of giving in spark session.
+
+***** Spark Session is give more priority than spark-submit and default values will be 3rd priority *****
+
+/etc/spark3/conf --> to verify the default config file (spark-defaults.conf)
+
+
+
+Evaluating the Initial Partitions in a Dataframe
+================================================
+
+How do we calculate the initial number of partitions in a dataframe?
+
+Initial partitions and Shuffle partitions are different
+
+Shuffle partitions - spark.shuffle.partitions - By Default 200
+
+Basically initial number of partitions play an important role in parallel.
+
+Lets consider we have 100 CPU cores and we have only 2 partitions in your dataframe then we are utilising only 2% capacity of your cluster. If same data would have been split across 100 partitions we could have used entire cluster wisely. So the number of partitions should be chosen wisely.
+
+**** When we read a file while creating the dataframe spark determines the initial number of partitions based on few configurations ****
+
+Scenario:-
+--------
+Let us consider that we have 1.1 Gb csv file in HDFS
+
+1)
+when we have 2 executors each with 1 Gb RAM and 1 CPU core
+
+Overall - 2 CPU cores -> So that we can execute 2 tasks in parallel at max.
+
+If partition size is 550 mb, we would get 2 partitions and then we could have executed both partitions in parallel but there is a chance that we may get OOM while execution bcz we will get 30% only for execution memory.
+
+spark recommends partition size should be <= 200 mb
+
+The initial number of partitions depends up on the partition size
+
+So that partition size should be min(128 Mb, (1.1 Gb/2 = 550 Mb))
+
+How we are getting 128 mb as partition size?
+-------------------------------------------
+
+There is a configuration "spark.sql.files.maxPartitionBytes" - 128 mb
+
+So that partition size should be min(maxPartitionBytes, file_size/defaultParallelism)
+
+2)
+when we have 8 executors each with 2 Gb RAM and 2 CPU cores
+
+Overall - 16 CPU cores -> so that we can execute 16 tasks in parallel at max
+
+defaultParallelism - 16 (no.of executors * no.of CPU cores)
+
+Now, partition size is min (126 mb, 1.1 Gb/ 16 = ~75 mb) 
+
+So with this spark will make use of complete cluster capacity wisely without wasting resources.
+
+For example:-
+
+If we have a file of size 1 Tb and 100 node cluster each with 16 CPU cores and 64 Gb RAM.
+
+You will get 1600 (100 * 16) as defaultParallelism
+
+1 TB/ 1600 = 650 mb
+
+so partition size will be min(128 mb (maxPartitionBytes), 650 mb (file_size/defaultParallelism))
+
+8000 partitions (128 mb)
+
+And finally 1600 tasks in parallel --> 1600 --> till 8000 partitions got executed
+
+*******
+1600 CPU cores and 8000 partitions are fine bcz we can run the 1600 tasks multiple times and make use of complete cluster capacity 
+But 1600 CPU cores and 800 partitions are not fine bcz we are under utilising the cluster capacity due to which some resources are wasted 
+*******
+
+
+Calculating the Initial Number of Partitions for a Single Non-Splitable file
+============================================================================
+
+Let us consider that we have a single file of size 1.1 Gb,
+
+If we have a 2 CPU cores - 9 partitions (128 mb)  --> max (2 partitions, 9 partitions)
+If we have a 16 CPU cores - 16 partitions (75 mb) --> max (16 partitions, 9 partitions)
+
+Basically 16 CPU cores - 9 partitions not okay as we wasting some resources (7),
+if we have 16 CPU cores - 32 partitions okay as we will completely utilize the cluster resources (16 tasks -> 16 task)
+
+What if we have file which is not splitable?
+-------------------------------------------
+Sometimes when we use compression techniques (like snappy, gzip) with the csv files then these files are not splitable. i.e. file corrupts
+
+1 big file with size 300 mb and when we try to create a dataframe out of it. You will have only 1 partition bcz if we split, data will be corrected. So these compression techniques with csv files are not recommended. 
+
+But if we apply "Snappy" compression technique on "parquet" file, we can split the file so it is recommended.
+
+Command to check the maxPartitionBytes
+--------------------------------------
+spark.conf.get("spark.sql.files.maxPartitionBytes") ==> '134217728b' / (1024 * 1024) = 128 mb
+
+Command to check defaultParallelism
+-----------------------------------
+spark.sparkContext.defaultParallelism() ==> 2
+
+Command to check partitions in dataframe
+----------------------------------------
+orders_df.rdd.getNumPartitions() ==> 9 (1.1 Gb/128 mb)
+
+When we write the above dataframe to a file using Dataframe Writer API we will 9 files, but i want to get only 1 file.
+
+new_orders_df = orders_df.repartition(1)
+
+new_orders_df.rdd.getNumPartitions() ==> 1
+
+Now if I wirte "new_orders_df" dataframe to disk we will get 1 file only.
+
+#new_orders_df.write \
+.format("csv") \
+.mode("overwrite") \
+.option("codec","org.apache.hadoop.io.compress.GzipCodec"/"gzip") \ (gZip compression technique)
+.save("orders_gz")
+
+By using the above command we will create a "part-00...csv.gz" file (169.8 mb) in the path "/user/itv028185/orders_gz"
+
+#new_orders_df.write \
+.format("csv") \
+.mode("overwrite") \
+.option("codec","snappy") \ (snappy compression technique)
+.save("orders_snappy")
+
+By using the above command we will create a "part-00...csv.snappy" file (313.9 mb) in the path "/user/itv028185/orders_snappy"
+
+***** gZip compress the file size more compared to snappy *****
+
+Lets read the above created file and create a new dataframe,
+#new_orders_df1 = spark.read \
+.format("csv") \
+.schema(orders_schema) \
+.load("/user/itv028185/orders_gz")
+
+#new_orderes_df1.rdd.getNumPartitions() ==> 1 (bcz the file is not splitable, though file size is > 128 mb)
+
+&&&&&& Basically the file should be splitable then only we can get best benefits like parallelism &&&&&&
+
+Now lets write the file in parquet format,
+#new_orders_df.write \
+.mode("overwrite") \
+.save("orders_parquet_new")
+
+By using the above command we will create a "part-00...parquet.snappy" file (109.9 mb) in the path "/user/itv028185/orders_parquet_new" and this file is splitable.
+
+Lets read the above created file and create a new dataframe,
+#new_orders_df2 = spark.read \ 
+.load("/user/itv028185/orders_parquet_new")  *** Here we no need to mention schema, as parquet file already contains metadata ****
+
+#new_orders_df2.rdd.getNumPartitions() ==> 2 
+
+Though the file that we read is 109.9 mb which can be fit in a single partition, as we have default 2 partitions and not to waste resources. So output is 2.
+
+
+Calculating the Initial Number Of Partitions for Multiple Files
+===============================================================
+
+When we have multiple files, how the number of initial partitions are calculated?
+--------------------------------------------------------------------------------
+
+#new_orders_df.rdd.getNumPartitions() ==> 1
+
+#final_orders_df = new_orders_df.repartition(20)
+
+#final_orders_df.rdd.getNumPartitions() ==> 20
+
+#final_orders_df.write \
+.format("csv") \
+.mode("overwrite") \
+.save("orders_final")
+
+With above command 20 csv files with size (53.6 mb) will get created in the path "/user/itv028185/orders_final"
+
+Now lets try to read the above file and create a dataframe and check how many partitions will get created?
+
+#final_new_orders_df = spark.read \
+.format("csv") \
+.schema(orders_schema) \
+.load("/user/itv028185/orders_final")
+
+#final_new_orders_df.rdd.getNumPartitions() ==> 10 (bcz 2 53.6 mb files get combined into 1 file as it will be < 128 mb) 
+
+spark.conf.get("spark.sql.files.maxPartitionBytes") // 128 mb
+
+spark.sparkContext.defaultParallelism // 2
+
+spark.conf.get("spark.sql.files.openCostInBytes") // '4194301' i.e. 4 mb
+This means the time taken to open one file is equal to the time taken to process 4 mb of data
+
+The cost of opening 20 files is equivalent to as if we reading a 80 mb data.
+
+2 files of 60 mb --> require 2 * 60 + 2 * 4 = 128 mb
+20 files of 2 mb --> require 20 * 2 + 20 * 4 = 120 mb
+
+Why this extra over-head 4 mb given is?
+
+while combining multiple small files this task should not become slow and others complete fast. We want all the merges to happen at same time.
+
+This "openCostInBytes - 4 mb" will be useful to understand,
+
+when you read 1 mb file we think in such a way that to create a partition of size 128 mb, I will open 128 files and create one partition. This will take a lot of time as over-head of 4 mb involved in opening each file.
+
+But if we read 128 files of size 1 mb we require --> 128 * 1 + 128 * 4 = 630 mb
+
+Even to read 1 mb file it will need 5 mb
+
+so 128 mb / 5 = 25 (we can read 25 1 mb files to create a partition)
+
+Let us make 500 partitions instead of 20 
+#final_orders_df = new_orders_df.repartition(500)
+
+#final_orders_df.rdd.getNumPatitions ==> 500
+
+With this lets write dataframe data to disk, so that we can see 500 files of 2.1 mb gets created (1.1 Gb / 500) in the path "/user/itv028185/orders_final_new"
+
+#final_orders_df.write \
+.format("csv") \
+.mode("overwrite") \
+.save("orders_final_new") 
+
+Now lets the read the files which are created in the path "/user/itv028185/orders_final_new" and create a dataframe
+
+#orders_df11 = spark.read \
+.format("csv") \
+.schema("orders_schema") \
+.load("/user/itv028185/orders_final_new")
+
+Before checking the number of partitions are there in the dataframe, lets calculate manually
+
+we have 500 files with size 2.1 mb, 
+to create a partition of 128 mb - 2.1 mb + 4 mb (over-head -- to read a file) ==> 128 / 6.1 = 21 files (Are combined in 1 partition)
+
+500 files / 21 files = 23.8 files ==> 24 partitions
+
+Lets verify by running the command,
+
+#orders_df1.rdd.getNumPartitions() = 24
+
+With this we can make sure while combining multiple small files and even working with the big file, time taken is almost same.
+
+*****
+partition size is not more than 128 mb
+	+
+tries to make use of all the available CPU cores
+*****
+
+Q) Merge the small files into larger files to reduce the number of partitions.
+
+Why?
+
+-> Reduces file-opening and closing overhead.
+
+-> Minimizes excessive task scheduling.
+
+-> Reduces metadata operations.
+
+-> Improves Spark processing efficiency, especially on clusters with limited resources.
+
+
+Q) when we do .partitionBy("product_category","product_demand") then
+
+A) Partition column order matters!
+
+-> Filtering on both partition columns → 1 folder.
+
+-> Filtering on the first partition column → 3 folders.	
+
+-> Filtering on the second partition column only → 20 folders.
+ 	
+
+Assignment Q6 
+-------------
+from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType, ArrayType
+from pyspark.sql.functions import col,size
+
+spark = SparkSession. \
+    builder. \
+    config('spark.shuffle.useOldFetchProtocol', 'true'). \
+    config("spark.sql.warehouse.dir", "/user/{username}/warehouse"). \
+    enableHiveSupport(). \
+    master('yarn'). \
+    getOrCreate()
+
+# creating schema for reading the json file
+
+users_schema = StructType([
+    StructField("user_id", IntegerType(), nullable=False),
+    StructField("user_first_name", StringType(), nullable=False),
+    StructField("user_last_name", StringType(), nullable=False),
+    StructField("user_email", StringType(), nullable=False),
+    StructField("user_gender", StringType(), nullable=False),
+    StructField("user_phone_numbers", ArrayType(StringType()), nullable=True),
+    StructField("user_address", StructType([
+        StructField("street", StringType(), nullable=False),
+        StructField("city", StringType(), nullable=False),
+        StructField("state", StringType(), nullable=False),
+        StructField("postal_code", StringType(), nullable=False),
+    ]), nullable=False)
+])
+
+#reading the files
+users_df = spark.read \
+.format("json") \
+.schema(users_schema) \
+.load("/public/sms/users/")
+
+users_df.withColumn("user_street",col("user_address.street")) \
+.withColumn("user_city",col("user_address.city")) \
+.withColumn("user_state", col("user_address.state")) \
+.withColumn("user_postal_code", col("user_address.postal_code")) \
+.withColumn("num_phn_numbers", size(col("user_phone_numbers"))).createOrReplaceTempView("users_vw")
+
+#Ans 5 state-wise gender count
+users_final_df = spark.sql("""select user_state,
+            sum(Male_cnt) as Male, 
+            sum(Female_cnt) as Female
+            from
+            (select user_state, 
+            case when user_gender='Male' then count(user_id) end as Male_cnt,
+            case when user_gender='Female' then count(user_id) end as Female_cnt 
+            from users_vw
+            where user_state is not null and user_phone_numbers is not null
+            group by user_state,user_gender)
+            group by user_state
+            order by user_state""")
+
+users_final_df.write.format("parquet").mode("overwrite").option("path","/user/itv006753/pivot_assignment_result").save()
+
+spark.stop()
+
+
+
+   
