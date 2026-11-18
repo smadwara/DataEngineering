@@ -2194,7 +2194,7 @@ rdd2 = rdd1.flatMap(lambda x: x.split(" "))
 rdd3 = rdd2.map(lambda x: (x,1))
 rdd4 = rdd3.reduceByKey (lambda x,y: x+y)
 rdd4.collect() --> to display the output on the screen
-rdd4.savAsTextFile("/user/itv028185/data/newoutput") --> to save the output in the HDFS.
+rdd4.saveAsTextFile("/user/itv028185/data/newoutput") --> to save the output in the HDFS.
 
 
 
@@ -2959,8 +2959,9 @@ The below is the issue, we need to bring all the keys in order dataset and custo
 			node1 		node2 		node3 		node4
 orders		p1,p2		p3,p4		p5,p6		p7,p8,p9(1012) ----- bigger dataset
 customers  	p1,p2(1012)										   ----- small dataset (Bcz 1 entry for 1 customer)
-									p9(1012)
-									p2(1012)
+									p9(1012) ----
+											     |--- Shuffled to get same customer_id on a single node
+									p2(1012) ----
 
 To overcome this issue we are trying to copy the entire customers dataset on all the nodes bcz the customers dataset is small. 
 We may think this might be redundancy but the dataset is small i.e. in Kb's. We are broadcasting the copy of customers dataset on all the nodes.
@@ -5518,7 +5519,7 @@ when we run the command,
 	replication = 1
 
 But when we run the command and assign it to somether,
-	#persist_df = orders_df.persist(StorageLevel (True,False,False,False,1)) --> nothing would have cahed
+	#persist_df = orders_df.persist(StorageLevel (True,False,False,False,1)) --> nothing would have cached
 
 If we run,
 	#orders_df.count() --> with this all the partitions / entire data will be cached
@@ -6252,9 +6253,9 @@ Dataframe Writer Modes
 
 1. overwrite		- replaces new files with existing files, if the folder already exists
 
-2. ignore		- ignores the command if the folder exists			
+2. ignore			- ignores the command if the folder exists			
 
-3. append		- add new files to existing files in the folder
+3. append			- add new files to existing files in the folder
 
 4. errorIfExists	- throws error if the folder exists
 
@@ -6323,7 +6324,7 @@ To verify how many records scanned, open "ALL APPLICATIONS UI" --> Click on ur "
 
 Basically we use partitionBy, incase when we do filtering based on 1 column and these queries are common. Just like indexing creating index on columns which is mostly used in filter condition in order to improve the performance.
 
-***** PartitionBy should be used on the columns which are having few distinct values  *****
+***** PartitionBy should be used on the columns which are having few distinct values *****
  
 
 More on Partition's Performance Benefits
@@ -6410,14 +6411,13 @@ Bucketing helps in 2 purposes.
 1. Could help in skipping the data. (Depends on spark version we are using)
 2. Joins
 
-
 ***** when we are working with "Bucket" we should mention the "fixed number of buckets" and the "bucketing column" *****
 
 If we want to have 8 buckets, 8 files will be created for each partition.
 
 For 1.1 Gb of data that we load and create dataframe will have 9 partitions.
 
-For each partition 8 buckets will be created. So overall we will have 72 files.
+For each partition 8 buckets will be created. So overall we will have 72 files in all folders together.
 
 How system will select what data to be put in which file?
 
@@ -7019,11 +7019,11 @@ Q) when we do .partitionBy("product_category","product_demand") then
 
 A) Partition column order matters!
 
--> Filtering on both partition columns → 1 folder.
+-> Filtering on both partition columns -> 1 folder.
 
--> Filtering on the first partition column → 3 folders.	
+-> Filtering on the first partition column -> 3 folders.	
 
--> Filtering on the second partition column only → 20 folders.
+-> Filtering on the second partition column only -> 20 folders.
  	
 
 Assignment Q6 
@@ -7057,6 +7057,8 @@ users_schema = StructType([
     ]), nullable=False)
 ])
 
+users_schema = "user_id int, user_first_name string, user_last_name string, user_email string, user_gender string, user_phone_numbers array<string>, user_address struct<street:string,city:string,state:string,postal_code:string>"
+
 #reading the files
 users_df = spark.read \
 .format("json") \
@@ -7089,4 +7091,1122 @@ spark.stop()
 
 
 
-   
+Week-10(Apache Spark Optimizations 1)
+=======
+
+Internals of groupBy
+====================
+
+How a groupBy works internally
+------------------------------
+Lets create a boiler plate code, create orders_schema and create orders_df dataframe. And verify the number of partitions in the dataframe.
+
+Now run the below command to save the output to the disk in HDFS path "/user/itv028185/output007",
+
+#orders_df.groupBy("order_status").count().write.format("csv").mode("overwrite").save("output007")
+
+Whenever we call a wide transforamtion/ whenever shuffling happens we get 200 shuffle partitions.
+
+Since we have only 9 different "order_status" we will have 9 partitions at max which will have some data and remaining 191 shuffle partitions would be empty. 
+
+But if we have 400 different "order_status" then all the 200 shuffle partitions will have data and each partition will have 2 different "order_status".
+
+The problem that arise here is that Task Scheduler is unnecessarily overburdened to schedule 200 tasks, though only 9 will work. Bcz it has to run the task that doesnot work.
+
+If we verify the data in the HDFS path "/user/itv028185/output007",
+
+#hadoop fs -ls -h "/user/itv028185/output007
+
+Here you will/should see only the files that contains data.
+
+*** Here "part-00053" is nothing but in the "SPARK UI", 53 is the Task Index number ***
+
+If you want to do testing, without writing the data to disk by invoking the entire flow use the below command, (noop - no operation)
+
+#orders_df.groupBy("order_status").count().write.format("noop").mode("overwrite").save() (This will execute quickly bcz we are not writing to the disk)
+
+Even try this and it work same way,
+
+create a spark table and run select order_status, count(*) from orders groupBy order_status
+
+
+Normal Join Vs Broadcast Join
+=============================
+
+How a Normal Join works in spark & Broadcast Join
+=================================================
+
+Joining orders_df and customers_df on customer_id column
+
+#spark.conf.get('spark.sql.autoBroadcastJoinThreshold') ==> '10485760b' = 10 mb
+
+What this "autoBroadcastJoinThreshold" indicates is that, when we are trying to join 2 dataframes/tables and if anyone of them is < 10 mb then it will automatically goes for "Broadcast Join" (Map Side Join).
+
+To disable Broadcast Join,
+
+#spark.conf.set('spark.sql.autoBroadcastJoinThreshold','-1') 
+
+Now perform the inner join,
+
+#orders_df.join(customers_df,orders_df.customer_id=customers_df.customer_id,"inner")
+
+To see the entire plan in SPARK UI dont run ".show()" instead write it to the disk,
+
+#orders_df.join(customers_df,orders_df.customer_id=customers_df.customer_id,"inner").write.format("noop").mode("overwrite").save() {210 tasks}
+
+Here after shuffling, sorting will take place bcz sorting will make sure that it can match the customer_id from both dataframes. 
+
+"Shuffle Sort Merge Join" (Shuffle - Same Customer_id from both dataframes will sit on single partition)
+ -----------------------
+
+Bcz of this shuffling the execution will get delayed. So our intention is to reduce/avoid shuffling.
+
+
+More on Broadcast Join
+======================
+
+orders dataframe - 1.1 Gb
+customers dataframe - 2 mb
+
+our Broadcast Join threshold is 10 mb by default. So if there is any table/dataframe it would have gone for Broadcast Join.
+
+Now lets reset the Broadcast Join to 10 mb,
+
+#spark.conf.set("spark.sql.autoBroadcastJoinThreshold","10485760b")
+
+and run the below command then you will see better performance compared to previous scenario when Broadcast Join is disabled,
+
+#orders_df.groupBy("order_status").count().write.format("csv").mode("overwrite").save("output007")
+
+***** So basically whenever Broadcast Join is happened then performance is improved bcz there is no shuffling involved *****
+
+Scenario:-
+--------
+The below is the issue, we need to bring all the keys in order dataset and customers dataset on a same node to perform Join transformation.
+
+			node1 		node2 		node3 		node4
+orders		p1,p2		p3,p4		p5,p6		p7,p8,p9(1012) ----- bigger dataset
+customers  	p1,p2(1012)										   ----- small dataset (Bcz 1 entry for 1 customer)
+									p9(1012) ----
+											     |--- Shuffled the data to get same customer_id on a single node (ex:- node 3)
+									p2(1012) ----
+
+To overcome this issue we are trying to copy the entire customers dataset on all the nodes bcz the customers dataset is small so that all the customers data will be on the same machine so it performs the data processing based on DATA LOCALITY principle.
+ 
+We may think this might be redundancy but the dataset is small i.e. in Kb/Mb's. So, we are broadcasting the copy of customers dataset on all the nodes.
+
+			node1 		  node2 		  node3 		  node4
+orders		p1,p2		  p3,p4			  p5,p6			  p7,p8,p9(1012) ----- bigger dataset
+        all_customers	 all_customers   all_customers	 all_customers	 ----- small dataset
+			(1012)		 (1012)			 (1012)			 (1012) ---
+										 						   |-- processing happens on the same machine (DATA_LOCALITY - NODE_LOCAL)
+			(1011)		 (1011)			 (1011)			 (1011) --- 
+
+By broadcasting the data on all the nodes the memory consumption might increase 2 mb * 9 = 20 mb, but it may give some performance benefits.
+
+Each machine is capable/self-sufficient to do the join locally. It does not need to depend on any other machine for joining and no need to shuffle the data to bring the same key data on to a single machine.
+
+This is how broadcast join works. Bigger dataset is distributed across the cluster and complete copy of smaller dataset is kept on all the machines.
+
+node1
+
+part of orders data
+complete customer data
+
+node2
+
+part of orders data
+complete customer data
+
+********
+As there is no need of shuffling, it won't create any additional stage and also additional 200 tasks won't get created.
+
+If a dataset is less than 10 mb i.e. small data is the data which can fit in memory of the driver machine.
+
+Let us consider that orders data is sitting on 4 different nodes.
+
+So we need to send the customers data to those nodes where orders data is present.
+
+Driver nodes knows where orders data is sitting...
+
+So now, customers data will go to the driver node as it have the information where orders data is present. customers data should be able to fit in drivers memory otherwise it will throw OOM error and broadcast starts from driver i.e. driver will broadcast customers data to all of the executors where orders data is present.
+
+System scans the customers and orders data. System will broadcast the customers data and Broadcast Hash Join happens on all 9 executors. So shuffling and sorting of data is not required.
+
+We can set Broadcast Memory to 2 Gb but driver may throw OOM error due to lack of memory as the data is unable to fit in memory of driver machine.
+********
+
+Different types of Joins
+========================
+
+inner join		- Works using Broadcast Join
+left  join		- Works using Broadcast Join
+right join      - orders_df and customers_df (Broadcast Join wont happen bcz we are comparing a part of orders data with complete customers data then 
+                  we might get "NULL" for non-matching rows from the partition p1 which is not correct. Eventually it works normally like the way it works when BroadcastJoin is disabled.)
+full outer join - Never use Broadcast Join
+
+When we try to broadcast huge dataset try the below command,
+
+#from pyspark.sql.functions import *
+
+#customers_df.join(broadcast(orders_df),orders_df.customer_id=customers_df.customer_id,"left").write.format("noop").mode("overwrite").save()
+
+***** Returns "sparkFatalException" ERROR *****
+
+
+Partition Skew
+==============
+Till now we have covered,
+
+1. How groupBy works internally
+2. We understood how a join works in spark - Shuffle Sort Merge Join 
+3. When we are joining a larger dataframe with smaller one - Broadcast Join
+
+Now lets join 2 spark sql tables.
+
+#orders_df.createOrRepalceTempView("orders")
+#customers_df.createOrReplaceTempView("customers")
+
+#spark.sql("select * from orders join customers on orders.customer_id == customers.customer_id").write.format("csv").save()
+
+To understand about partition Skew
+----------------------------------
+
+Lets create a dataframe (orders_new_df) by reading file from the path "/public/trendytech/retail_db/ordersnew"
+
+#orders_new_df.groupBy("order_status").count().collect() --> to visualize the data on the screen
+
+In the above dataframe, majority of the data is having in order_status=COMPLETE folder.
+
+Lets create a mapping_schema,
+
+#mapping_schema = "status string, code integer"
+
+Now lets create a dataframe (mapping_df) by reading a file from the path "/public/trendytech/datasets/mapping_data"
+
+#mapping_df = spark.read \
+.format("csv") \
+.option("delimiter", "|") \			==> This is because mapping_data is delimited based on "|"
+.schema(mapping_schema) \
+.load("/public/trendytech/datasets/mapping_data") 
+
+#orders_new_df.join(mapping_df, orders_new_df.order_status == mapping_df.status,"inner").write.format("noop").mode("overwrite").save()
+
+When we run the above command, job will get triggered and it will have 224 tasks. Out of which 1 task will hold 525 Mb of data (460L records) i.e. it contains "COMPLETE" order_status and it will take 34 Sec to get completed bcz of Partition Skew.
+
+**** Partition Skew is a scenario where out of 9 distinct order_status keys, only 1 key having huge data in the partition than others ****
+
+We cannot get parallelism in the above case as huge amount of data is present in a single partition and it has to be handled by 1 executor and due to this Spillage in Memory and Disk.
+
+***** Salting is a manual process with which we can solve the problem of Partition Skew *****
+
+*** Partitioning Skew indicates Slow-Running Stages/Tasks, Spilling Data to Disk and Out of Memory errors ***
+
+***** Salting increases the number of partitions by splitting the repeating keys and help us to avoid partition skew *****
+
+In this salting method, 
+
+we will add some random number at the end of the key. So that we will break that key in multiple other keys, with this each key will go to each partition and execution will get completed quickly.
+
+COMPLETE1
+COMPLETE2
+COMPLETE3
+
+
+3 Use-cases & Better Optimizations
+==================================
+
+Recap:-
+
+We have 200 shuffle partitions but only few of them have data. Bcz it puts load on task scheduler unnecessarily.
+
+when there is dominating key / key which is having huge amount of data and there is a partition skew.
+
+Shuffle Sort Merge Join - Basically we need to avoid this join
+
+Broadcast Join - When we have one bigger dataset and another smaller (<10 mb) dataset 
+
+
+Challenges that we have are:-
+
+1. We have 200 shuffle partitions but only few of them have data. Bcz it puts load on task scheduler unnecessarily.
+
+2. when there is dominating key / key which is having huge amount of data and there is a partition skew.
+
+3. I want to join orders dataframe with distinct of customers dataframe (< 10 Mb) 
+
+We have created orders_df by reading "/public/trendytech/orders/orders_1gb.csv" file and customers_df by reading "/public/trendytech/retail_db/customersnew" with duplicate data.
+
+When we run,
+
+#orders_df.join(customers_df.distinct(), orders_df.customer_id == customers_df.distinct().customer_id, "inner").write.format("noop").mode("overwrite").save()
+
+Then it will create a 411 tasks (9 tasks for orders, 2 tasks for customers and 400 tasks for both distinct and join) bcz we have 2 wide transformations (distinct and join) and this join will still follow "Shuffle Sort Merge Join".
+
+Though we have done distinct due to which size of customers_df reduced to ~1 Mb only why Broadcast Join is not happening?
+	 
+Explanation:-
+
+In customers data there are 14 files around 12 Mb data, there were 2 initial partitions so 2 tasks will get executed
+
+Lets consider,
+Partition 1 - 7 files (174,090 records) -> local distinct -> (12,345 records) -> global distinct --
+																								   |-- 12,345 records	
+Partition 2 - 7 files (174,090 records) -> local distinct -> (12,345 records) -> global distinct -- 
+
+So now Why not Broadcast Join means, when spark created the execution plan initially it is having 12.7 Mb and it cannot build/hanlde the execution plan dynamically based on the change in data size (run-time stats is unable to handle below spark 3.0).
+
+We can handle the Challenges 1,2,3 using AQE (Adaptive Query Execution) a feature given in Spark 3.0
+
+
+
+Adaptive Query Execution (AQE)
+==============================
+
+Spark 3.0, 3.1 (By default not enabled)
+
+Spark 3.2 (By default enabled)
+
+This feature is enabled by default in Spark version of 3.2 and above but below that we need to enable it.
+
+AQE provides
+------------
+1. dynamically coalescing the number of shuffle partitions
+2. dynamically handling partition Skew
+3. dynamically switching join strategies
+
+How it works is?
+----------------
+During the shuffle, it calculates the run-time stats.
+i.e. for customers data we have performed shuffling and distinct now spark will calculate below details like
+
+1. number of records
+2. size of the data
+3. min and max of each column
+4. count/number of occurances of each key
+
+To verify AQE enabled or not
+----------------------------
+#spark.conf.get("spark.sql.adaptive.enabled") => 'false' for spark version below 3.2
+
+#spark.conf.set("spark.sql.adaptive.enabled",True) => to enable Adaptive Query Execution
+
+Case 1:- (Dynamically coalescing the number of shuffle partitions)
+------
+
+Before enabling AQE when we run the below command, it will create 209 tasks
+
+#orders_df.groupBy("order_status").count().write.format("csv").mode("overwrite").save("output007") 
+
+After enabling AQE when we run the below command, it will create 9 tasks by coalescing/reducing the partitions without data or else even it may create 8 partitions.
+
+#orders_df.groupBy("order_status").count().write.format("csv").mode("overwrite").save("output007")
+
+*** Adaptive Query Execution (AQE) not only reduce/coalesce the partitions without data but also it will combine data present in mutliple partitions into 1 partition if data is less in those partitions and this will be based on some properties ***
+
+**** After execution of job, in SPARK UI if we go to "SQL" open the execution plan you can view "AdaptiveSparkPlan". If AQE is enabled. ****
+
+
+Case 2:- (Dynamically handling partition Skew)
+------
+
+Basically when we want to join 2 tables/dataframes ex:- orders_df and customers_df. In case if orders_df have more data especially related to order_status='COMPLETED' then in that to handle this data will bcm difficult and takes lot of time to execute the partition (34 Sec).
+
+To avoid the above scenario, AQE will split the partition with huge data into 2/more equal partitions internally (based on some properties) and makes a copy of each customers data and then perform join.
+
+Before enabling AQE when we run the below command, overall 57 sec for complete job execution. Where 224 tasks got created and 1 task with huge data will take 34 sec. 
+
+#orders_new_df.join(mapping_df, orders_new_df.order_status == mapping_df.status,"inner").write.format("noop").mode("overwrite").save()
+
+After enabling AQE when we run the below command,  overall 29 sec for complete job execution. Where 39 tasks got created. If we verify the execution plan then "SortMergeJoin(Skew=true)" i.e. removing the partition skew.
+
+#orders_new_df.join(mapping_df, orders_new_df.order_status == mapping_df.status,"inner").write.format("noop").mode("overwrite").save()
+
+If we enable BroadcastJoinThreshold along with AQE and run the below command, then the execution of the job will be much more faster (15 sec) (24 tasks creted) bcz shuffling and sorting are not required along with Partition Skew as we are not doing shuffling i.e. same key going to same partition. It will do Broadcast Hash Join.
+
+#spark.conf.get('spark.sql.autoBroadcastJoinThreshold') => '10485760b'
+
+#spark.conf.set('spark.sql.autoBroadcastJoinThreshold',''10485760b'')
+
+#orders_new_df.join(mapping_df, orders_new_df.order_status == mapping_df.status,"inner").write.format("noop").mode("overwrite").save()
+
+
+Case 3:- (Dynamically switching join strategies)
+------
+
+Before enabling AQE when we run the below command, 411 tasks get created as customers_df initial size is 12 Mb so Broadcast Hash Join is not considered and will perform shuffle sort merge join. (24 sec)
+
+#orders_df.join(customers_df.distinct(),orders_df.customer_id == customers_df.distinct().customer_id, "inner").write.format("noop").mode("overwrite").save()
+
+After enabling AQE when we run the below command, Broadcast Join enabled by default so it has taken (14 sec). Here shuffling will be done initially bcz during the shuffle only we got to know the run-time stats. We are not performing sort and merge.
+
+#spark.conf.set('spark.sql.adaptive.enable',True)
+
+#orders_df.join(customers_df.distinct(),orders_df.customer_id == customers_df.distinct().customer_id, "inner").write.format("noop").mode("overwrite").save()
+
+
+
+More on Join Types
+==================
+
+Join Types in Spark
+-------------------
+Created orders_df by reading a file from "/public/trendytech/datasets/orders_sample.csv" and customers_df by reading a file from "/public/trendytech/datasets/customers_sample.csv"
+
+Inner - All the matching records from both the tables
+
+Left Outer - All the matching records from both the tables + Non-matching records from the left table padded with nulls on the right
+
+Right Outer - All the matching records from both the tables + Non-matching records from the right table padded with nulls on the left
+
+Full Outer - All the matching records from both the tables + Non-matching records from the left table padded with nulls on the right + Non-matching records from the right table padded with nulls on the left
+
+Semi (Left Semi) - All the matching records from both the tables but returns only the columns from the left table
+Customers	Orders
+Customers who have placed at least one order?
+
+Anti (Left Anti) - All the records that are present in left table but not matching or present in the right table
+Customers	Orders
+Customers who did not place any order?
+
+
+Join Strategies
+===============
+
+Join Strategies in Apache spark
+-------------------------------
+
+1. Broadcast Hash Join
+2. Shuffle Sort Merge Join
+3. Shuffle Hash Join
+
+Broadcast - broadcast complete copy of data on to the executors with the help of driver machine.
+Hash -
+Sort - Sorting a list of data in ascending order and its a costly operation. Best sorting technique takes O(nlogn) time for Execution.
+Shuffle - Sending data across the network. Its a very costly operation. So better to avoid if we can.
+Merge - We can easily merge 2 sorted lists.
+
+Hash Table - Basically it meant for quick searching
+
+Hash Table Creation
+
+- Hash Table is a Data Structure that will increase the search efficiency to O(1) i.e. constant time
+- Hash function is used to Map the input value to a key
+
+HASH TABLE
+ -------------		  Mapped Using HASH FUNCTION
+|KEY	VALUE |			VALUE      ---> 	KEY
+|101	11599 |	        256		   --->     104	
+|102 	17	  |		
+ -------------
+ 
+Let us consider,
+
+orders_table		customers_table
+100000				1000
+
+If we do normal search i.e. orders_table(customer_id) should be matched with customers_table(customer_id) then we have to search 1 record of customer_id in orders_table with all the 1000 records of customer_id in customers_table
+
+100000 * 1000 = 10,00,00,000
+
+1. Broadcast Hash Join (1 Large table and 1 Small table)
+----------------------
+
+Orders table with size 1.1 Gb 9 partitions, customers table with size 1 Mb < 10 Mb threshold. So Broadcast Hash Join will be offered by the system which is super efficient as it does not require shuffle and sort.
+
+In this case, customers hash table will be created. It takes some space in the memory to create this, but structure will be very efficient so that we are able to search the values very very quickly by using the customer_id key.
+
+After the creation of customer hash table, driver will broadcast it to all the executors where orders data is kept.
+
+Executor 1
+==========
+Part of orders data - partition 1 ==> PROBE table
+Entire Customers Hash Table
+
+Why this way is efficient?
+
+part of orders data - 10000 records
+Entire Customers Hash Table - 1000 records 
+
+It will perform 1 operation for each order search overall 10000 operations, instead of for each record of orders table which will scan all the records in customers table.
+
+As no shuffling is required the output from executor 1 will be the final output from this executor. At the expense of some extra memory in terms of driver and executor memory.
+
+We worked with orders_1gb.csv and customers tables by creating dataframes.
+
+#orders_df.join(customers_df,orders_df.customers_id == customers_df.customerid,"inner").write.format("noop").save() --> 13 secs taken
+
+
+2. Shuffle Sort Merge Join (Suitable when both tables are very big)
+--------------------------
+
+First disable Broadcast Join Threshold
+
+#spark.conf.set("spark.sql.autoBroadcastJoinThreshold","-1")
+
+#orders_df.join(customers_df,orders_df.customers_id == customers_df.customerid,"inner").write.format("noop").save()  --> 18 sec
+
+#orders_df.join(customers_df,orders_df.customers_id == customers_df.customerid,"inner").explain() --> to verify the execution plan
+
+#orders_df.join(customers_df.hint("Shuffle_merge"),orders_df.customers_id == customers_df.customerid,"inner").write.format("noop").save()
+
+&&&&&
+In SPARK UI --> SQL the order will be like this,
+
+"Scan --> Filter --> Exchange/Shuffle --> Sort --> SortMergeJoin"
+&&&&&
+
+Shuffle 
+-------
+- 200 partitions will get created
+- same keys from both the tables will land in same executor
+
+Sort
+----
+- Sort is a costly operation with this keys from both the tables will be sorted in asc order on the same executor internally
+- Merging the data becomes easier and faster on sorting
+
+
+3. Shuffle Hash Join
+--------------------
+
+It mainly for 2 large tables. 1 table is large and another table is medium size.
+
+Shuffle 
+-------
+- 200 shuffle partitions will get created
+- same keys from both the tables will land in same executor
+
+Now the medium table will be created as Hash Table so that join operation becomes efficient
+
+Executor 1
+
+Part of orders table - partition 1
+Part of customers table - partition 1 Hash Table
+
+#orders_df.join(customers_df.hint("Shuffle_hash"),orders_df.customers_id == customers_df.customerid,"inner").write.format("noop").save() ==> 210 tasks
+25 sec
+
+&&&&&
+In SPARK UI --> SQL the order will be like this,
+
+"Scan --> Filter --> Exchange/Shuffle --> ShuffledHashJoin"
+&&&&&
+
+Spark will choose "Shuffle Sort Merge Join" / "Shuffle Hash Join" based on the cost.
+
+
+
+Optimizing Join of 2 Large Tables - Bucketing
+=============================================
+
+1 Large and 1 Small Table - Broadcast Hash Join
+
+If we have 2 Large tables can we do some optimization
+
+Shuffle Sort Merge Join (preferred)
+
+Shuffle Hash Join 
+
+Bucketing - Mainly helps for join optimizations 
+
+Partitioning - Mainly helps for filtering and optimizations
+
+Lets create orders_df by reading file from "orders_1gb.csv" and customers_df by reading file from "/retails_db/customers"
+
+Now write the orders_df data back to disk,
+
+#orders_df.write \
+.mode("overwrite") \
+.bucketBy(8,"customer_id") \
+.sortBy("customer_id") \
+.option("path","orders201") \
+.saveAsTable("orderstable201")
+
+Now write the customers_df data back to disk,
+
+#customers_df.write \
+.mode("overwrite") \
+.bucketBy(8,"customer_id") \
+.sortBy("customer_id") \
+.option("path","customers201") \
+.saveAsTable("customerstable201")
+
+***** 2 tables with same 8 number of buckets will gives optimization *****
+
+#spark.sql("select * from orderstable201 join customerstable201 on orderstable201.customer_id == customerstable201.customer_id").write.format("noop").mode("overwrite").save()
+
+The above job doesnot have shuffling and 8 tasks got created bcz of 8 buckets and job completed in 9 sec
+
+&&&&&
+In SPARK UI --> SQL the order will be like this,
+
+"Scan parquet file --> ColumnarToRow --> Filter --> Sort --> SortMergeJoin
+&&&&&
+
+How Bucketing helps in this Join?
+---------------------------------
+Before bucketing, 
+
+Shuffling --> Sort --> Merge
+
+Now after bucketing,
+
+orders table 8 buckets	   customers table 8 buckets
+
+orders - bucket 1	JOIN    customers - bucket 1  ==> As we are bucketing and sorting the data based on "customer_id" both will hold same keys bcz of Hash Function is consistent. 
+
+orders - bucket 2   JOIN    customers - bucket 2
+
+No shuffling is involed in this process even during bucketing bcz 9 partitions in each partitions 8 files are created based on bucketing.
+
+Dividing and applying Hash function is a costly but one time operation and we will eventual gains.
+
+Shuffling (Not Required) --> Sort (Global Sorting) --> SortMergeJoin
+
+&&&&&
+
+This will only work when number of buckets are same in both the tables.
+
+**** SMB (Sort Merge Bucket Join) ****
+
+Both the tables are large,
+
+Both the tables are bucketed based on same join key,
+
+Both the tables have same number of buckets....
+
+Use case:-
+========
+
+When we want to join 2 big tables of 1TB each frequently for some reports
+
+Bucketing and Hash Function is a 1 time activity but we will have eventual gains in the long term
+
+Let us consider without bucketing,
+
+Join is taking 1 hours, so for 30 days 30 hours 
+
+After bucketing,
+
+initially it will take 5 hours for bucketing and join will happen in 10 mins. so for 30 days 300 min = 5 hours. Overall 10 hours.
+
+Bucketing can help us in Bucket pruning also from Spark 2.4 onwards
+
+**** Parallelism after shuffle is min of (total partitions,number of distinct keys, total cpu cores) ****
+
+
+
+Week-11(Apache Spark Optimizations 1)
+=======
+
+Memory Management in Apache Spark
+=================================
+
+If you are requesting for Executor Memory - 2 GB 
+
+--executor-memory 2G (during spark-submit command execution)
+
+When we request for 2 Gb for Executor Memory, How this 2 Gb is allocated?
+------------------------------------------------------------------------
+2 GB (heap memory) - Controlled by JVM / JVM memory
+
+Also we will get max(10% of Executor Memory OR 384 Mb) - overhead memory (non-heap) - Outside JVM
+
+Scenario:-
+--------
+Basically when we run the below command for 8 GB RAM and 4 CPU Cores,
+
+spark3-submit \
+--deploy-mode cluster \
+--num-executors 1 \
+--executor-cores 4 \
+--executor-memory 8G \
+--conf spark.sql.dynamicAllocation.enabled=false \
+program1.py
+
+Error:-
+-----
+Required executor memory (8192),
+overhead (819 MB),
+and Pyspark memory (0 MB),
+is above the max threshold (8192 MB) of this cluster! please check the values of yarn.scheduler.maximum-allocation-mb and yarn.nodemanager.resource.memory-mb
+
+yarn.scheduler.maximum-allocation-mb = 8192 Mb (We cannot get anything more than this including overhead memory)
+yarn.scheduler.maximum-allocation-vcores = 4
+yarn.nodemanager.resource.memory-mb = 51540 MB (Machine memory)
+
+If we request for 2 GB Executor Memory?
+--------------------------------------
+
+2 GB - executor (JVM)
+
+Now executor memory is divided into,
+
+300 MB - Reserved Memory for Spark Engine
+
+1.7 GB - Is divided into 2 parts
+ 
+	- 60% unified area (Storage Memory & Execution Memory) - 1 GB
+    - 40% user memory - 700 MB
+
+384 MB - overhead memory (outside JVM)
+
+Overall Summary
+---------------
+384 mb - overhead memory / non-heap memory (outside JVM)
+300 mb - reserved memory for spark engine
+1 gb - Storage & Execution Memory 
+	500 mb - storage memory
+	500 mb - execution memory
+700 mb - user memory
+
+overhead memory - VM related overheads, system will use this for various things like safegaurding againt OOM error
+reserved memory - 300 mb (spark engine)
+storage memory - whenever we do cache, persist all this will store here (Dataframe & Spark SQL related opertions)
+execution memory  - whenever we do sort, join, aggregation & shuffle all of these will require temporary memory for execution (Dataframe & Spark SQL related opertions)
+user memory - For all RDD related operations, user-defined data structures such as Hash Table / Hash Map.
+
+*** Execution memory can take some memory from storage memory provided it is free and vice-versa ***
+
+Scenario 1:
+----------
+
+1 GB - Storage Memory & Execution Memory (unified area)
+	- 500 mb (storage)
+	- 500 mb (execution) 
+
+lets consider there is no execution and we have cached 700 Mb of data,
+
+now if execution requires some memory then it can evict storage memory to a certain threshold of 200 mb.
+
+Scenario 2:
+----------
+1 GB - Storage Memory & Execution Memory (unified area)
+	- 500 mb (storage)
+	- 500 mb (execution) 
+
+lets consider we did not do any caching and execution requires 700 Mb of memory,
+now if we want to store something and only 300 mb of storage memory is avaliable - for caching.
+
+If storage requires more memory then system cannot evict execution memory, storage cannot evict the execution memory.
+
+***** Execution can evict storage memory to a certain threshold, but storage cannot evict execution memory *****
+
+When we cache data 70% of storage memory then execution cannot evict more than 20% of storage memory
+
+Boiler plate code
+-----------------
+#from pyspark.sql import SparkSession
+import getpass
+username = getpass.getuser()
+spark = sparkSession. \
+	builder. \
+	config('spark.shuffle.useOldFetchProtocol','true'). \
+	config('spark.executor.memory','2G'). \
+	config('spark.executor.instances','1'). \
+	config('spark.dynamicAllocation.enabled','false'). \
+    config('spark.ui.port','0'). \
+    config("spark.sql.warehouse.dir", f"/user/{username}/warehouse"). \
+    enableHiveSupport(). \
+    master('yarn'). \
+    getOrCreate()
+	
+After running this command, Go to SPARK UI --> Click on Executors 
+
+Here we will get 912.3 Mb (~1 GB) for unified area (storage and execution memory). Bcz out of 2 GB, 300 mb will go for reserved memory remamining is 1.7 Gb - 60% for unified are = 912.3 Mb
+
+If you want to change the overhead memory
+-----------------------------------------
+we can change here,
+
+#spark.yarn.executor.MemoryOverhead'
+
+Execution:-
+
+Now if we cache the orders_df --> new_orders_df = orders_df.cache()
+								  new_orders_df.count() --> 25831125 bytes
+								 
+Now in Executors page --> Storage Memory --> 286.7 Mb / 912.3 Mb
+
+Now we have joined orders_df and customers_df by disabling "autoBroadcastJoinThreshold" so that there will be some execution right like shuffling, sorting, merging.
+
+Here you can observe that,
+
+Even though we are working with 1.2 Mb of data (shuffle Read Size) we require 68.1 Mb of Execution memory bcz it would have shuffled / done some calcuation based on the operation.
+
+If the amount of "Peak Execution Memory" would have execeeded the unified area memory. It would have resulted in "DISK SPILL".
+
+So in 912.3 Mb we have cached 286.7 Mb, we are remaining with 625.6 Mb. So 200 tasks taken 69.5 Mb on average. So we are not getting DISK SPILL.
+
+But If we make shuffle partitions 2 instead of 200,
+
+#spark.conf.set("spark.sql.shuffle.partitions","2")
+
+In this case,
+
+only 2 tasks will get created each of 196.9 Mb and 200.7 Mb i.e. shuffle read size.
+
+So it may consume more than 912.3 Mb of execution memory, bcz of this we have Spill(Memory) - 960 Mb and Spill(disk) - 15.4 Mb
+
+Metric              value       Meaning
+------              -----       -------
+Shuffle Read Size	196.9 MB	Data received by the task from the shuffle stage.
+Execution Memory	912 MB		Peak execution memory used by the task or stage, depending on where you read the metric.
+Spill (Memory)		960 MB		Data spilled from execution memory into an intermediate in-memory representation during processing.
+Spill (Disk)		15.4 MB		Data written to disk because it could not remain in memory.
+
+Spill happens because Spark cannot keep all the required intermediate data in memory, so it temporarily moves data to disk to continue processing.
+
+If we make it 4,
+
+#spark.conf.set("spark.sql.shuffle.partitions","4")
+
+then 4 tasks will run after shuffle but before shuffle we will have 9 tasks bcz file is of 1.1 Gb 
+
+Let us consider that we have 4 GB RAM, 4 CPU cores,
+
+28% - Storage Memory and 28% - Execution Memory = 2.4 Gb / 4 CPU cores i.e. 600 mb per core.
+
+So for each task we cannot use more than 600 Mb of data. When we are processing 300 mb of data and do sorting then Peak Execution Memory becomes 
+800 Mb and it will SPILL to DISK. 
+So we have to understand that each core should get good amount of memory so that SPILL becomes less.
+
+pyspark memory
+--------------
+
+By default 0, if we are using spark with scala/java we no need pyspark memory but if we use spark with python i.e. pyspark and when we are using python libraries (not related to pyspark) - then it initiates a python worker and it will need some memory. 
+
+Off-heap memory 
+--------------
+
+By default 0, it is outside the JVM (no Garbage Collection)
+
+In Heap Memory - whenever we create some objects in memory
+
+we have to free it up right. Garbage collection takes time to free up the objects from the memory.
+
+Now if we grab a piece of memory outside JVM / Heap memory i.e. raw memory if we store something no garbage collection is required and OS will take care of it and it will be faster.
+
+So if we request 2 GB off-heap Memory
+
+2 Gb executor memory - 912.3 Mb (unified memory) 
+
+now storage and execution memory - 912.3 Mb (on-heap memory) - 2 Gb (Off-heap memory)
+
+To make sure Garbage collection doesnot take more time, we need to combine on-heap and Off-heap memory to balance the things.
+
+Adding off-heap memory in Boiler Plate Code
+
+#from pyspark.sql import SparkSession
+import getpass
+username = getpass.getuser()
+spark = sparkSession. \
+	builder. \
+	config('spark.shuffle.useOldFetchProtocol','true'). \
+	config('spark.executor.memory','2G'). \
+	config('spark.executor.instances','1'). \
+	config('spark.dynamicAllocation.enabled','false'). \
+    config('spark.memory.offHeap.size','2G'). \
+	config('spark.memory.offHeap.enabled','true'). \
+    config("spark.sql.warehouse.dir", f"/user/{username}/warehouse"). \
+    enableHiveSupport(). \
+    master('yarn'). \
+    getOrCreate()
+	
+After running this command, Go to SPARK UI --> Click on Executors --> In storage memory (0/2.9 GB)
+
+And we re-ran the command likes creating to verify will there be any SPILL or not
+	- orders_df
+	- customers_df 
+	- caching the orders_df and finding the count 
+	- disabling the autoBroadcastJoinThreshold
+	- reducing the shuffle partitions count to 2
+	- running the join 
+
+Now there is no SPILL and the Peak Execution Memory is 1.6 GB 
+
+Properties 
+ 
+overhead - spark.executor.memoryOverhead (10% of Executor Memory)
+on-heap  - spark.executor.memory
+off-heap - spark.memory.offHeap.size
+pyspark  - spark.executor.pyspark.memory (It might take it from overhead memory)
+
+Let us consider we request for X (spark.executor.memory)
+
+(X - 300 mb) * (0.6) = unified memory
+(X - 300 mb) * (0.4) = user defined memory
+
+We can increase the unified memory from 60% to 80% if you dont use user defined memory i.e. no need to create user defined data structures & RDD related operations set the below configuration 
+
+#spark.memory.fraction = 0.8
+
+Now in unified area instead of having 50% for storage memory and 50% for execution memory,if you want to increase execution memory as you dont do caching then set the below configuration so that we can get 80% for execution memory.
+
+#spark.memory.stroageFraction = 0.2
+
+Using above settings as a part of spark-submit command,
+
+spark3-submit \
+--deploy-mode cluster \
+--num-executors 1 \
+--executor-cores 4 \
+--executor-memory 8G \
+--conf spark.sql.dynamicAllocation.enabled=false \
+--conf spark.memory.fraction=.8 \
+--conf spark.memory.stroageFraction=.2 \
+program1.py
+
+
+Sort Aggregate Vs Hash Aggregate
+================================
+
+Firstly ran boiler plate code, created orders_df by reading a file from path "/public/trendytech/retail_db/ordersnew"
+
+Now our expectation is grouping the data based on customer_id, month from order_date column, number of orders and want to sort the output based on month.
+
+Lets create a spark table "orders"
+1)
+#spark.sql(""" select customer_id, 
+			   date_format(order_date,'MMMM') as month_name, 
+			   count(*) as total_orders, 
+			   first(date_format(order_date,'MMMM')) as month_number  
+			   from orders
+			   group by customer_id, month_name order by month_number""").show()
+			  
+This has taken 1 min for execution
+
+2)
+#spark.sql(""" select customer_id, 
+			   date_format(order_date,'MMMM') as month_name, 
+			   count(*) as total_orders, 
+			   first(date_format(order_date,'MMMM')) as month_number  
+			   from orders
+			   group by customer_id, month_name order by month_number""").write.format("noop").mode("overwrite").save()
+			  
+This has taken 58 sec for execution
+
+3)
+#spark.sql(""" select customer_id, 
+			   date_format(order_date,'MMMM') as month_name, 
+			   count(*) as total_orders, 
+			   first(int(date_format(order_date,'MMMM'))) as month_number  
+			   from orders
+			   group by customer_id, month_name order by month_number""").show()
+			  
+This has taken 24 sec for execution
+
+4)
+#spark.sql(""" select customer_id, 
+			   date_format(order_date,'MMMM') as month_name, 
+			   count(*) as total_orders, 
+			   first(int(date_format(order_date,'MMMM'))) as month_number  
+			   from orders
+			   group by customer_id, month_name order by month_number""").write.format("noop").mode("overwrite").save()
+			  
+This has taken 17 sec for execution
+
+
+Continuation of Sort Vs Hash Aggregate
+======================================
+
+Query 2 has taken more than 1.2 min
+
+SQL Flow
+--------
+Scan --> Sort --> SortAggregate --> Exchange/Shuffle --> Sort --> SortAggregate --> Exchange/Shuffle --> Sort --> OverwriteByExpression
+
+Query 4 has taken more than 15 sec
+
+SQL Flow
+--------
+Scan --> HashAggregate --> Exchange/Shuffle --> HashAggregate --> Exchange/Shuffle --> Sort --> OverwriteByExpression
+
+
+Q) Why Query 2 used Sort Aggregate and Query 4 used Hash Aggregate?
+
+If there are less number of distinct values / groupings and if we dont use immutable types like string then system will use Hash Aggregate otherwise it will go for Sort Aggregate.
+
+Q) Why Query 4 which has Hash Aggregate ran faster than Query 2?
+
+How internally sort and hash aggregates happens?
+-----------------------------------------------
+Sort Aggregate
+--------------
+Let us consider that we have 10 Partitions
+
+Input Data
+----------
+
+1 January
+1 January
+2 February
+1 January
+2 February
+3 January
+1 January
+
+After sorting based on key as combiniation of customer_id, month_name  
+
+1 January
+1 January
+1 January
+1 January
+2 February
+2 February
+3 January
+
+Local  Aggregation 
+
+1 January 4
+2 February 2
+3 January 1
+
+Shuffled and goes for global aggregation
+
+Sorting itself a costly operations as it takes time, takes lot of execution memory
+
+To sort 1000 number even if we use best algorithm it takes 0(nlogn) time complexity = 1000 * 10 (log 1000) = 10000 operations
+
+If double the number then time taken is more than double 
+
+Hash Aggregation
+----------------
+
+It creates a Hash Table for the input data.
+
+Input Data
+----------
+
+1 January
+1 January
+2 February
+1 January
+2 February
+3 January
+1 January
+
+Hash Table
+----------
+
+Key			Value
+1 January 	 4
+2 February   2
+3 January    1
+
+What happens here is, for every key entry there is a value 1 gets added in the Hash Table. If same key gets added 'n' times then 'n' will be the value for that key.
+
+So with this approach, we are iterating through the list only one time i.e. for 1000 values 1000 operations. 	
+
+But in case of Sort Aggregate, firstly it will sort the data as per key order and then aggregate it.
+
+&&&&&&&&&&&&&&&&
+
+Sort Aggregate - O(nlongn) 
+Hash Aggregate - O(n) - it requires some space as it creates Hash Table outside the JVM and takes memory from off-heap. So there is no Garbage Collection
+
+Incase of "Query 2" we used month_num as string and string is immutable '01' cannot be replaced,
+
+Key			Value
+1 January 	 1,'01' (string is immutable)
+
+But incase of "Query 4" we casted month_num as int and int is mutable 1 can be replaced,
+
+Key			Value
+1 January 	 2, 1
+
+
+Basically if there are less distinct values / less groupings and if we dont use immutable types then Hash Aggregate will takes place by default.
+
+But if we have very huge distinct values then Hash Table will be very big in size as it keeps each unique key due to which it requires more memory, so it will not be feesible for the system.
+
+&&&&&&&&&&&&&&&&
+
+To get to know where system will use Sort Aggregate or Hash Aggregate
+---------------------------------------------------------------------
+
+By runnig the below query we can get the physical plan in that we can get to view,
+
+#spark.sql(""" select customer_id, 
+			   date_format(order_date,'MMMM') as month_name, 
+			   count(*) as total_orders, 
+			   first(int(date_format(order_date,'MMMM'))) as month_number  
+			   from orders
+			   group by customer_id, month_name order by month_number""").expalin()
+			   
+But if you want to view/get all plans,
+
+#spark.sql(""" select customer_id, 
+			   date_format(order_date,'MMMM') as month_name, 
+			   count(*) as total_orders, 
+			   first(int(date_format(order_date,'MMMM'))) as month_number  
+			   from orders
+			   group by customer_id, month_name order by month_number""").expalin(True)
+			   
+			   
+
+Apache Spark Logical and Physical Plans
+=======================================
+
+Various Plans
+=============
+ 
+Parsed Logical plan
+-------------------
+This will verify the correctness of the syntax (Error - Parse Exception) (This is considered as Unresolved Logical plan bcz spark does not know whether the table name or column names are present or not)
+
+Analyzed Logical plan
+---------------------
+This will verify whether the table name or column names are present or not in Catalog as it contains metadata (Error - Analysis Exception) (Resolved Logical plan)
+
+Optimized Logical plan
+----------------------
+This will have certain set of predefined rules!
+
+!) predicate pushdown - pushing filters down (i.e. applying filters as soon as possible so that we can eliminate data in early stages)
+
+@) combining multiple projections into one
+
+#) combining multiple filters into one
+
+Physical plan
+-------------
+This will give details like which join strategy or aggregate strategy is opted/chosen by the system
+
+Basically multiple physical plans will get created based on various strategies (like join strategies or aggregation strategies) then it will check the "COST MODEL" for each of them and among them system will choose the best performing and less cost involved physical plan and code is generated for physical plan which is internal RDD code and this code is executed across the cluster.
+
+To verify the above plans lets execute SQL query
+------------------------------------------------
+
+#spark.sql(""" select customer_id, count(1) from (select * from orders where customer_id in (1,2,3,4,5)) 
+			  where customer_id in (1,2,3)
+			  group by customer_id
+			  having customer_id = 1 """).explain(True)
+			  
+#spark.sql(""" select order_id, order_status from 
+			   (select order_id, customer_id, order_status from orders where order_id < 500)
+			   where order_id < 200 """).explain(True)
+			   
+#spark.sql(""" select * from orders join customers on orders.customer_id = customers.customerid 
+			   where orders_status = 'CLOSED' """).explain(True)
+			   
+#spark.sql(""" select * from orders """).explain(True) 
+
+orders_1gb.csv customers
+
+
+Catalyst Optimizer
+==================
+
+This works are Optimized Logical Plan level.
+
+Optimization happening with the help of Catalyst Optimizer where some set of predefined rules are configured.
+
+When we write code with using dataframe or spark sql it goes through the Catalyst Optimizer, but not incase if we write code in RDD.
+
+You can add your own rules also along with the existing rules for this we are using "spark 2 - scala"
+
+In spark 2 - scala, no need to write and execute the Boiler Plate code as sparkSession is already available.
+
+We can add a rule i.e. in case of multiplication left * right if right side is 1 then ignore the multiplication...
